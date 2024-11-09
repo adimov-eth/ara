@@ -117,10 +117,7 @@ CREATE TABLE public.tasks (
 CREATE TABLE public.users (
     id bigint primary key generated always as identity,
     username text NOT NULL,
-    role_ text NOT NULL DEFAULT
-
-
-'User',
+    role_ text NOT NULL DEFAULT 'User',
     email text NULL,
     password_hash text NULL,
     city text NULL,
