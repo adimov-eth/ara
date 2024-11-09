@@ -1,0 +1,133 @@
+flowchart TB
+    %% Entry Point
+    Start([App Launch]) --> ON[Onboarding Screen]
+    ON --> EF[Explore Features]
+    EF --> TW[How to use TON wallet]
+    
+    %% Authentication Flow
+    ON --> Auth{Login or Register?}
+    Auth -->|Register| REG[Registration]
+    Auth -->|Login| LOG[Login]
+    
+    %% Profile Creation
+    REG --> PI[Profile Information]
+    PI --> PD[Full Name/City/Phone/Email/DOB]
+    PI --> SM[Social Media Accounts]
+    PI --> AR[Accept Rules]
+    PI --> KYC[KYC Verification]
+    
+    %% Wallet Connection
+    PD & SM & AR & KYC --> CW[Connect TON Wallet]
+    LOG --> CW
+    
+    %% User Status Check
+    CW --> UE{User Profile Exists?}
+    UE -->|No| PI
+    UE -->|Yes| PA{Member of Aravt?}
+    
+    %% Non-Member Flow with Ref System
+    PA -->|No| LAJ[List of Available Aravts]
+    %% RI -->|Yes| RAL{Ref is Aravt Leader?}
+    %% RAL -->|Yes| JI[Join Invitation]
+    %% RAL -->|No| LAJ[List of Available Aravts]
+    
+    %% Aravt Browsing
+    LAJ --> FL[Filter: Rating/Free Slots/Friends]
+    FL --> VA[View Aravt Details]
+    VA --> SR[Submit Join Request]
+    SR --> RQ[(Request Queue)]
+    
+    %% Admin Request Review
+    RQ --> AR2{Admin Review}
+    AR2 -->|Accept| AM[Add Member]
+    AR2 -->|Decline| DR[(Delete Request)]
+    
+    %% Member Access
+    PA -->|Yes| AW[Aravt Window]
+    AM --> AW
+    
+    %% Aravt Window Features
+    AW --> MT[Member Tasks]
+    AW --> GT[Global Tasks]
+    AW --> ML[Member List]
+    AW --> TGC[Telegram Group Chat]
+    AW --> PRJ[Projects]
+    
+    %% Leader Checks and Rankings
+    AW --> LR{User is Aravt Leader?}
+    LR -->|Rank 1| L1[Basic Leadership]
+    LR -->|Rank 2| L2[100 Group Leadership]
+    LR -->|Rank 3| L3[1000 Group Leadership]
+    
+    %% Leadership Features
+    L1 & L2 & L3 --> AP[Admin Panel]
+    AP --> IM[Invite Members]
+    AP --> RM[Remove Members]
+    AP --> TC[Task Creation]
+    AP --> CGC[Update group chat]
+    
+    %% Project Management
+    AP --> HP{Have Project?}
+    HP -->|Yes| MP[Manage Project]
+    HP -->|No| CP[Create Project]
+    CP --> CO[Create Offers]
+    CP --> DON[Donation Options]
+    
+    %% Task Management
+    TC --> TT{Task Type}
+    TT -->|Local| IT[Local Task]
+    TT -->|Global| CT[Global Task]
+    
+    %% Task Validation & KPI
+    IT & CT --> TV[Task Validation]
+    TV --> VAL{Validator Check}
+    VAL -->|Approved| KPI[Task completed]
+    
+    %% KPI Stages
+    %% KPI --> S1[Stage 1: 20%]
+    %% KPI --> S2[Stage 2: 60%]
+    %% KPI --> S3[Stage 3: 20%]
+    
+    %% Reward System
+    KPI --> RD[Reward Distribution]
+    RD --> FEE[10% to Aravt]
+    RD --> TR{Type of Reward}
+    TR -->|Tokens| ST[Aravt Tokens]
+    TR -->|Currency| AC[USDT Compensation]
+    %% RD --> SR[Seasonal Rewards]
+    %% SR --> SE1[Season 1 Distribution]
+    %% SR --> SE2[Season 2 Distribution]
+    
+    %% Warning System
+    %% VAL -->|Not Completed| WS[Warning System]
+    %% WS --> W1[1. Automatic Warning]
+    %% W1 --> W2[2. Money Deduction]
+    %% W2 --> W3[3. Removal Voting]
+    
+    %% Smart Contract Integration
+    %% TC -.-> SMC[Smart Contract Creation]
+    %% SMC --> MW[Mint Aravt Wallet]
+    %% SMC --> MNFT[Mint NFT Gerege]
+    %% SMC --> ID[UQ2wer894892342]
+    
+    %% Game Style Elements
+    %% SR --> GL[Gaming League Style]
+    %% GL --> FN[Fortnite-like]
+    %% GL --> OL[Open League]
+
+    %% Styling
+    classDef start fill:#ffffff,stroke:red,stroke-width:2px
+    classDef process fill:blue,stroke:#333,stroke-width:1px
+    classDef decision fill:purple,stroke:#333,stroke-width:1px
+    classDef storage fill:green,stroke:#333,stroke-width:1px
+    classDef feature fill:white,stroke:red,stroke-width:1px
+    classDef warning fill:yellow,stroke:#333,stroke-width:1px
+    classDef smart fill:red,stroke:#red,stroke-width:1px
+    
+    class Start start
+    class ON,EF,TW,REG,LOG,PI,PD,SM,KYC,CW,VA,SR,AM,TC,IT,CT,TV,KPI,S1,S2,S3,RD,CGC process
+    class Auth,UE,PA,RI,RAL,AR2,LR,HP,TT,VAL,TR decision
+    class RQ,DR storage
+    class LAJ,FL,AW,MT,GT,ML,TGC,PRJ,L1,L2,L3,AP,IM,RM,MP,CP,CO,DON,ST,AC,SR,SE1,SE2,GL,FN,OL feature
+    class WS,W1,W2,W3 warning
+    class SMC,MW,MNFT,ID smart
