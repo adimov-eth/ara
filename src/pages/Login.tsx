@@ -1,30 +1,51 @@
-import React, { useState } from 'react';
-import { Wallet, Mail, Lock, ArrowRight, Globe } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Wallet, ArrowRight, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useAuthStore } from '@/store/auth';
 
-const LoginView = ({ onLoginSuccess }) => {
+interface LoginProps {
+  onLoginSuccess?: () => void;
+}
+
+const Login = ({ onLoginSuccess }: LoginProps) => {
+  const navigate = useNavigate();
+  const login = useAuthStore(state => state.login);
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isWalletConnecting, setIsWalletConnecting] = useState(false);
   const [error, setError] = useState('');
 
-  const handleEmailLogin = async (e) => {
+  const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
     
     try {
-      // Simulate API call
+      // TODO: Replace with actual API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      onLoginSuccess();
-    } catch (err) {
-      setError('Invalid credentials. Please try again.');
+      
+      // Mock user data - replace with actual API response
+      const mockUser = {
+        id: 1,
+        username: 'testuser',
+        email: email,
+        role: 'User' as const,
+      };
+      const mockToken = 'mock-jwt-token';
+      
+      login(mockUser, mockToken);
+      onLoginSuccess?.();
+      navigate('/dashboard');
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'Invalid credentials. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -35,15 +56,23 @@ const LoginView = ({ onLoginSuccess }) => {
     setError('');
 
     try {
-      // Example wallet connection logic
-      if (typeof window.ethereum !== 'undefined') {
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-        onLoginSuccess();
-      } else {
-        throw new Error('No wallet found');
-      }
-    } catch (err) {
-      setError('Failed to connect wallet. Please make sure you have TON wallet installed.');
+      // TODO: Replace with TON wallet connection logic
+      const mockUser = {
+        id: 1,
+        username: 'wallet_user',
+        role: 'User' as const,
+      };
+      const mockToken = 'mock-wallet-token';
+      
+      login(mockUser, mockToken);
+      onLoginSuccess?.();
+      navigate('/dashboard');
+    } catch (error: unknown) {
+      setError(
+        error instanceof Error 
+          ? error.message 
+          : 'Failed to connect wallet. Please make sure you have TON wallet installed.'
+      );
     } finally {
       setIsWalletConnecting(false);
     }
@@ -106,7 +135,7 @@ const LoginView = ({ onLoginSuccess }) => {
                     type="email"
                     placeholder="m@example.com"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                     required
                   />
                 </div>
@@ -116,7 +145,7 @@ const LoginView = ({ onLoginSuccess }) => {
                     id="password"
                     type="password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                     required
                   />
                 </div>
@@ -155,4 +184,4 @@ const LoginView = ({ onLoginSuccess }) => {
   );
 };
 
-export default LoginView;
+export default Login;
