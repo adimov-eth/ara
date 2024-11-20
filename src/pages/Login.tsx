@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Wallet, ArrowRight, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -163,6 +163,12 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
                     </>
                   )}
                 </Button>
+                <div className="text-center text-sm">
+                  Don't have an account?{" "}
+                  <Link to="/signup" className="text-primary hover:underline">
+                    Sign up
+                  </Link>
+                </div>
               </form>
             </TabsContent>
           </Tabs>
