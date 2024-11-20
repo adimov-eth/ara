@@ -6,6 +6,7 @@ import About from '../pages/About'
 import NotFound from '../pages/NotFound'
 import Login from '@/pages/Login'
 import SignUp from '@/pages/SignUp'
+import CompleteRegistration from '@/pages/CompleteRegistration'
 import BrowseAravts from '@/pages/BrowseAravts'
 import ExploreFeatures from '@/pages/ExploreFeatures'
 import AdminPanel from '@/pages/AdminPanel'
@@ -21,6 +22,7 @@ export function AppRoutes() {
       {/* Public routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/complete_registration" element={<CompleteRegistration/>} />
       <Route path="/explore" element={<ExploreFeatures />} />
       
       {/* Protected routes */}

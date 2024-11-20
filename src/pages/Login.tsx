@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuthStore } from '@/store/auth';
+import { api } from '@/lib/api';
 
 interface LoginProps {
   onLoginSuccess?: () => void;
@@ -29,19 +30,9 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
     setError('');
     
     try {
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const { access_token, user } = await api.login(email, password);
       
-      // Mock user data - replace with actual API response
-      const mockUser = {
-        id: 1,
-        username: 'testuser',
-        email: email,
-        role: 'User' as const,
-      };
-      const mockToken = 'mock-jwt-token';
-      
-      login(mockUser, mockToken);
+      login(user, access_token);
       onLoginSuccess?.();
       navigate('/dashboard');
     } catch (error: unknown) {

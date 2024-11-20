@@ -1,5 +1,7 @@
 import axios from './axios'
+import { useAuthStore, User as LoginUser} from '@/store/auth' 
 
+/*
 // Types based on backend schema
 export interface User {
   id: number
@@ -18,6 +20,7 @@ export interface User {
   rating?: number
   aravt_id?: number
 }
+*/
 
 export interface RegistrationData {
   username: string
@@ -29,13 +32,28 @@ export interface RegistrationData {
 }
 
 export const api = {
+  async login(email: string, password: string): Promise<{ access_token: string, user: LoginUser }> {
+    const response = await axios.post('/login/', {email, password})
+    return response.data
+  },
+
   async register(data: RegistrationData): Promise<{ message: string }> {
     const response = await axios.post('/registration/', data)
     return response.data
   },
 
-  async complete_registration(token: string): Promise<{ message: string }> {
+  async complete_registration(token: string): Promise<{ access_token: string }> {
     const response = await axios.get('/complete_registration/'+`${token}`)
+    return response.data
+  },
+
+  async who_am_i(): Promise<{ message: string }> {
+    const { token } = useAuthStore()
+    const response = await axios.get('/who_am_i', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
     return response.data
   },
 
