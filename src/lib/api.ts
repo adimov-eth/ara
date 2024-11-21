@@ -32,8 +32,8 @@ export interface RegistrationData {
 }
 
 export const api = {
-  async login(email: string, password: string): Promise<{ access_token: string, user: LoginUser }> {
-    const response = await axios.post('/login/', {email, password})
+  async login(username: string, password: string): Promise<{ access_token: string, user: LoginUser }> {
+    const response = await axios.post('/login/', {username, password})
     return response.data
   },
 

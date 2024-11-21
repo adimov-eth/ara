@@ -18,19 +18,19 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
   const navigate = useNavigate();
   const login = useAuthStore(state => state.login);
   
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isWalletConnecting, setIsWalletConnecting] = useState(false);
   const [error, setError] = useState('');
 
-  const handleEmailLogin = async (e: React.FormEvent) => {
+  const handleUsernameLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
     
     try {
-      const { access_token, user } = await api.login(email, password);
+      const { access_token, user } = await api.login(username, password);
       
       login(user, access_token);
       onLoginSuccess?.();
@@ -91,7 +91,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
           <Tabs defaultValue="wallet" className="space-y-4">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="wallet">TON Wallet</TabsTrigger>
-              <TabsTrigger value="email">Email</TabsTrigger>
+              <TabsTrigger value="username">Username</TabsTrigger>
             </TabsList>
 
             <TabsContent value="wallet">
@@ -117,16 +117,16 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
               </div>
             </TabsContent>
 
-            <TabsContent value="email">
-              <form onSubmit={handleEmailLogin} className="space-y-4">
+            <TabsContent value="username">
+              <form onSubmit={handleUsernameLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="username">Username</Label>
                   <Input
-                    id="email"
-                    type="email"
-                    placeholder="m@example.com"
-                    value={email}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                    id="username"
+                    type="username"
+                    placeholder="userrname"
+                    value={username}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
                     required
                   />
                 </div>
@@ -149,7 +149,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
                     'Signing in...'
                   ) : (
                     <>
-                      Sign in with Email
+                      Sign in with Username
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </>
                   )}
