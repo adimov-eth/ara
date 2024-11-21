@@ -19,7 +19,7 @@ const TasksManagement = () => {
     isLoading, 
     error, 
     fetchDashboardData,
-    updateTaskProgress 
+    updateTaskIsDone 
   } = useDashboardStore();
 
   useEffect(() => {
@@ -109,7 +109,7 @@ const TasksManagement = () => {
                     key={task.id}
                     task={task}
                     onUpdate={(taskId, updates) => 
-                      updateTaskProgress(taskId, updates.progress || 0)
+                      updateTaskIsDone(taskId, updates.is_done || false)
                     }
                     isLoading={isLoading}
                   />
@@ -124,7 +124,7 @@ const TasksManagement = () => {
                     key={task.id}
                     task={task}
                     onUpdate={(taskId, updates) => 
-                      updateTaskProgress(taskId, updates.progress || 0)
+                      updateTaskIsDone(taskId, updates.is_done || false)
                     }
                     isLoading={isLoading}
                   />

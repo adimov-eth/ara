@@ -1,5 +1,6 @@
 import { create } from 'zustand'
-import { type User } from '@/types'
+import { api } from '@/lib/api'
+import { Task } from '@/lib/api'
 
 interface DashboardStats {
   tasksCompleted: number;
@@ -10,19 +11,6 @@ interface DashboardStats {
   rankProgress: number;
 }
 
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  reward: number;
-  rewardType: 'AT' | 'USDT';
-  deadline: string;
-  status: 'open' | 'in_progress' | 'completed';
-  assignees: User[];
-  progress: number;
-  isGlobal: boolean;
-}
-
 interface DashboardState {
   stats: DashboardStats;
   localTasks: Task[];
@@ -30,7 +18,7 @@ interface DashboardState {
   isLoading: boolean;
   error: string | null;
   fetchDashboardData: () => Promise<void>;
-  updateTaskProgress: (taskId: number, progress: number) => Promise<void>;
+  updateTaskIsDone: (taskId: number, is_done: boolean) => Promise<void>;
 }
 
 export const useDashboardStore = create<DashboardState>((set, get) => ({
@@ -50,54 +38,15 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
   fetchDashboardData: async () => {
     set({ isLoading: true, error: null });
     try {
-      // TODO: Replace with actual API calls
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const tasks: Task[] = await api.aravt_get_tasks();
       
-      const mockLocalTasks: Task[] = [
-        {
-          id: 1,
-          title: 'Website Development',
-          description: 'Create landing page for new project',
-          reward: 500,
-          rewardType: 'USDT',
-          deadline: '2024-11-20',
-          status: 'in_progress',
-          assignees: [],
-          progress: 60,
-          isGlobal: false,
-        },
-        {
-          id: 2,
-          title: 'Smart Contract Audit',
-          description: 'Security audit for token contract',
-          reward: 1000,
-          rewardType: 'AT',
-          deadline: '2024-11-25',
-          status: 'open',
-          assignees: [],
-          progress: 0,
-          isGlobal: false,
-        },
-      ];
+      const LocalTasks: Task[] = tasks.filter((task) => !task.is_global);
 
-      const mockGlobalTasks: Task[] = [
-        {
-          id: 3,
-          title: 'Network Enhancement',
-          description: 'Improve cross-aravt communication protocol',
-          reward: 2000,
-          rewardType: 'AT',
-          deadline: '2024-12-01',
-          status: 'open',
-          assignees: [],
-          progress: 30,
-          isGlobal: true,
-        },
-      ];
+      const GlobalTasks: Task[] = tasks.filter((task) => task.is_global);
 
       set({ 
-        localTasks: mockLocalTasks,
-        globalTasks: mockGlobalTasks,
+        localTasks: LocalTasks,
+        globalTasks: GlobalTasks,
         isLoading: false 
       });
     } catch (error) {
@@ -109,7 +58,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
     }
   },
 
-  updateTaskProgress: async (taskId: number, progress: number) => {
+  updateTaskIsDone: async (taskId: number, is_done: boolean) => {
     set({ isLoading: true, error: null });
     try {
       // TODO: Replace with actual API call
@@ -118,7 +67,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
       const state = get();
       const updateTasks = (tasks: Task[]) =>
         tasks.map(task =>
-          task.id === taskId ? { ...task, progress } : task
+          task.id === taskId ? { ...task, is_done } : task
         );
 
       set({
@@ -130,7 +79,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
       if (error instanceof Error) {
         set({ error: error.message, isLoading: false });
       } else {
-        set({ error: 'Failed to update task progress', isLoading: false });
+        set({ error: 'Failed to update task completion', isLoading: false });
       }
     }
   },

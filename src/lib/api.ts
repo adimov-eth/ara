@@ -1,5 +1,5 @@
 import axios from './axios'
-import { useAuthStore, User as LoginUser} from '@/store/auth' 
+import { User as LoginUser} from '@/store/auth' 
 
 /*
 // Types based on backend schema
@@ -38,13 +38,17 @@ export interface CreateAravt {
 }
 
 export interface Task {
+  id: number,
   title: string,
   description: string,
   link: string,
   reward: number,
+ // rewardType: 'AT' | 'USDT';
   defenition_of_done: {},
   responsible_users_ids: [],
+  is_done: boolean,
   is_global: boolean
+  date_time: string
 }
 
 export enum ProjectStatus {
@@ -180,7 +184,7 @@ export const api = {
     return response.data
   },
 
-  async aravt_get_tasks(): Promise<{ message: string }> {
+  async aravt_get_tasks(): Promise<Task[]> {
     const response = await axios.get('/aravt/get_tasks/')
     return response.data
   },

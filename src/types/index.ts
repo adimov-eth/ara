@@ -35,17 +35,3 @@ export interface ExtendedUser extends User {
     city?: string;
     tokenBalance: number;
   }
-
-  export interface Task {
-    id: number;
-    title: string;
-    description: string;
-    reward: number;
-    rewardType: 'AT' | 'USDT';
-    deadline: string;
-    status: 'open' | 'in_progress' | 'completed';
-    assignees: User[];
-    progress: number;
-    isGlobal: boolean;
-    priority?: 'low' | 'medium' | 'high';
-  }

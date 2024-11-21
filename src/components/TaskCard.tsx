@@ -1,9 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { Globe, Home, CreditCard, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { type Task } from '@/types';
+import { type Task } from '@/lib/api';
 
 interface TaskCardProps {
   task: Task;
@@ -18,13 +16,13 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
       <div className="flex justify-between items-start">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            {task.isGlobal ? (
+            {task.is_global ? (
               <Globe className="h-4 w-4 text-blue-500" />
             ) : (
               <Home className="h-4 w-4 text-green-500" />
             )}
             <CardTitle className="text-lg">{task.title}</CardTitle>
-            {task.priority && (
+            {/* {task.priority && (
               <Badge variant={
                 task.priority === 'high' ? 'destructive' :
                 task.priority === 'medium' ? 'default' :
@@ -32,7 +30,7 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
               }>
                 {task.priority}
               </Badge>
-            )}
+            )} */}
           </div>
           <p className="text-gray-500">{task.description}</p>
         </div>
@@ -41,8 +39,8 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
             <Button 
               variant="outline" 
               size="sm"
-              onClick={() => onUpdate(task.id, { status: 'completed' })}
-              disabled={isLoading || task.status === 'completed'}
+              onClick={() => onUpdate(task.id, { is_done: true })}
+              disabled={isLoading || task.is_done === true}
             >
               Mark Complete
             </Button>
@@ -67,24 +65,14 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
           <div className="flex items-center gap-4">
             <div className="flex items-center">
               <CreditCard className="h-4 w-4 mr-1 text-gray-500" />
-              <span>{task.reward} {task.rewardType}</span>
+              <span>{task.reward} {/*task.rewardType*/}</span>
             </div>
             <div className="flex items-center">
               <Star className="h-4 w-4 mr-1 text-gray-500" />
-              <span>Due: {new Date(task.deadline).toLocaleDateString()}</span>
+              <span>Due: {new Date(task.date_time).toLocaleDateString()}</span>
             </div>
           </div>
         </div>
-
-        {task.progress > 0 && (
-          <div>
-            <div className="flex justify-between text-sm mb-1">
-              <span>Progress</span>
-              <span>{task.progress}%</span>
-            </div>
-            <Progress value={task.progress} />
-          </div>
-        )}
       </div>
     </CardContent>
   </Card>
