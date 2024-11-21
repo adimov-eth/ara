@@ -90,12 +90,7 @@ export const api = {
   },
 
   async who_am_i(): Promise<{ message: string }> {
-    const { token } = useAuthStore()
-    const response = await axios.get('/who_am_i', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+    const response = await axios.get('/who_am_i')
     return response.data
   },
 
