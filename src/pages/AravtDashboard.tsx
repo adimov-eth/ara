@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useDashboardStore } from '@/store/dashboard';
 import { useAuthStore } from '@/store/auth';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
-import { type Task } from '@/types';
+import { Task } from '@/types';
 
 const TaskCard = ({ task }: { task: Task }) => (
   <Card className="hover:bg-gray-50">
@@ -17,7 +17,7 @@ const TaskCard = ({ task }: { task: Task }) => (
       <div className="flex justify-between items-start">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            {task.isGlobal ? (
+            {task.is_global ? (
               <Globe className="h-4 w-4 text-blue-500" />
             ) : (
               <Home className="h-4 w-4 text-green-500" />
@@ -26,8 +26,8 @@ const TaskCard = ({ task }: { task: Task }) => (
           </div>
           <p className="text-gray-500">{task.description}</p>
         </div>
-        <Badge variant={task.status === 'in_progress' ? 'default' : 'secondary'}>
-          {task.status}
+        <Badge variant={task.is_done === true ? 'default' : 'secondary'}>
+          {task.is_done === true ? 'Completed' : 'Pending'}
         </Badge>
       </div>
     </CardHeader>
@@ -37,24 +37,14 @@ const TaskCard = ({ task }: { task: Task }) => (
           <div className="flex items-center gap-4">
             <div className="flex items-center">
               <CreditCard className="h-4 w-4 mr-1 text-gray-500" />
-              <span>{task.reward} {task.rewardType}</span>
+              <span>{task.reward} {"AT"}</span>
             </div>
             <div className="flex items-center">
               <Star className="h-4 w-4 mr-1 text-gray-500" />
-              <span>Due: {new Date(task.deadline).toLocaleDateString()}</span>
+              <span>Due: {new Date(task.date_time).toLocaleDateString()}</span>
             </div>
           </div>
         </div>
-
-        {task.progress > 0 && (
-          <div>
-            <div className="flex justify-between text-sm mb-1">
-              <span className="text-gray-500">Progress</span>
-              <span className="text-gray-500">{task.progress}%</span>
-            </div>
-            <Progress value={task.progress} />
-          </div>
-        )}
       </div>
     </CardContent>
   </Card>
@@ -90,7 +80,7 @@ const AravtDashboard = () => {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
-  if (isLoading && !localTasks.length && !globalTasks.length) {
+  if (isLoading) {
     return <LoadingSpinner />;
   }
 

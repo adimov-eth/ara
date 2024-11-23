@@ -18,15 +18,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 
-interface CreateTaskForm {
-  type: 'local' | 'global';
-  title: string;
-  description: string;
-  priority: 'low' | 'medium' | 'high';
-  deadline: string;
-  rewardType: 'AT' | 'USDT';
-  rewardAmount: number;
-}
+import { Task } from '@/types'
 
 const AdminPanel = () => {
   const { user } = useAuthStore();
@@ -56,38 +48,44 @@ const AdminPanel = () => {
   }, [fetchAdminData]);
 
 
-  const [createTaskForm, setCreateTaskForm] = useState<CreateTaskForm>({
-    type: 'local',
+  const [createTaskForm, setCreateTaskForm] = useState<Omit<Task, 'id'>>({
+    is_global: false,
     title: '',
     description: '',
-    priority: 'medium',
-    deadline: '',
-    rewardType: 'AT',
-    rewardAmount: 0,
+    date_time: '',
+    reward: 0,
+    is_done: false,
+    link: '',
+    defenition_of_done: '',
+    responsible_users_ids: [],
+    priority: 'low'
   });
 
   const handleCreateTask = async () => {
     await createTask({
       title: createTaskForm.title,
       description: createTaskForm.description,
-      reward: createTaskForm.rewardAmount,
-      rewardType: createTaskForm.rewardType,
-      deadline: createTaskForm.deadline,
-      status: 'open',
-      assignees: [],
-      progress: 0,
-      isGlobal: createTaskForm.type === 'global',
-      priority: createTaskForm.priority,
+      reward: createTaskForm.reward,
+      date_time: createTaskForm.date_time,
+      is_global: createTaskForm.is_global,
+      is_done: false,
+      link: '',
+      defenition_of_done: '',
+      responsible_users_ids: [],
+      priority: 'low'
     });
     setIsCreateTaskModalOpen(false);
     setCreateTaskForm({
-      type: 'local',
+      is_global: false,
       title: '',
       description: '',
-      priority: 'medium',
-      deadline: '',
-      rewardType: 'AT',
-      rewardAmount: 0,
+      date_time: '',
+      reward: 0,
+      is_done: false,
+      link: '',
+      defenition_of_done: '',
+      responsible_users_ids: [],
+      priority: 'low'
     });
   };
 
@@ -519,17 +517,17 @@ const AdminPanel = () => {
             <div className="grid gap-2">
               <Label>Task Type</Label>
               <Select
-                value={createTaskForm.type}
-                onValueChange={(value: 'local' | 'global') => 
-                  setCreateTaskForm(prev => ({ ...prev, type: value }))
+                value={createTaskForm.is_global ? "true" : "false"}
+                onValueChange={(value: string) => 
+                  setCreateTaskForm(prev => ({ ...prev, is_global: value === "true" }))
                 }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select task type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="local">Local Task</SelectItem>
-                  <SelectItem value="global">Global Task</SelectItem>
+                  <SelectItem value="false">Local Task</SelectItem>
+                  <SelectItem value="true">Global Task</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -575,7 +573,7 @@ const AdminPanel = () => {
                 <Label>Deadline</Label>
                 <Input 
                   type="date"
-                  value={createTaskForm.deadline}
+                  value={createTaskForm.date_time}
                   onChange={(e) => setCreateTaskForm(prev => ({ ...prev, deadline: e.target.value }))}
                 />
               </div>
@@ -583,28 +581,11 @@ const AdminPanel = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label>Reward Type</Label>
-                <Select
-                  value={createTaskForm.rewardType}
-                  onValueChange={(value: 'AT' | 'USDT') => 
-                    setCreateTaskForm(prev => ({ ...prev, rewardType: value }))
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select reward type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="AT">Aravt Tokens (AT)</SelectItem>
-                    <SelectItem value="USDT">USDT</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid gap-2">
                 <Label>Reward Amount</Label>
                 <Input 
                   type="number" 
                   placeholder="Enter amount"
-                  value={createTaskForm.rewardAmount}
+                  value={createTaskForm.reward}
                   onChange={(e) => setCreateTaskForm(prev => ({ 
                     ...prev, 
                     rewardAmount: parseInt(e.target.value) 

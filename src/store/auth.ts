@@ -1,13 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-
-export interface User {
-  id: number;
-  username: string;
-  email?: string;
-  role: 'User' | 'AravtLeader' | 'SuperAdmin';
-  aravt_id?: number;
-}
+import { User } from '@/types'
 
 interface AuthState {
   user: User | null;

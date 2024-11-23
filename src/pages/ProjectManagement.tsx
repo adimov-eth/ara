@@ -1,45 +1,13 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, ListChecks, Users, CreditCard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { useAuthStore } from '@/store/auth';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
-
-interface Project {
-  id: number;
-  name: string;
-  description: string;
-  status: 'active' | 'planning' | 'completed';
-  progress: number;
-  tasks: number;
-  members: number;
-  funding: string;
-}
-
-const mockProjects: Project[] = [
-  {
-    id: 1,
-    name: 'DeFi Protocol',
-    description: 'Building decentralized exchange platform',
-    status: 'active',
-    progress: 65,
-    tasks: 8,
-    members: 5,
-    funding: '50000 USDT'
-  },
-  {
-    id: 2,
-    name: 'NFT Marketplace',
-    description: 'Community-driven NFT trading platform',
-    status: 'planning',
-    progress: 20,
-    tasks: 12,
-    members: 3,
-    funding: '30000 USDT'
-  }
-];
+import { useProjectsStore } from '@/store/projects';
+import { Project } from "@/types";
 
 const ProjectCard = ({ project }: { project: Project }) => {
   const navigate = useNavigate();
@@ -52,7 +20,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
             <CardTitle className="text-lg">{project.name}</CardTitle>
             <CardDescription>{project.description}</CardDescription>
           </div>
-          <Badge variant={project.status === 'active' ? 'default' : 'secondary'}>
+          <Badge variant={project.status == 'Posted' ? 'default' : 'secondary'}>
             {project.status}
           </Badge>
         </div>
@@ -63,7 +31,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
             <div className="flex items-center gap-4">
               <div>
                 <ListChecks className="h-4 w-4 inline mr-1" />
-                {project.tasks} tasks
+                {project.tasks.length} tasks
               </div>
               <div>
                 <Users className="h-4 w-4 inline mr-1" />
@@ -71,16 +39,9 @@ const ProjectCard = ({ project }: { project: Project }) => {
               </div>
               <div>
                 <CreditCard className="h-4 w-4 inline mr-1" />
-                {project.funding}
+                {project.fundings}
               </div>
             </div>
-          </div>
-          <div>
-            <div className="flex justify-between items-center mb-1">
-              <span className="text-sm font-medium">Progress</span>
-              <span className="text-sm text-gray-500">{project.progress}%</span>
-            </div>
-            <Progress value={project.progress} />
           </div>
         </div>
       </CardContent>
@@ -102,8 +63,13 @@ const ProjectCard = ({ project }: { project: Project }) => {
 
 const ProjectManagement = () => {
   const { user } = useAuthStore();
+  const { projects, isLoading, error, fetchProjects } = useProjectsStore();
 
-  if (!user) {
+  useEffect(() => {
+    fetchProjects();
+  }, [fetchProjects]);
+
+  if (!user || isLoading) {
     return <LoadingSpinner />;
   }
 
@@ -121,7 +87,7 @@ const ProjectManagement = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-4">
-        {mockProjects.map((project) => (
+        {projects.map((project: Project) => (
           <ProjectCard key={project.id} project={project} />
         ))}
       </div>

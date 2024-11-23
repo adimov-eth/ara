@@ -1,5 +1,6 @@
 import { create } from 'zustand'
-import { type User, type Task, type Aravt, ExtendedUser } from '@/types'
+import { User, Task, Aravt, JoinRequest } from '@/types'
+import { api } from '@/lib/api'
 
 interface AdminStats {
   totalMembers: number;
@@ -8,23 +9,6 @@ interface AdminStats {
   averageRating: number;
   totalRewards: string;
   pendingRequests: number;
-}
-
-interface JoinRequest {
-  id: number;
-  user: {
-    name: string;
-    username: string;
-    email: string;
-    skills: string[];
-    referredBy: string;
-  };
-  applicationDate: string;
-}
-
-export interface AdminTask extends Task {
-  assignedTo?: string[];
-  priority: 'low' | 'medium' | 'high';
 }
 
 interface AravtSettings {
@@ -47,9 +31,9 @@ interface AravtSettings {
 
 interface AdminState {
   stats: AdminStats;
-  members: ExtendedUser[];
+  members: User[];
   pendingRequests: JoinRequest[];
-  tasks: AdminTask[];
+  tasks: Task[];
   aravt: Aravt | null;
   isLoading: boolean;
   error: string | null;
@@ -58,8 +42,8 @@ interface AdminState {
   rejectRequest: (requestId: number) => Promise<void>;
   updateMemberRole: (userId: number, role: User['role']) => Promise<void>;
   removeMember: (userId: number) => Promise<void>;
-  createTask: (task: Omit<AdminTask, 'id'>) => Promise<void>;
-  updateTask: (taskId: number, updates: Partial<AdminTask>) => Promise<void>;
+  createTask: (task: Omit<Task, 'id'>) => Promise<void>;
+  updateTask: (taskId: number, updates: Partial<Task>) => Promise<void>;
   deleteTask: (taskId: number) => Promise<void>;
   settings: AravtSettings;
   updateSettings: (updates: Partial<AravtSettings>) => Promise<void>;
@@ -76,23 +60,7 @@ export const useAdminStore = create<AdminState>((set, get) => ({
   },
   members: [],
   pendingRequests: [],
-  tasks: [
-    {
-      id: 1,
-      title: 'Smart Contract Development',
-      description: 'Develop and test token staking smart contract',
-      reward: 1500,
-      rewardType: 'USDT',
-      deadline: '2024-12-01',
-      status: 'in_progress',
-      assignees: [],
-      progress: 65,
-      isGlobal: false,
-      priority: 'high',
-      assignedTo: ['John D.', 'Sarah M.'],
-    },
-    // Add more mock tasks as needed
-  ],
+  tasks: [],
   aravt: null,
   isLoading: false,
   error: null,
@@ -117,62 +85,14 @@ export const useAdminStore = create<AdminState>((set, get) => ({
   fetchAdminData: async () => {
     set({ isLoading: true, error: null });
     try {
-      // TODO: Replace with actual API calls
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const PendingRequests: JoinRequest[] = await api.aravt_applications()
 
-      const mockPendingRequests: JoinRequest[] = [
-        {
-          id: 1,
-          user: {
-            name: 'Sarah Johnson',
-            username: '@sjohnson',
-            email: 'sarah@example.com',
-            skills: ['Smart Contracts', 'DeFi'],
-            referredBy: 'Alex Chen',
-          },
-          applicationDate: '2024-11-08',
-        },
-        {
-          id: 2,
-          user: {
-            name: 'David Lee',
-            username: '@dlee',
-            email: 'david@example.com',
-            skills: ['Frontend', 'UI/UX'],
-            referredBy: 'Maria Garcia',
-          },
-          applicationDate: '2024-11-09',
-        },
-      ];
-
-      const mockMembers = [
-        {
-          id: 1,
-          username: 'alexchen',
-          email: 'alex@example.com',
-          role: 'AravtLeader' as const,
-          tasksCompleted: 24,
-          rating: 4.8,
-          completionRate: 92,
-          city: 'Singapore',
-          tokenBalance: 2500,
-        },
-        {
-          id: 2,
-          username: 'mgarcia',
-          email: 'maria@example.com',
-          role: 'User' as const,
-          tasksCompleted: 18,
-          rating: 4.5,
-          completionRate: 85,
-          city: 'Barcelona',
-          tokenBalance: 1200,
-        },
-      ];
+      const Aravts = await api.aravt()
+      const Members = Aravts.map(aravt => aravt.team).flat()
 
       set({ 
-        pendingRequests: mockPendingRequests,
-        members: mockMembers,
+        pendingRequests: PendingRequests,
+        members: Members,
         isLoading: false,
       });
     } catch (error) {
@@ -186,8 +106,7 @@ export const useAdminStore = create<AdminState>((set, get) => ({
   approveRequest: async (requestId: number) => {
     set({ isLoading: true, error: null });
     try {
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const approve = await api.aravt_applications_approve(requestId)
       
       const state = get();
       const updatedRequests = state.pendingRequests.filter(req => req.id !== requestId);
@@ -211,7 +130,7 @@ export const useAdminStore = create<AdminState>((set, get) => ({
   rejectRequest: async (requestId: number) => {
     set({ isLoading: true, error: null });
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const reject = await api.aravt_applications_reject(requestId)
       
       const state = get();
       const updatedRequests = state.pendingRequests.filter(req => req.id !== requestId);
@@ -275,16 +194,12 @@ export const useAdminStore = create<AdminState>((set, get) => ({
   createTask: async (task) => {
     set({ isLoading: true, error: null });
     try {
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const newTask = {
-        ...task,
-        id: Math.max(0, ...get().tasks.map(t => t.id)) + 1,
-      };
+      const newTask = await api.aravt_set_task(task)
+
+      const tasks = await api.aravt_get_tasks()
       
       set(state => ({
-        tasks: [...state.tasks, newTask],
+        tasks: tasks,
         isLoading: false,
       }));
     } catch (error) {

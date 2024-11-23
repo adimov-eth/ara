@@ -87,7 +87,7 @@ const MemberManagement = () => {
           </div>
 
           <div className="space-y-4">
-            {members.map((member) => (
+            {/*members.map((member) => (
               <MemberCard
                 key={member.id}
                 member={member}
@@ -95,7 +95,7 @@ const MemberManagement = () => {
                 onRemoveMember={removeMember}
                 isLoading={isLoading}
               />
-            ))}
+            ))*/}
           </div>
         </CardContent>
       </Card>

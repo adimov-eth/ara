@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { api } from '@/lib/api'
-import { Task } from '@/lib/api'
+import { Task } from '@/types'
 
 interface DashboardStats {
   tasksCompleted: number;

@@ -4,11 +4,11 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { type ExtendedUser } from '@/types';
+import { User } from '@/types';
 
 interface MemberCardProps {
-  member: ExtendedUser;
-  onUpdateRole: (userId: number, role: ExtendedUser['role']) => void;
+  member: User;
+  onUpdateRole: (userId: number, role: User['role']) => void;
   onRemoveMember: (userId: number) => void;
   isLoading?: boolean;
 }
@@ -43,7 +43,7 @@ export const MemberCard = ({ member, onUpdateRole, onRemoveMember, isLoading }: 
         <div className="space-y-2">
           <Select 
             defaultValue={member.role}
-            onValueChange={(value: ExtendedUser['role']) => onUpdateRole(member.id, value)}
+            onValueChange={(value: User['role']) => onUpdateRole(member.id, value)}
             disabled={isLoading}
           >
             <SelectTrigger className="w-[180px]">

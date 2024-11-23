@@ -24,12 +24,12 @@ export function AppRoutes() {
       <Route path="/signup" element={<SignUp />} />
       <Route path="/complete_registration" element={<CompleteRegistration/>} />
       <Route path="/explore" element={<ExploreFeatures />} />
+      <Route path="/browse" element={<BrowseAravts />} />
       
       {/* Protected routes */}
       <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/browse" element={<BrowseAravts />} />
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/dashboard" element={<AravtDashboard />} />
         <Route path="/projects" element={<ProjectManagement />} />

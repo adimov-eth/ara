@@ -17,9 +17,9 @@ const BrowseAravts = () => {
   }, [fetchAravts]);
 
   const filteredAravts = aravts.filter(aravt => 
-    aravt.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    aravt.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    aravt.skills.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
+    aravt.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    aravt.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    aravt.skills?.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   if (isLoading && !aravts.length) {
@@ -79,18 +79,18 @@ const BrowseAravts = () => {
                       <div className="flex items-center gap-1 text-gray-600">
                         <span>Leader:</span>
                         <span className="text-blue-500">
-                          {aravt.leader}
+                          {aravt.leader?.full_name}
                         </span>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-1 text-gray-600">
                         <Users className="h-4 w-4" />
-                        <span>{aravt.capacity.current}/{aravt.capacity.max}</span>
+                        <span>{aravt.team?.length}/{10}</span>
                       </div>
                       <Button 
                         className="bg-[#0f172a] hover:bg-[#1e293b] text-white rounded-lg px-6"
-                        onClick={() => applyToAravt(aravt.id)}
+                        onClick={() => applyToAravt(aravt.id, "")}
                         disabled={isLoading}
                       >
                         Register
@@ -100,7 +100,7 @@ const BrowseAravts = () => {
                   </div>
 
                   <div className="flex flex-wrap gap-2 mt-4">
-                    {aravt.skills.map((skill, index) => (
+                    {aravt.skills?.map((skill, index) => (
                       <span
                         key={index}
                         className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700"

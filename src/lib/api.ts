@@ -1,84 +1,8 @@
 import axios from './axios'
-import { User as LoginUser} from '@/store/auth' 
-
-/*
-// Types based on backend schema
-export interface User {
-  id: number
-  username: string
-  email?: string
-  role_: 'SuperAdmin' | 'AravtLeader' | 'User'
-  city?: string
-  date_of_birth?: string
-  full_name?: string
-  is_active: boolean
-  is_deleted: boolean
-  refered_by_id?: number
-  able_to_create_aravt: boolean
-  able_to_create_tasks: boolean
-  is_leader_of_aravt: boolean
-  rating?: number
-  aravt_id?: number
-}
-*/
-
-export interface RegistrationData {
-  username: string
-  email: string
-  password: string
-  city: string
-  date_of_birth: string
-  full_name: string
-}
-
-export interface CreateAravt {
-  name: string
-  description: string
-  init_user_id: number
-}
-
-export interface Task {
-  id: number,
-  title: string,
-  description: string,
-  link: string,
-  reward: number,
- // rewardType: 'AT' | 'USDT';
-  defenition_of_done: {},
-  responsible_users_ids: [],
-  is_done: boolean,
-  is_global: boolean
-  date_time: string
-}
-
-export enum ProjectStatus {
-  "Posted",
-  "Not Posted",
-}
-
-export interface Project {
-  name: string,
-  description: string,
-  link: string,
-  fundings: {},
-  logo: string,
-  Status: ProjectStatus,
-  location: string
-}
-
-export interface Offer {
-  name: string,
-  business_id: number,
-  description: string,
-  is_limited: boolean,
-  count_left: number,
-  duration: number,
-  price: number,
-  assets: {}
-}
+import { User, RegistrationData, CreateAravt, Aravt, Project, Offer, Task, JoinRequest } from '@/types'
 
 export const api = {
-  async login(username: string, password: string): Promise<{ access_token: string, user: LoginUser }> {
+  async login(username: string, password: string): Promise<{ access_token: string, user: User }> {
     const response = await axios.post('/login/', {username, password})
     return response.data
   },
@@ -113,23 +37,23 @@ export const api = {
     return response.data
   },
 
-  async users_user(user_id: string): Promise<{ message: string }> {
-    const response = await axios.get('/users/user/'+`${user_id}`)
+  async users_user(user_id: number): Promise<{ message: string }> {
+    const response = await axios.get('/users/user/' + `${user_id}`)
     return response.data
   },
 
-  async users_user_subscribe(user_id: string): Promise<{ message: string }> {
-    const response = await axios.post('/users/user/'+`${user_id}` + '/subscribe')
+  async users_user_subscribe(user_id: number): Promise<{ message: string }> {
+    const response = await axios.post('/users/user/' + `${user_id}` + '/subscribe')
     return response.data
   },
 
-  async users_user_unsubscribe(user_id: string): Promise<{ message: string }> {
-    const response = await axios.delete('/users/user/'+`${user_id}` + '/unsubscribe')
+  async users_user_unsubscribe(user_id: number): Promise<{ message: string }> {
+    const response = await axios.delete('/users/user/' + `${user_id}` + '/unsubscribe')
     return response.data
   },
 
-  async users_user_let_create_aravt(user_id: string): Promise<{ message: string }> {
-    const response = await axios.put('/users/user/'+`${user_id}` + '/let_create_aravt')
+  async users_user_let_create_aravt(user_id: number): Promise<{ message: string }> {
+    const response = await axios.put('/users/user/' + `${user_id}` + '/let_create_aravt')
     return response.data
   },
 
@@ -139,37 +63,37 @@ export const api = {
   },
 
 
-  async aravt(): Promise<{ message: string }> {
+  async aravt(): Promise<Aravt[]> {
     const response = await axios.get('/aravt/')
     return response.data
   },
 
-  async aravt_aravt(aravt_id: string): Promise<{ message: string }> {
+  async aravt_aravt(aravt_id: number): Promise<Aravt> {
     const response = await axios.get('/aravt/' + `${aravt_id}`)
     return response.data
   },
 
-  async aravt_create_aravt(data: CreateAravt): Promise<{ message: string }> {
+  async aravt_create_aravt(data: CreateAravt): Promise<Aravt> {
     const response = await axios.post('/aravt/create_aravt/', data)
     return response.data
   },
 
-  async aravt_join(aravt_id: string, data: {aravt_id: number, text: string}): Promise<{ message: string }> {
+  async aravt_join(aravt_id: number, data: {aravt_id: number, text: string}): Promise<{ message: string }> {
     const response = await axios.post('/aravt/'+ `${aravt_id}` + '/join', data)
     return response.data
   },
 
-  async aravt_applications(): Promise<{ message: string }> {
+  async aravt_applications(): Promise<JoinRequest[]> {
     const response = await axios.get('/aravt/applications/')
     return response.data
   },
 
-  async aravt_applications_approve(application_id: string): Promise<{ message: string }> {
+  async aravt_applications_approve(application_id: number): Promise<{ message: string }> {
     const response = await axios.post('/aravt/applications/' + `${application_id}` + '/approve')
     return response.data
   },
 
-  async aravt_applications_reject(application_id: string): Promise<{ message: string }> {
+  async aravt_applications_reject(application_id: number): Promise<{ message: string }> {
     const response = await axios.delete('/aravt/applications/' + `${application_id}` + '/reject')
     return response.data
   },
@@ -179,7 +103,7 @@ export const api = {
     return response.data
   },
 
-  async aravt_set_task(data: Task): Promise<{ message: string }> {
+  async aravt_set_task(data: Omit<Task, 'id'>): Promise<{ message: string }> {
     const response = await axios.post('/aravt/set_task/', data)
     return response.data
   },
@@ -210,6 +134,6 @@ export const api = {
   },
 
   async logout(): Promise<void> {
-    await axios.post('/auth/logout/')
+    await axios.get('/logout/')
   }
 }

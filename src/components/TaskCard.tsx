@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Globe, Home, CreditCard, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { type Task } from '@/lib/api';
+import { Badge } from '@/components/ui/badge';
+import { Task } from '@/types';
 
 interface TaskCardProps {
   task: Task;
@@ -22,7 +23,7 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
               <Home className="h-4 w-4 text-green-500" />
             )}
             <CardTitle className="text-lg">{task.title}</CardTitle>
-            {/* {task.priority && (
+            {task.priority && (
               <Badge variant={
                 task.priority === 'high' ? 'destructive' :
                 task.priority === 'medium' ? 'default' :
@@ -30,7 +31,7 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
               }>
                 {task.priority}
               </Badge>
-            )} */}
+            )}
           </div>
           <p className="text-gray-500">{task.description}</p>
         </div>

@@ -48,6 +48,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
 
     try {
       // TODO: Replace with TON wallet connection logic
+      /*
       const mockUser = {
         id: 1,
         username: 'wallet_user',
@@ -56,6 +57,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
       const mockToken = 'mock-wallet-token';
       
       login(mockUser, mockToken);
+      */
       onLoginSuccess?.();
       navigate('/dashboard');
     } catch (error: unknown) {

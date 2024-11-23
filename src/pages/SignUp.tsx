@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api, RegistrationData } from '@/lib/api';
+import { api } from '@/lib/api';
+import { RegistrationData } from '@/types';
 
 const SignUp = () => {
   const navigate = useNavigate();
