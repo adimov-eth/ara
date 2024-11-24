@@ -7,6 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useDashboardStore } from '@/store/dashboard';
+import { useTasksStore } from '@/store/tasks';
 import { useAuthStore } from '@/store/auth';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { Task } from '@/types';
@@ -73,14 +74,19 @@ const StatCard = ({ title, value, icon: Icon, progress }: {
 );
 
 const AravtDashboard = () => {
-  const { stats, localTasks, globalTasks, isLoading, error, fetchDashboardData } = useDashboardStore();
+  const { stats, isLoading: dashboardLoading, error: dashboardError, fetchDashboardData } = useDashboardStore();
+  const { localTasks, globalTasks, isLoading: tasksLoading, error: tasksError, fetchTasksData} = useTasksStore();
   const user = useAuthStore(state => state.user);
 
   useEffect(() => {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
-  if (isLoading) {
+  useEffect(() => {
+    fetchTasksData();
+  }, [fetchTasksData]);
+
+  if (dashboardLoading || tasksLoading) {
     return <LoadingSpinner />;
   }
 
@@ -101,9 +107,15 @@ const AravtDashboard = () => {
         </div>
       </div>
 
-      {error && (
+      {dashboardError && (
         <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription>{dashboardError}</AlertDescription>
+        </Alert>
+      )}
+
+      {tasksError && (
+        <Alert variant="destructive">
+          <AlertDescription>{tasksError}</AlertDescription>
         </Alert>
       )}
 

@@ -66,11 +66,11 @@ export interface Task {
   id: number,
   title: string,
   description: string,
-  link: string,
+  link?: string,
   reward: number,
   // rewardType: 'AT' | 'USDT';
   defenition_of_done: {},
-  responsible_users_ids: [],
+  responsible_users_ids: number[],
   is_done: boolean,
   is_global: boolean
   date_time: string

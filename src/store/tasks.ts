@@ -1,39 +1,34 @@
 import { create } from 'zustand'
 import { api } from '@/lib/api'
+import { Task } from '@/types'
 
-interface DashboardStats {
-  tasksCompleted: number;
-  totalTasks: number;
-  tokensEarned: number;
-  usdtEarned: number;
-  rank: number;
-  rankProgress: number;
-}
-
-interface DashboardState {
-  stats: DashboardStats;
+interface TasksState {
+  localTasks: Task[];
+  globalTasks: Task[];
   isLoading: boolean;
   error: string | null;
-  fetchDashboardData: () => Promise<void>;
+  fetchTasksData: () => Promise<void>;
   updateTaskIsDone: (taskId: number, is_done: boolean) => Promise<void>;
 }
 
-export const useDashboardStore = create<DashboardState>((set, get) => ({
-  stats: {
-    tasksCompleted: 12,
-    totalTasks: 15,
-    tokensEarned: 2450,
-    usdtEarned: 1200,
-    rank: 2,
-    rankProgress: 65,
-  },
+export const useTasksStore = create<TasksState>((set, get) => ({
+  localTasks: [],
+  globalTasks: [],
   isLoading: false,
   error: null,
 
-  fetchDashboardData: async () => {
+  fetchTasksData: async () => {
     set({ isLoading: true, error: null });
     try {
+      const tasks: Task[] = await api.aravt_get_tasks();
+      
+      const LocalTasks: Task[] = tasks.filter((task) => !task.is_global);
+
+      const GlobalTasks: Task[] = tasks.filter((task) => task.is_global);
+
       set({ 
+        localTasks: LocalTasks,
+        globalTasks: GlobalTasks,
         isLoading: false 
       });
     } catch (error) {
@@ -52,8 +47,14 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
       await new Promise(resolve => setTimeout(resolve, 500));
       
       const state = get();
+      const updateTasks = (tasks: Task[]) =>
+        tasks.map(task =>
+          task.id === taskId ? { ...task, is_done } : task
+        );
 
       set({
+        localTasks: updateTasks(state.localTasks),
+        globalTasks: updateTasks(state.globalTasks),
         isLoading: false,
       });
     } catch (error) {
