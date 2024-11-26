@@ -8,6 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuthStore } from '@/store/auth';
+import { User } from '@/types';
+
 import { api } from '@/lib/api';
 
 interface LoginProps {
@@ -16,6 +18,7 @@ interface LoginProps {
 
 const Login = ({ onLoginSuccess }: LoginProps) => {
   const navigate = useNavigate();
+  const setToken = useAuthStore(state => state.setToken);
   const login = useAuthStore(state => state.login);
   
   const [username, setUsername] = useState('');
@@ -31,8 +34,10 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
     
     try {
       const { access_token, user } = await api.login(username, password);
+      setToken(access_token)
+      const current_user: User = await api.users_user(user.id);
       
-      login(user, access_token);
+      login(current_user, access_token);
       onLoginSuccess?.();
       navigate('/dashboard');
     } catch (error: unknown) {

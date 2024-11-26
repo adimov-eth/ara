@@ -7,8 +7,10 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useAravtsStore } from '@/store/aravts';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useAuthStore } from '@/store/auth';
 
 const BrowseAravts = () => {
+  const { user, hasAravt } = useAuthStore();
   const { aravts, isLoading, error, fetchAravts, applyToAravt } = useAravtsStore();
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -27,7 +29,7 @@ const BrowseAravts = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-8 space-y-8">
+    <div className="w-full max-w-6xl mx-auto p-8 space-y-8">
       {/* Welcome Message */}
       <Card className="bg-blue-50 border-none p-6">
         <div className="flex items-center gap-2 mb-2">
@@ -88,14 +90,17 @@ const BrowseAravts = () => {
                         <Users className="h-4 w-4" />
                         <span>{aravt.team?.length}/{10}</span>
                       </div>
-                      <Button 
-                        className="bg-[#0f172a] hover:bg-[#1e293b] text-white rounded-lg px-6"
-                        onClick={() => applyToAravt(aravt.id, "")}
-                        disabled={isLoading}
-                      >
-                        Register
-                        <ChevronRight className="ml-2 h-4 w-4" />
-                      </Button>
+                      { (!user || user && !hasAravt) ? ( 
+                        <Button 
+                          className="bg-[#0f172a] hover:bg-[#1e293b] text-white rounded-lg px-6"
+                          onClick={() => applyToAravt(aravt.id, "")}
+                          disabled={isLoading}
+                        >
+                          Register
+                          <ChevronRight className="ml-2 h-4 w-4" />
+                        </Button> 
+                        ) : null
+                      }
                     </div>
                   </div>
 

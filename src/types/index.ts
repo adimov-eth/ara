@@ -14,10 +14,12 @@ export interface User {
   is_leader_of_aravt: boolean
   rating?: number
   aravt_id?: number
+  aravt?: Aravt | null
   skills?: string[]
   tasksCompleted?: number
   completionRate?: number
   tokenBalance?: number
+  is_subordinate?: boolean
 }
 
 export interface Aravt {

@@ -87,8 +87,8 @@ export const useAdminStore = create<AdminState>((set, get) => ({
     try {
       const PendingRequests: JoinRequest[] = await api.aravt_applications()
 
-      const Aravts = await api.aravt()
-      const Members = Aravts.map(aravt => aravt.team).flat()
+      /*const Aravts = */await api.aravt()
+      const Members: User[] = [] //Aravts.map(aravt => aravt.team).flat()
 
       set({ 
         pendingRequests: PendingRequests,
@@ -106,7 +106,7 @@ export const useAdminStore = create<AdminState>((set, get) => ({
   approveRequest: async (requestId: number) => {
     set({ isLoading: true, error: null });
     try {
-      const approve = await api.aravt_applications_approve(requestId)
+      await api.aravt_applications_approve(requestId)
       
       const state = get();
       const updatedRequests = state.pendingRequests.filter(req => req.id !== requestId);
@@ -130,7 +130,7 @@ export const useAdminStore = create<AdminState>((set, get) => ({
   rejectRequest: async (requestId: number) => {
     set({ isLoading: true, error: null });
     try {
-      const reject = await api.aravt_applications_reject(requestId)
+      await api.aravt_applications_reject(requestId)
       
       const state = get();
       const updatedRequests = state.pendingRequests.filter(req => req.id !== requestId);
@@ -194,14 +194,14 @@ export const useAdminStore = create<AdminState>((set, get) => ({
   createTask: async (task) => {
     set({ isLoading: true, error: null });
     try {
-      const newTask = await api.aravt_set_task(task)
+      await api.aravt_set_task(task)
 
       const tasks = await api.aravt_get_tasks()
       
-      set(state => ({
+      set({
         tasks: tasks,
         isLoading: false,
-      }));
+      });
     } catch (error) {
       set({ 
         error: error instanceof Error ? error.message : 'Failed to create task', 

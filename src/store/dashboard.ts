@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { api } from '@/lib/api'
+//import { api } from '@/lib/api'
 
 interface DashboardStats {
   tasksCompleted: number;
@@ -15,10 +15,9 @@ interface DashboardState {
   isLoading: boolean;
   error: string | null;
   fetchDashboardData: () => Promise<void>;
-  updateTaskIsDone: (taskId: number, is_done: boolean) => Promise<void>;
 }
 
-export const useDashboardStore = create<DashboardState>((set, get) => ({
+export const useDashboardStore = create<DashboardState>((set) => ({
   stats: {
     tasksCompleted: 12,
     totalTasks: 15,
@@ -43,25 +42,5 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         set({ error: 'Failed to fetch dashboard data', isLoading: false });
       }
     }
-  },
-
-  updateTaskIsDone: async (taskId: number, is_done: boolean) => {
-    set({ isLoading: true, error: null });
-    try {
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const state = get();
-
-      set({
-        isLoading: false,
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        set({ error: error.message, isLoading: false });
-      } else {
-        set({ error: 'Failed to update task completion', isLoading: false });
-      }
-    }
-  },
+  }
 })); 

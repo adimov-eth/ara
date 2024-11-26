@@ -20,11 +20,13 @@ export function AppRoutes() {
   return (
     <Routes>
       {/* Public routes */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/complete_registration" element={<CompleteRegistration/>} />
-      <Route path="/explore" element={<ExploreFeatures />} />
-      <Route path="/browse" element={<BrowseAravts />} />
+      <Route element={<Layout />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/complete_registration" element={<CompleteRegistration/>} /> 
+        <Route path="/explore" element={<ExploreFeatures />} />
+        <Route path="/browse" element={<BrowseAravts /> }/>
+      </Route>
       
       {/* Protected routes */}
       <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
