@@ -194,9 +194,9 @@ export const useAdminStore = create<AdminState>((set, get) => ({
   createTask: async (task) => {
     set({ isLoading: true, error: null });
     try {
-      await api.aravt_set_task(task)
+      await api.tasks_set_task(task)
 
-      const tasks = await api.aravt_get_tasks()
+      const tasks = await api.tasks_get_tasks()
       
       set({
         tasks: tasks,

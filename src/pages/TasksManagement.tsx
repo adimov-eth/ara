@@ -40,14 +40,15 @@ const TasksManagement = () => {
         description: formData.get('description') as string,
         link: formData.get('link') as string,
         reward: Math.floor(Number(formData.get('reward'))),
-        defenition_of_done: JSON.parse(formData.get('defenition_of_done') as string || '{}'),
+        reward_type: (formData.get('reward_type') === 'AT' ? 'AT' : 'USDT') as 'AT' | 'USDT',
+        definition_of_done: JSON.parse(formData.get('definition_of_done') as string || '{}'),
         responsible_users_ids: responsibleUsers ? responsibleUsers.split(',').map(id => Number(id.trim())) : [],
         is_done: false,
         is_global: formData.get('is_global') === 'true',
         date_time: formData.get('deadline') as string,
         priority: formData.get('priority') as 'low' | 'medium' | 'high'
       };
-      await api.aravt_set_task(taskData);
+      await api.tasks_set_task(taskData);
       await fetchTasksData();
       setShowCreateTaskForm(false);
     } catch (error) {
@@ -116,8 +117,8 @@ const TasksManagement = () => {
                     <Input id="reward" name="reward" type="number" step="1" min="0" required />
                   </div>
                   <div>
-                    <Label htmlFor="defenition_of_done">Definition of Done</Label>
-                    <Textarea id="defenition_of_done" name="defenition_of_done" placeholder="{}" required />
+                    <Label htmlFor="definition_of_done">Definition of Done</Label>
+                    <Textarea id="definition_of_done" name="definition_of_done" placeholder="{}" required />
                   </div>
                   <div>
                     <Label htmlFor="responsible_users_ids">Responsible Users (comma-separated IDs)</Label>

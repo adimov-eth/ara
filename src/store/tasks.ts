@@ -20,7 +20,7 @@ export const useTasksStore = create<TasksState>((set, get) => ({
   fetchTasksData: async () => {
     set({ isLoading: true, error: null });
     try {
-      const tasks: Task[] = await api.aravt_get_tasks();
+      const tasks: Task[] = await api.tasks_get_tasks();
       
       const LocalTasks: Task[] = tasks.filter((task) => !task.is_global);
 

@@ -70,8 +70,8 @@ export interface Task {
   description: string,
   link?: string,
   reward: number,
-  // rewardType: 'AT' | 'USDT';
-  defenition_of_done: {},
+  reward_type: 'AT' | 'USDT';
+  definition_of_done: {},
   responsible_users_ids: number[],
   is_done: boolean,
   is_global: boolean

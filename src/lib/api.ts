@@ -107,13 +107,18 @@ export const api = {
     return response.data
   },
 
-  async aravt_set_task(data: Omit<Task, 'id'>): Promise<MessageResponse> {
-    const response = await axios.post('/aravt/set_task/', data)
+  async tasks_set_task(data: Omit<Task, 'id'>): Promise<MessageResponse> {
+    const response = await axios.post('/tasks/set_task/', data)
     return response.data
   },
 
-  async aravt_get_tasks(): Promise<Task[]> {
-    const response = await axios.get('/aravt/get_tasks/')
+  async tasks_get_tasks(): Promise<Task[]> {
+    const response = await axios.get('/tasks/')
+    return response.data
+  },
+
+  async tasks_get_task(task_id: number): Promise<Task> {
+    const response = await axios.get('/tasks/id' + `${task_id}`)
     return response.data
   },
 

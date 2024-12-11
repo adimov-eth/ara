@@ -54,9 +54,10 @@ const AdminPanel = () => {
     description: '',
     date_time: '',
     reward: 0,
+    reward_type: 'AT',
     is_done: false,
     link: '',
-    defenition_of_done: '',
+    definition_of_done: '',
     responsible_users_ids: [],
     priority: 'low'
   });
@@ -66,11 +67,12 @@ const AdminPanel = () => {
       title: createTaskForm.title,
       description: createTaskForm.description,
       reward: createTaskForm.reward,
+      reward_type: createTaskForm.reward_type,
       date_time: createTaskForm.date_time,
       is_global: createTaskForm.is_global,
       is_done: false,
       link: '',
-      defenition_of_done: '',
+      definition_of_done: '',
       responsible_users_ids: [],
       priority: 'low'
     });
@@ -81,9 +83,10 @@ const AdminPanel = () => {
       description: '',
       date_time: '',
       reward: 0,
+      reward_type: 'AT',
       is_done: false,
       link: '',
-      defenition_of_done: '',
+      definition_of_done: '',
       responsible_users_ids: [],
       priority: 'low'
     });

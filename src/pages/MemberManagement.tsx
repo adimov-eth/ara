@@ -9,16 +9,20 @@ import { useAuthStore } from '@/store/auth';
 import { useAdminStore } from '@/store/admin';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { MemberCard } from '@/components/admin/MemberCard';
+import { RequestCard } from '@/components/admin/RequestCard';
 
 const MemberManagement = () => {
   const { user } = useAuthStore();
   const { 
     members, 
+    pendingRequests, 
     isLoading, 
     error, 
     fetchAdminData,
     updateMemberRole,
-    removeMember 
+    removeMember,
+    approveRequest,
+    rejectRequest
   } = useAdminStore();
 
   useEffect(() => {
@@ -97,6 +101,23 @@ const MemberManagement = () => {
               />
             ))}
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Pending Join Requests</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {pendingRequests.map((application) => (
+            <RequestCard
+              key={application.id}
+              request={application}
+              onApprove={approveRequest}
+              onReject={rejectRequest}
+              isLoading={isLoading}
+            />
+          ))}
         </CardContent>
       </Card>
     </div>
