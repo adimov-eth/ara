@@ -21,7 +21,7 @@ const NavLink = ({ to, children }: { to: string; children: React.ReactNode }) =>
 }
 
 export default function Layout() {
-  const { user } = useAuthStore()
+  const { user, hasAravt } = useAuthStore()
   const isAdmin = user?.role === 'SuperAdmin' 
   // const isAravtLeader = user?.role === 'AravtLeader'
 
@@ -35,7 +35,7 @@ export default function Layout() {
                 <span className="text-xl font-bold text-gray-900">Aravt</span>
               </Link>
 
-              {user ? (
+              {user ? hasAravt ? (
                 <div className="flex items-center gap-4 ml-8">
                   <NavLink to="/dashboard">Dashboard</NavLink>
                   <NavLink to="/projects">Projects</NavLink>
@@ -44,7 +44,12 @@ export default function Layout() {
                   <NavLink to="/browse">Browse Aravts</NavLink>
                   {isAdmin && <NavLink to="/admin">Admin</NavLink>}
                 </div>
-              ) : (
+              )  : (
+                <div className="flex items-center gap-4 ml-8">
+                  <NavLink to="/browse">Browse Aravts</NavLink>
+                </div>
+              ) 
+              : (
                 <div className="flex items-center gap-8 ml-8">
                   <NavLink to="/explore">Explore</NavLink>
                   <NavLink to="/browse">Browse Aravts</NavLink>

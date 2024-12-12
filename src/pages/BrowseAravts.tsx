@@ -7,15 +7,11 @@ import { useAuthStore } from '@/store/auth';
 import AravtCard from '@/components/AravtCard'; // Import the new component
 import { Card } from '@/components/ui/card'; 
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import JoinRequestForm from '@/components/JoinRequestForm'; // Import the join request form
 import { Aravt } from '@/types';
 
 const BrowseAravts = () => {
-  // const { user, hasAravt } = useAuthStore();
-  const { aravts, isLoading, error, fetchAravts, applyToAravt, fetchAravtDetails } = useAravtsStore();
+  const { aravts, isLoading, error, fetchAravts } = useAravtsStore();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedAravt, setSelectedAravt] = useState<Aravt | null>(null); // State for selected Aravt details
-  const [isJoining, setIsJoining] = useState(false); // State to control the join request form visibility
 
   useEffect(() => {
     fetchAravts();
@@ -26,29 +22,6 @@ const BrowseAravts = () => {
     aravt.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     aravt.skills?.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
   );
-
-  const handleJoinAravt = (aravtId: number) => {
-    setSelectedAravt(aravtId); // Set the selected Aravt for joining
-    setIsJoining(true); // Show the join request form
-  };
-
-  const handleGetMoreInfo = async (aravtId: number) => {
-    const details = await fetchAravtDetails(aravtId); // Fetch details for the selected Aravt
-    setSelectedAravt(details); // Set the selected Aravt details
-  };
-
-  const handleJoinRequestSubmit = async (data: { reason: string; additionalInfo: string }) => {
-    if (selectedAravt) {
-      await applyToAravt(selectedAravt.id, data.reason); // Send join request with reason
-      setIsJoining(false); // Close the form after submission
-      setSelectedAravt(null); // Clear selected Aravt
-    }
-  };
-
-  const handleCloseForm = () => {
-    setIsJoining(false); // Close the form without submitting
-    setSelectedAravt(null); // Clear selected Aravt
-  };
 
   if (isLoading && !aravts.length) {
     return <LoadingSpinner />;
@@ -91,43 +64,8 @@ const BrowseAravts = () => {
             <AravtCard 
               key={aravt.id} 
               aravt={aravt} 
-              onJoin={handleJoinAravt} 
-              onGetMoreInfo={handleGetMoreInfo} 
             />
           ))}
-        </div>
-
-        {/* Display Join Request Form */}
-        {isJoining && selectedAravt && (
-          <JoinRequestForm 
-            aravtId={selectedAravt.id} 
-            onSubmit={handleJoinRequestSubmit} 
-            onClose={handleCloseForm} 
-          />
-        )}
-
-        {/* Display Selected Aravt Details */}
-        <div className="mt-6">
-          {selectedAravt && !isJoining && (
-            <Card className="p-6">
-              <h3 className="text-lg font-semibold">{selectedAravt.name}</h3>
-              <p className="text-gray-500">{selectedAravt.description}</p>
-              <div className="flex items-center gap-1 text-gray-600">
-                <span>Leader:</span>
-                <span className="text-blue-500">{selectedAravt.leader?.full_name}</span>
-              </div>
-              <div className="flex flex-wrap gap-2 mt-4">
-                {selectedAravt.skills?.map((skill, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </Card>
-          )}
         </div>
       </div>
     </div>

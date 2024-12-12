@@ -113,3 +113,11 @@ export interface JoinRequest {
   text: string,
   date_time: string
 }
+
+export interface TaskCompletion {
+  "id": number,
+  "task": Partial<Task>,
+  "user": Partial<User>,
+  "body": {},
+  "completed_at": string
+}

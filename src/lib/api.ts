@@ -1,5 +1,5 @@
 import axios from './axios'
-import { User, RegistrationData, CreateAravt, Aravt, Project, Offer, Task, JoinRequest } from '@/types'
+import { User, RegistrationData, CreateAravt, Aravt, Project, Offer, Task, JoinRequest, TaskCompletion } from '@/types'
 
 interface MessageResponse {
   message: string
@@ -36,6 +36,7 @@ export const api = {
     return response.data
   },
 
+  
   async users(): Promise<User[]> {
     const response = await axios.get('/users/')
     return response.data
@@ -107,6 +108,7 @@ export const api = {
     return response.data
   },
 
+
   async tasks_set_task(data: Omit<Task, 'id'>): Promise<MessageResponse> {
     const response = await axios.post('/tasks/set_task/', data)
     return response.data
@@ -121,6 +123,32 @@ export const api = {
     const response = await axios.get('/tasks/id' + `${task_id}`)
     return response.data
   },
+
+  async tasks_update_task(task_id: number, data: Partial<Task>): Promise<MessageResponse> {
+    const response = await axios.put('/tasks/task/' + `${task_id}`+ '/complete', data)
+    return response.data
+  },
+
+  async tasks_all_completions(): Promise<TaskCompletion[]> {
+    const response = await axios.get('/tasks/all_comletions')
+    return response.data
+  },
+
+  async tasks_completions_for_task(task_completion_id: number  ): Promise<TaskCompletion> {
+    const response = await axios.get('/tasks/completions_for_task_' + `${task_completion_id}`)
+    return response.data
+  },
+
+  async tasks_completions_approve(task_completion_id: number  ): Promise<TaskCompletion> {
+    const response = await axios.post('/tasks/completions/' + `${task_completion_id}` + '/approve')
+    return response.data
+  },
+
+  async tasks_completions_reject(task_completion_id: number  ): Promise<TaskCompletion> {
+    const response = await axios.delete('/tasks/completions/' + `${task_completion_id}` + '/reject')
+    return response.data
+  },
+
 
   async aravt_set_business(data: Project): Promise<MessageResponse> {
     const response = await axios.post('/aravt/set_business/', data)

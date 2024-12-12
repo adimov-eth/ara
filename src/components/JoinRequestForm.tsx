@@ -5,17 +5,16 @@ import { Card } from '@/components/ui/card';
 
 interface JoinRequestFormProps {
   aravtId: number;
-  onSubmit: (data: { reason: string; additionalInfo: string }) => void;
+  onSubmit: (data: { reason: string }) => void;
   onClose: () => void;
 }
 
 const JoinRequestForm = ({ aravtId, onSubmit, onClose }: JoinRequestFormProps) => {
   const [reason, setReason] = useState('');
-  const [additionalInfo, setAdditionalInfo] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ reason, additionalInfo });
+    onSubmit({ reason });
   };
 
   return (
@@ -29,14 +28,6 @@ const JoinRequestForm = ({ aravtId, onSubmit, onClose }: JoinRequestFormProps) =
             value={reason} 
             onChange={(e) => setReason(e.target.value)} 
             required 
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Additional Information</label>
-          <Input 
-            type="text" 
-            value={additionalInfo} 
-            onChange={(e) => setAdditionalInfo(e.target.value)} 
           />
         </div>
         <div className="flex gap-2">
