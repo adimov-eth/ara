@@ -59,7 +59,8 @@ const AdminPanel = () => {
     link: '',
     definition_of_done: '',
     responsible_users_ids: [],
-    priority: 'low'
+    priority: 'low',
+    one_time: false
   });
 
   const handleCreateTask = async () => {
@@ -74,7 +75,8 @@ const AdminPanel = () => {
       link: '',
       definition_of_done: '',
       responsible_users_ids: [],
-      priority: 'low'
+      priority: createTaskForm.priority,
+      one_time: createTaskForm.one_time
     });
     setIsCreateTaskModalOpen(false);
     setCreateTaskForm({
@@ -88,7 +90,8 @@ const AdminPanel = () => {
       link: '',
       definition_of_done: '',
       responsible_users_ids: [],
-      priority: 'low'
+      priority: 'low',
+      one_time: false
     });
   };
 
@@ -595,6 +598,16 @@ const AdminPanel = () => {
                   }))}
                 />
               </div>
+            </div>
+
+            <div className="grid gap-2">
+              <Label>One Time Task</Label>
+              <Switch
+                checked={createTaskForm.one_time}
+                onCheckedChange={(checked) => 
+                  setCreateTaskForm(prev => ({ ...prev, one_time: checked }))
+                }
+              />
             </div>
           </div>
           <DialogFooter>

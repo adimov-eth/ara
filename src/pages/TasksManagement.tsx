@@ -46,7 +46,8 @@ const TasksManagement = () => {
         is_done: false,
         is_global: formData.get('is_global') === 'true',
         date_time: formData.get('deadline') as string,
-        priority: formData.get('priority') as 'low' | 'medium' | 'high'
+        priority: formData.get('priority') as 'low' | 'medium' | 'high',
+        one_time: formData.get('one_time') === 'true'
       };
       await api.tasks_set_task(taskData);
       await fetchTasksData();

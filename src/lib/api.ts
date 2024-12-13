@@ -114,7 +114,7 @@ export const api = {
     return response.data
   },
 
-  async tasks_get_tasks(): Promise<Task[]> {
+  async tasks_get_tasks(): Promise<{tasks: Task[], other_tasks: Task[], parent_tasks: Task[]}> {
     const response = await axios.get('/tasks/')
     return response.data
   },

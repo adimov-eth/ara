@@ -12,7 +12,7 @@ interface TaskCardProps {
 }
 
 export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps) => (
-  <Card className="hover:bg-gray-50">
+  <Card className="hover:bg-gray-50 max-w-3xl w-full">
     <CardHeader className="p-4">
       <div className="flex justify-between items-start">
         <div className="space-y-1">

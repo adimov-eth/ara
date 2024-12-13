@@ -20,10 +20,19 @@ export const useTasksStore = create<TasksState>((set, get) => ({
   fetchTasksData: async () => {
     set({ isLoading: true, error: null });
     try {
-      const tasks: Task[] = await api.tasks_get_tasks();
+      let all_tasks = await api.tasks_get_tasks();
+      let other_tasks = all_tasks.other_tasks;
+      let parent_tasks = all_tasks.parent_tasks;
       
-      const LocalTasks: Task[] = tasks.filter((task) => !task.is_global);
+      const tasks: Task[] = all_tasks.tasks;
+      
+      console.log('Fetched tasks:', tasks);
 
+      if (!Array.isArray(tasks)) {
+        throw new Error('Fetched tasks is not an array');
+      }
+
+      const LocalTasks: Task[] = tasks.filter((task) => !task.is_global);
       const GlobalTasks: Task[] = tasks.filter((task) => task.is_global);
 
       set({ 

@@ -77,6 +77,7 @@ export interface Task {
   is_global: boolean
   date_time: string
   priority: 'low' | 'medium' | 'high';
+  one_time: boolean;
 }
 
 export type ProjectStatus = "Posted" | "Not Posted"
