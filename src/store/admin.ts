@@ -196,7 +196,11 @@ export const useAdminStore = create<AdminState>((set, get) => ({
     try {
       await api.tasks_set_task(task)
 
-      const tasks = await api.tasks_get_tasks()
+      let all_tasks = await api.tasks_get_tasks();
+      let other_tasks = all_tasks.other_tasks;
+      let parent_tasks = all_tasks.parent_tasks;
+
+      const tasks = all_tasks.tasks;
       
       set({
         tasks: tasks,
