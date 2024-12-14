@@ -137,3 +137,19 @@ button:focus-visible {
     @apply bg-background text-foreground;
   }
 }
+
+/* Add responsive styles */
+@media (max-width: 640px) {
+  body {
+    padding: 0; /* Remove body padding for mobile */
+  }
+
+  h1 {
+    font-size: 2.5em; /* Adjust heading size for mobile */
+  }
+
+  button {
+    padding: 0.4em 0.8em; /* Adjust button padding for mobile */
+    font-size: 1rem; /* Adjust button font size for mobile */
+  }
+}

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '@/lib/api';
 import { RegistrationData } from '@/types';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -14,8 +16,20 @@ const SignUp = () => {
     full_name: ''
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement> | Date | null) => {
+    let name: string;
+    let value: string;
+
+    if (e instanceof Date) {
+      name = 'date_of_birth';
+      value = e.toISOString().split('T')[0]; // Format date to yyyy-mm-dd
+    } else if (e && 'target' in e) {
+      name = e.target.name;
+      value = e.target.value;
+    } else {
+      return; // Handle null case
+    }
+
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -82,7 +96,7 @@ const SignUp = () => {
               <input
                 id="city"
                 name="city"
-                type="city"
+                type="text"
                 required
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100"
                 placeholder="city"
@@ -91,24 +105,24 @@ const SignUp = () => {
                 />
             </div>
             <div>
-              <label htmlFor="date_of_birth" className="sr-only">Date_of_birth</label>
-              <input
+              <label htmlFor="date_of_birth" className="sr-only">Date of Birth</label>
+              <DatePicker
                 id="date_of_birth"
                 name="date_of_birth"
-                type="date_of_birth"
-                required
+                selected={formData.date_of_birth ? new Date(formData.date_of_birth) : null}
+                onChange={(date) => handleChange(date)}
+                dateFormat="yyyy-MM-dd"
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100"
-                placeholder="date_of_birth"
-                value={formData.date_of_birth}
-                onChange={handleChange}
-                />
+                placeholderText="Select date of birth"
+                required
+              />
             </div>
             <div>
               <label htmlFor="full_name" className="sr-only">Full name</label>
               <input
                 id="full_name"
                 name="full_name"
-                type="full_name"
+                type="text"
                 required
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100"
                 placeholder="full_name"
@@ -120,7 +134,6 @@ const SignUp = () => {
           <div>
             <button
               type="submit"
-              onClick={handleSubmit}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Sign Up

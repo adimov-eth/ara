@@ -31,10 +31,10 @@ const JoinRequestForm = ({ aravtId, onSubmit, onClose }: JoinRequestFormProps) =
           />
         </div>
         <div className="flex gap-2">
-          <Button type="submit" className="bg-green-500 hover:bg-green-600 text-white">
+          <Button type="submit" className="bg-black hover:bg-gray-700 text-white">
             Submit Join Request
           </Button>
-          <Button type="button" className="bg-red-500 hover:bg-red-600 text-white" onClick={onClose}>
+          <Button type="button" className="bg-black hover:bg-gray-700 text-white" onClick={onClose}>
             Cancel
           </Button>
         </div>

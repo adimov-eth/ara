@@ -17,6 +17,7 @@ const AravtCard = ({ aravt }: AravtCardProps) => {
   const [selectedAravtDetails, setSelectedAravtDetails] = useState<Aravt | null>(null); // State for selected Aravt details
   const [loadingDetails, setLoadingDetails] = useState(false); // State to manage loading state for details
   const [loadingJoin, setLoadingJoin] = useState(false); // State to manage loading state for join request
+  const [showDetails, setShowDetails] = useState(false); // State to manage visibility of additional details
 
   const handleJoinRequestSubmit = async (data: { reason: string }) => {
     setLoadingJoin(true); // Set loading state for join request
@@ -35,14 +36,20 @@ const AravtCard = ({ aravt }: AravtCardProps) => {
   };
 
   const handleGetMoreInfo = async () => {
-    setLoadingDetails(true); // Set loading state
-    try {
-      const details = await fetchAravtDetails(aravt.id); // Fetch details for the selected Aravt
-      setSelectedAravtDetails(details); // Set the selected Aravt details
-    } catch (error) {
-      console.error("Failed to fetch Aravt details:", error);
-    } finally {
-      setLoadingDetails(false); // Reset loading state
+    if (showDetails) {
+      setShowDetails(false); // Hide details if already shown
+      setSelectedAravtDetails(null); // Clear details when hiding
+    } else {
+      setLoadingDetails(true);
+      try {
+        const details = await fetchAravtDetails(aravt.id);
+        setSelectedAravtDetails(details);
+      } catch (error) {
+        console.error("Failed to fetch Aravt details:", error);
+      } finally {
+        setLoadingDetails(false);
+        setShowDetails(true); // Show details after fetching
+      }
     }
   };
 
@@ -83,11 +90,11 @@ const AravtCard = ({ aravt }: AravtCardProps) => {
 
           {/* Buttons for Join and Get More Info */}
           <div className="mt-4 flex gap-2">
-            <Button className="bg-gray-300 hover:bg-gray-400 text-black" onClick={() => setIsJoining(true)}>
+            <Button className="bg-black hover:bg-gray-700 text-white" onClick={() => setIsJoining(true)}>
               Join Aravt
             </Button>
-            <Button className="bg-gray-300 hover:bg-gray-400 text-black" onClick={handleGetMoreInfo}>
-              Get More Info
+            <Button className="bg-black hover:bg-gray-700 text-white" onClick={handleGetMoreInfo}>
+              {showDetails ? "Hide" : "Get More Info"}
             </Button>
           </div>
 
@@ -101,7 +108,7 @@ const AravtCard = ({ aravt }: AravtCardProps) => {
           )}
 
           {/* Display Selected Aravt Details */}
-          {selectedAravtDetails && (
+          {showDetails && selectedAravtDetails && (
             <div className="mt-4">
               <h4 className="text-md font-semibold">Details:</h4>
               <p className="text-gray-500">{selectedAravtDetails.description}</p>
