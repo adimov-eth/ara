@@ -87,8 +87,8 @@ export const useAdminStore = create<AdminState>((set, get) => ({
     try {
       const PendingRequests: JoinRequest[] = await api.aravt_applications()
 
-      /*const Aravts = */await api.aravt()
-      const Members: User[] = [] //Aravts.map(aravt => aravt.team).flat()
+      const Aravts = await Promise.all((await api.aravt()).map(async aravt => await api.aravt_aravt(aravt.id)))
+      const Members: User[] = Aravts.map(aravt => aravt.team).flat()
 
       set({ 
         pendingRequests: PendingRequests,
