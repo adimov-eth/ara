@@ -104,7 +104,7 @@ const SignUp = () => {
                 onChange={handleChange}
                 />
             </div>
-            <div>
+            <div className="mb-6">
               <label htmlFor="date_of_birth" className="sr-only">Date of Birth</label>
               <DatePicker
                 id="date_of_birth"
@@ -112,9 +112,14 @@ const SignUp = () => {
                 selected={formData.date_of_birth ? new Date(formData.date_of_birth) : null}
                 onChange={(date) => handleChange(date)}
                 dateFormat="yyyy-MM-dd"
-                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100"
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100 mb-4"
                 placeholderText="Select date of birth"
                 required
+                showYearDropdown
+                yearDropdownItemNumber={100}
+                scrollableYearDropdown
+                showMonthDropdown
+                popperClassName="datepicker-popover"
               />
             </div>
             <div>
