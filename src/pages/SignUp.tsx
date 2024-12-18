@@ -112,7 +112,7 @@ const SignUp = () => {
                 selected={formData.date_of_birth ? new Date(formData.date_of_birth) : null}
                 onChange={(date) => handleChange(date)}
                 dateFormat="yyyy-MM-dd"
-                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100 mb-4"
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100"
                 placeholderText="Select date of birth"
                 required
                 showYearDropdown

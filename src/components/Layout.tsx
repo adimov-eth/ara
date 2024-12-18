@@ -49,12 +49,8 @@ export default function Layout() {
                   <NavLink to="/browse">Browse Aravts</NavLink>
                 </div>
               ) 
-              : (
-                <div className="flex items-center gap-8 ml-8">
-                  <NavLink to="/explore">Explore</NavLink>
-                  <NavLink to="/browse">Browse Aravts</NavLink>
-                </div>
-              )}
+              : (<div/>)
+            }
             </div>
             <div className="flex items-center gap-4 w-[200px] justify-end">
               {user ? (
