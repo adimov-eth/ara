@@ -11,45 +11,7 @@ import { useTasksStore } from '@/store/tasks';
 import { useAuthStore } from '@/store/auth';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { Task } from '@/types';
-
-const TaskCard = ({ task }: { task: Task }) => (
-  <Card className="hover:bg-gray-50">
-    <CardHeader className="p-4">
-      <div className="flex justify-between items-start">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            {task.is_global ? (
-              <Globe className="h-4 w-4 text-blue-500" />
-            ) : (
-              <Home className="h-4 w-4 text-green-500" />
-            )}
-            <CardTitle className="text-lg">{task.title}</CardTitle>
-          </div>
-          <p className="text-gray-500">{task.description}</p>
-        </div>
-        <Badge variant={task.is_done === true ? 'default' : 'secondary'}>
-          {task.is_done === true ? 'Completed' : 'Pending'}
-        </Badge>
-      </div>
-    </CardHeader>
-    <CardContent className="p-4 pt-0">
-      <div className="space-y-4">
-        <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center">
-              <CreditCard className="h-4 w-4 mr-1 text-gray-500" />
-              <span>{task.reward} {"AT"}</span>
-            </div>
-            <div className="flex items-center">
-              <Star className="h-4 w-4 mr-1 text-gray-500" />
-              <span>Due: {new Date(task.date_time).toLocaleDateString()}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </CardContent>
-  </Card>
-);
+import { TaskCard } from '@/components/TaskCard';
 
 const StatCard = ({ title, value, icon: Icon, progress }: {
   title: string;

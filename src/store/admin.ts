@@ -197,6 +197,7 @@ export const useAdminStore = create<AdminState>((set, get) => ({
       await api.tasks_set_task(task)
 
       let all_tasks = await api.tasks_get_tasks();
+      // TODO:
       let other_tasks = all_tasks.other_tasks;
       let parent_tasks = all_tasks.parent_tasks;
 
