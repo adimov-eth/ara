@@ -18,6 +18,7 @@ const MemberManagement = () => {
     pendingRequests, 
     isLoading, 
     error, 
+    fetchAravtData,
     fetchAdminData,
     updateMemberRole,
     removeMember,
@@ -28,6 +29,10 @@ const MemberManagement = () => {
   useEffect(() => {
     fetchAdminData();
   }, [fetchAdminData]);
+
+  useEffect(() => {
+    fetchAravtData();
+  }, [fetchAravtData]);
 
   if (!user) {
     return <LoadingSpinner />;

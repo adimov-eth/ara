@@ -60,7 +60,12 @@ const AdminPanel = () => {
     definition_of_done: '',
     responsible_users_ids: [],
     priority: 'low',
-    one_time: false
+    one_time: false,
+    completions: {
+      completions_amount: 0,
+      is_completion_approved: false,
+      num_of_approved: 0
+    }
   });
 
   const handleCreateTask = async () => {
@@ -76,7 +81,12 @@ const AdminPanel = () => {
       definition_of_done: '',
       responsible_users_ids: [],
       priority: createTaskForm.priority,
-      one_time: createTaskForm.one_time
+      one_time: createTaskForm.one_time,
+      completions: {
+        completions_amount: 0,
+        is_completion_approved: false,
+        num_of_approved: 0
+      }
     });
     setIsCreateTaskModalOpen(false);
     setCreateTaskForm({
@@ -91,7 +101,12 @@ const AdminPanel = () => {
       definition_of_done: '',
       responsible_users_ids: [],
       priority: 'low',
-      one_time: false
+      one_time: false,
+      completions: {
+        completions_amount: 0,
+        is_completion_approved: false,
+        num_of_approved: 0
+      }
     });
   };
 

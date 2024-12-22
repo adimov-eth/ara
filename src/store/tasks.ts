@@ -52,8 +52,7 @@ export const useTasksStore = create<TasksState>((set, get) => ({
   updateTaskIsDone: async (taskId: number, is_done: boolean) => {
     set({ isLoading: true, error: null });
     try {
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await api.tasks_update_task(taskId, { is_done: true });
       
       const state = get();
       const updateTasks = (tasks: Task[]) =>

@@ -78,6 +78,11 @@ export interface Task {
   date_time: string
   priority: 'low' | 'medium' | 'high';
   one_time: boolean;
+  completions: {
+    completions_amount: number,
+    is_completion_approved: boolean,
+    num_of_approved: number
+  }
 }
 
 export type ProjectStatus = "Posted" | "Not Posted"
@@ -122,5 +127,7 @@ export interface TaskCompletion {
   "task": Partial<Task>,
   "user": Partial<User>,
   "body": {},
-  "completed_at": string
+  "completed_at": string,
+  "is_approved": boolean,
+  "reward_paid": boolean
 }

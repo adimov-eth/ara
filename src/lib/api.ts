@@ -125,7 +125,7 @@ export const api = {
   },
 
   async tasks_update_task(task_id: number, data: Partial<Task>): Promise<MessageResponse> {
-    const response = await axios.put('/tasks/task/' + `${task_id}`+ '/complete', data)
+    const response = await axios.put('/tasks/task/' + `${task_id}`+ '/complete', { task_id: task_id, body: data})
     return response.data
   },
 

@@ -10,8 +10,8 @@ import { useDashboardStore } from '@/store/dashboard';
 import { useTasksStore } from '@/store/tasks';
 import { useAuthStore } from '@/store/auth';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
-import { Task } from '@/types';
-import { TaskCard } from '@/components/TaskCard';
+//import { Task } from '@/types';
+//import { TaskCard } from '@/components/TaskCard';
 
 const StatCard = ({ title, value, icon: Icon, progress }: {
   title: string;
@@ -37,18 +37,18 @@ const StatCard = ({ title, value, icon: Icon, progress }: {
 
 const AravtDashboard = () => {
   const { stats, isLoading: dashboardLoading, error: dashboardError, fetchDashboardData } = useDashboardStore();
-  const { localTasks, globalTasks, isLoading: tasksLoading, error: tasksError, fetchTasksData} = useTasksStore();
+  //const { localTasks, globalTasks, isLoading: tasksLoading, error: tasksError, fetchTasksData} = useTasksStore();
   const user = useAuthStore(state => state.user);
 
   useEffect(() => {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
-  useEffect(() => {
-    fetchTasksData();
-  }, [fetchTasksData]);
+  //useEffect(() => {
+  //  fetchTasksData();
+  //}, [fetchTasksData]);
 
-  if (dashboardLoading || tasksLoading) {
+  if (dashboardLoading /*|| tasksLoading*/) {
     return <LoadingSpinner />;
   }
 
@@ -75,11 +75,11 @@ const AravtDashboard = () => {
         </Alert>
       )}
 
-      {tasksError && (
+      {/*tasksError && (
         <Alert variant="destructive">
           <AlertDescription>{tasksError}</AlertDescription>
         </Alert>
-      )}
+      )*/}
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <StatCard
@@ -106,7 +106,7 @@ const AravtDashboard = () => {
         />
       </div>
 
-      <Card>
+      {/*<Card>
         <CardHeader>
           <CardTitle>Tasks</CardTitle>
         </CardHeader>
@@ -140,7 +140,7 @@ const AravtDashboard = () => {
             </TabsContent>
           </Tabs>
         </CardContent>
-      </Card>
+      </Card>*/}
     </div>
   );
 };

@@ -47,7 +47,7 @@ export const TaskManagementCard = ({ task, onUpdate, onDelete, isLoading }: Task
             onClick={() => onUpdate(task.id, { is_done: true })}
             disabled={isLoading || task.is_done}
           >
-            Mark Complete
+            Complete
           </Button>
           <Button 
             variant="outline" 

@@ -43,7 +43,7 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
               onClick={() => onUpdate(task.id, { is_done: true })}
               disabled={isLoading || task.is_done === true}
             >
-              Mark Complete
+              Complete
             </Button>
           )}
           {onDelete && (
@@ -77,4 +77,4 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
       </div>
     </CardContent>
   </Card>
-); 
+);

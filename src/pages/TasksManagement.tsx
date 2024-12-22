@@ -47,7 +47,12 @@ const TasksManagement = () => {
         is_global: formData.get('is_global') === 'true',
         date_time: formData.get('deadline') as string,
         priority: formData.get('priority') as 'low' | 'medium' | 'high',
-        one_time: formData.get('one_time') === 'true'
+        one_time: formData.get('one_time') === 'true',
+        completions: {
+          "completions_amount": 0,
+          "is_completion_approved": false,
+          "num_of_approved": 0
+       }
       };
       await api.tasks_set_task(taskData);
       await fetchTasksData();

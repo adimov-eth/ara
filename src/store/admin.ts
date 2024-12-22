@@ -39,6 +39,7 @@ interface AdminState {
   isLoading: boolean;
   error: string | null;
   fetchAdminData: () => Promise<void>;
+  fetchAravtData: () => Promise<void>;
   approveRequest: (requestId: number) => Promise<void>;
   rejectRequest: (requestId: number) => Promise<void>;
   updateMemberRole: (userId: number, role: User['role']) => Promise<void>;
@@ -52,7 +53,7 @@ interface AdminState {
 
 export const useAdminStore = create<AdminState>()((set, get) => {
   const aravt = useAuthStore.getState().aravt as Aravt; // Access aravt from the store without using a hook
-  console.log(aravt)
+  const user = useAuthStore.getState().user as User;
 
   return {
     stats: {
@@ -90,16 +91,36 @@ export const useAdminStore = create<AdminState>()((set, get) => {
     fetchAdminData: async () => {
       set({ isLoading: true, error: null });
       try {
-        const PendingRequests: JoinRequest[] = await api.aravt_applications()
 
-        //const Aravts = await Promise.all((await api.aravt()).map(async aravt => await api.aravt_aravt(aravt.id)))
-        //const Members: User[] = Aravts.map(aravt => aravt.team).flat()
+        if (user.is_leader_of_aravt) {
+          const PendingRequests: JoinRequest[] = await api.aravt_applications()
+          set({ 
+            pendingRequests: PendingRequests,
+            isLoading: false,
+          });
+        } else {
+          set({ 
+            pendingRequests: [],
+            isLoading: false,
+          });
+        }
+      } catch (error) {
+        set({ 
+          error: error instanceof Error ? error.message : 'Failed to fetch admin data', 
+          isLoading: false 
+        });
+      }
+    },
+
+    fetchAravtData: async () => {
+      set({ isLoading: true, error: null });
+      try {
         const user_aravt = await api.aravt_aravt(aravt.id)
         const Members: User[] = [user_aravt.leader, ...user_aravt.team]
 
         set({ 
-          pendingRequests: PendingRequests,
           members: Members,
+          aravt: user_aravt,
           isLoading: false,
         });
       } catch (error) {
