@@ -50,33 +50,11 @@ export default function Layout() {
                     <div className="flex items-center text-sm text-gray-500 w-[100px] text-right truncate">  
                       <NavLink to="/profile"> {user.username}</NavLink>
                     </div>
-                    <button 
-                      onClick={async () => {
-                        await api.logout()
-                        useAuthStore.getState().logout()
-                      }}
-                      className={cn(
-                        "bg-red-600 text-white hover:bg-red-700 px-4 py-2 rounded-md text-sm font-medium transition duration-200 ease-in-out"
-                      )}
-                    >
-                      Logout
-                    </button>
                   </div>
                 ) : (
                   <div className="flex items-center gap-4 ml-8">
                     <NavLink to="/browse">Browse Aravts</NavLink>
                     <NavLink to="/profile">Profile</NavLink>
-                    <button 
-                      onClick={async () => {
-                        await api.logout()
-                        useAuthStore.getState().logout()
-                      }}
-                      className={cn(
-                        "bg-red-600 text-white hover:bg-red-700 px-4 py-2 rounded-md text-sm font-medium transition duration-200 ease-in-out"
-                      )}
-                    >
-                      Logout
-                    </button>
                   </div>
                 ))
               }
