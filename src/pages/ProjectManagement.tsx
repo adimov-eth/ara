@@ -17,11 +17,16 @@ const ProjectCard = ({ project }: { project: Project }) => {
     <Card>
       <CardHeader className="p-4">
         <div className="flex justify-between items-start">
-          <div>
-            <CardTitle className="text-lg">{project.name}</CardTitle>
-            <CardDescription>{project.description}</CardDescription>
+          <div className="flex items-center">
+            {project.logo && (
+              <img src={project.logo} alt={`${project.name} logo`} className="h-8 w-8 mr-2" />
+            )}
+            <div>
+              <CardTitle className="text-lg">{project.name}</CardTitle>
+              <CardDescription>{project.description}</CardDescription>
+            </div>
           </div>
-          <Badge variant={project.status == 'Posted' ? 'default' : 'secondary'}>
+          <Badge variant={project.status === 'Posted' ? 'default' : 'secondary'}>
             {project.status}
           </Badge>
         </div>
@@ -31,16 +36,8 @@ const ProjectCard = ({ project }: { project: Project }) => {
           <div className="flex justify-between text-sm text-gray-500">
             <div className="flex items-center gap-4">
               <div>
-                <ListChecks className="h-4 w-4 inline mr-1" />
-                {project.tasks.length} tasks
-              </div>
-              <div>
-                <Users className="h-4 w-4 inline mr-1" />
-                {project.members} members
-              </div>
-              <div>
                 <CreditCard className="h-4 w-4 inline mr-1" />
-                {project.fundings}
+                {project.fundings.toString()}
               </div>
             </div>
           </div>

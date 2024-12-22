@@ -92,7 +92,7 @@ export interface Project {
   name: string,
   description: string,
   link: string,
-  fundings: string,
+  fundings: {},
   logo: string,
   status: ProjectStatus,
   location: string,
