@@ -111,7 +111,9 @@ export interface JoinRequest {
   id: number,
   aravt_id: number,
   user: User,
-  text: string,
+  text: {
+    application: string;
+  },
   date_time: string
 }
 

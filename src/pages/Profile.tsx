@@ -6,7 +6,7 @@ import { useAuthStore } from '@/store/auth'
 import { api } from '@/lib/api'
 
 const Profile = () => {
-  const { user, isLoading, error, fetchUserProfile } = useUserStore();
+  const { user, /*applications,*/ isLoading, error, fetchUserProfile} = useUserStore();
 
   useEffect(() => {
     fetchUserProfile(); // Fetch user profile on component mount
@@ -25,6 +25,24 @@ const Profile = () => {
         <p><strong>Date of Birth:</strong> {user?.date_of_birth}</p>
         <p><strong>Full Name:</strong> {user?.full_name}</p>
       </div>
+
+
+      
+{/*       <div className="mt-4">
+        <h3 className="text-md font-semibold">Join Requests</h3>
+        {applications.length > 0 ? (
+          <ul className="list-disc pl-5">
+            {applications.map((request) => (
+              <li key={request.id} className="text-gray-700">
+                {request.aravt_id} - {request.text}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-gray-500">No join requests found.</p>
+        )}
+      </div> */}
+
       <div>
         <button 
         onClick={async () => {
@@ -32,7 +50,7 @@ const Profile = () => {
           useAuthStore.getState().logout()
         }}
         className={cn(
-          "bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md text-sm font-medium transition duration-200 ease-in-out"
+          "mt-4 bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md text-sm font-medium transition duration-200 ease-in-out"
         )}
       >
         Logout

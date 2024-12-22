@@ -39,7 +39,11 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
       
       login(current_user, access_token);
       onLoginSuccess?.();
-      navigate('/dashboard');
+      if (Boolean(current_user.aravt)) {
+        navigate('/dashboard');
+      } else {
+        navigate('/browse');
+      }
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'Invalid credentials. Please try again.');
     } finally {

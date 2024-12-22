@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { User } from '@/types'
+import { User, Aravt } from '@/types'
 
 interface AuthState {
   user: User | null;
@@ -9,7 +9,7 @@ interface AuthState {
   setToken: (token: string) => void;
   login: (user: User, token: string) => void;
   logout: () => void;
-  hasAravt: boolean;
+  aravt: Aravt | null;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -18,12 +18,12 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       token: null,
       isAuthenticated: false,
-      hasAravt: false,
+      aravt: null,
       setToken: (token: string) => set({ token }),
       login: (user: User, token: string) => 
-        set({ user, token, isAuthenticated: true, hasAravt: Boolean(user.aravt) }),
+        set({ user, token, isAuthenticated: true, aravt: user.aravt }),
       logout: () => 
-        set({ user: null, token: null, isAuthenticated: false, hasAravt: false }),
+        set({ user: null, token: null, isAuthenticated: false, aravt: null }),
     }),
     {
       name: 'auth-storage',

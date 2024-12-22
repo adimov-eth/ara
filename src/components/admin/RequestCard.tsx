@@ -9,7 +9,9 @@ interface RequestCardProps {
     id: number;
     aravt_id: number,
     user: User;
-    text: string
+    text: {
+      application: string;
+    };
     date_time: string;
   };
   onApprove: (id: number) => void;
@@ -31,6 +33,7 @@ export const RequestCard = ({ request, onApprove, onReject, isLoading }: Request
             <div className="font-medium">{request.user.full_name}</div>
             <div className="text-sm text-muted-foreground">{request.user.username}</div>
             <div className="text-sm text-muted-foreground">{request.user.email}</div>
+            <div className="text-sm text-muted-foreground">{request.text.application}</div>
             <div className="flex gap-2 mt-2">
               {request.user.skills?.map((skill, index) => (
                 <Badge key={index} variant="secondary">

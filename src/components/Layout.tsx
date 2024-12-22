@@ -21,7 +21,7 @@ const NavLink = ({ to, children }: { to: string; children: React.ReactNode }) =>
 }
 
 export default function Layout() {
-  const { user, hasAravt } = useAuthStore()
+  const { user, aravt } = useAuthStore()
   const isAdmin = user?.role === 'SuperAdmin' 
   const location = useLocation()
   const isSignUpPage = location.pathname === '/signup'
@@ -35,7 +35,7 @@ export default function Layout() {
             <div className="flex h-full items-center flex-nowrap w-full">
               <div className="flex items-center gap-4">
                 {
-                  user && (hasAravt ? (
+                  user && (Boolean(aravt) ? (
                   <div className="flex items-center gap-4 ml-8">
                     <div className="text-xl">
                       <NavLink to="/dashboard">

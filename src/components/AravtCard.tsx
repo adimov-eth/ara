@@ -6,6 +6,7 @@ import { Users } from 'lucide-react';
 import { Aravt } from '@/types'; // Adjust the import based on your types location
 import JoinRequestForm from '@/components/JoinRequestForm'; // Import the join request form
 import { useAravtsStore } from '@/store/aravts'; // Import the store to fetch details
+import { toast } from 'react-toastify'; // Import toast for notifications
 
 interface AravtCardProps {
   aravt: Aravt;
@@ -23,6 +24,7 @@ const AravtCard = ({ aravt }: AravtCardProps) => {
     setLoadingJoin(true); // Set loading state for join request
     try {
       await applyToAravt(aravt.id, data.reason); // Call applyToAravt with the reason
+      alert("Join request submitted successfully!"); // Show success notification
     } catch (error) {
       console.error("Failed to apply to Aravt:", error);
     } finally {
@@ -61,21 +63,12 @@ const AravtCard = ({ aravt }: AravtCardProps) => {
             {aravt.name.substring(0, 2)}
           </AvatarFallback>
         </Avatar>
-
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <h3 className="text-lg font-semibold">{aravt.name}</h3>
-              <p className="text-gray-500">{aravt.description}</p>
               <div className="flex items-center gap-1 text-gray-600">
-                <span>Leader:</span>
-                <span className="text-blue-500">{aravt.leader?.full_name}</span>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1 text-gray-600">
-                <Users className="h-4 w-4" />
-                <span>{aravt.team?.length}/{10}</span>
+                <span className="text-gray-500">{aravt.description}</span>
               </div>
             </div>
           </div>
@@ -111,10 +104,15 @@ const AravtCard = ({ aravt }: AravtCardProps) => {
           {showDetails && selectedAravtDetails && (
             <div className="mt-4">
               <h4 className="text-md font-semibold">Details:</h4>
-              <p className="text-gray-500">{selectedAravtDetails.description}</p>
               <div className="flex items-center gap-1 text-gray-600">
                 <span>Leader:</span>
                 <span className="text-blue-500">{selectedAravtDetails.leader?.full_name}</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1 text-gray-600">
+                  <Users className="h-4 w-4" />
+                  <span>{selectedAravtDetails.team?.length}/{10}</span>
+                </div>
               </div>
               <div className="flex flex-wrap gap-2 mt-2">
                 {selectedAravtDetails.skills?.map((skill, index) => (
