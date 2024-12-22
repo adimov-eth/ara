@@ -88,7 +88,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
           <Tabs defaultValue="username" className="space-y-4">
             <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="username">Username</TabsTrigger>
-              <TabsTrigger value="wallet">TON Wallet</TabsTrigger>
+              <TabsTrigger value="wallet">TON Wallet</TabsTrigger>  
             </TabsList>
 
             <TabsContent value="wallet">
@@ -111,6 +111,15 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
                     </span>
                   </div>
                 </div>
+                <CardFooter className="flex flex-col space-y-4">
+                <Button 
+                  variant="outline" 
+                  className="w-full"
+                  onClick={() => window.open('https://db.aravt.io', '_blank')}
+                >
+                  Don't have a TON wallet?
+                </Button>
+              </CardFooter>
               </div>
             </TabsContent>
 
@@ -146,7 +155,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
                     'Signing in...'
                   ) : (
                     <>
-                      Sign in with Username
+                      Sign in
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </>
                   )}
@@ -161,15 +170,6 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
             </TabsContent>
           </Tabs>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
-          <Button 
-            variant="outline" 
-            className="w-full"
-            onClick={() => window.open('https://db.aravt.io', '_blank')}
-          >
-            Don't have a TON wallet?
-          </Button>
-        </CardFooter>
       </Card>
     </div>
   );
