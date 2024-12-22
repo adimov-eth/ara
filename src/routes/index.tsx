@@ -15,6 +15,7 @@ import ProjectManagement from '@/pages/ProjectManagement'
 import TasksManagement from '@/pages/TasksManagement'
 import MemberManagement from '@/pages/MemberManagement'
 import ProjectDetails from '@/pages/ProjectDetails'
+import Profile from '@/pages/Profile'
 
 export function AppRoutes() {
   return (
@@ -32,6 +33,7 @@ export function AppRoutes() {
       <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/dashboard" element={<AravtDashboard />} />
         <Route path="/projects" element={<ProjectManagement />} />

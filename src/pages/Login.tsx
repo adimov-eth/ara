@@ -53,16 +53,6 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
 
     try {
       // TODO: Replace with TON wallet connection logic
-      /*
-      const mockUser = {
-        id: 1,
-        username: 'wallet_user',
-        role: 'User' as const,
-      };
-      const mockToken = 'mock-wallet-token';
-      
-      login(mockUser, mockToken);
-      */
       onLoginSuccess?.();
       navigate('/dashboard');
     } catch (error: unknown) {
@@ -77,7 +67,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+    <div className="flex justify-center min-h-screen bg-gray-50">
       <Card className="w-full max-w-md mx-4">
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-between">
@@ -95,16 +85,16 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
             </Alert>
           )}
           
-          <Tabs defaultValue="wallet" className="space-y-4">
+          <Tabs defaultValue="username" className="space-y-4">
             <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="username">Username</TabsTrigger>
               <TabsTrigger value="wallet">TON Wallet</TabsTrigger>
-              <TabsTrigger value="username">Username</TabsTrigger>
             </TabsList>
 
             <TabsContent value="wallet">
               <div className="space-y-4">
                 <Button 
-                  className="w-full h-12"
+                  className="w-full h-12 bg-black text-white hover:bg-gray-800"
                   onClick={handleWalletConnect}
                   disabled={isWalletConnecting}
                 >
@@ -131,7 +121,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
                   <Input
                     id="username"
                     type="username"
-                    placeholder="userrname"
+                    placeholder="username"
                     value={username}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
                     required
@@ -149,7 +139,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full"
+                  className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -172,13 +162,10 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
           </Tabs>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <div className="text-sm text-center text-gray-500">
-            By connecting, you agree to our Terms of Service and Privacy Policy
-          </div>
           <Button 
             variant="outline" 
             className="w-full"
-            onClick={() => window.open('https://ton.org/wallets', '_blank')}
+            onClick={() => window.open('https://db.aravt.io', '_blank')}
           >
             Don't have a TON wallet?
           </Button>

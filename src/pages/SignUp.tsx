@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { api } from '@/lib/api';
 import { RegistrationData } from '@/types';
 import DatePicker from 'react-datepicker';
@@ -47,7 +47,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex bg-gray-50">
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow">
         <h2 className="text-center text-3xl font-bold">Sign Up</h2>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -139,12 +139,21 @@ const SignUp = () => {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
             >
               Sign Up
             </button>
-          </div>        
+          </div>
         </form>
+        <div className="text-sm text-center text-gray-500">
+          By connecting, you agree to our Terms of Service and Privacy Policy
+        </div>
+        <div className="text-center text-sm mt-4">
+          Already have an account?{" "}
+          <Link to="/login" className="text-primary hover:underline">
+            Log in
+          </Link>
+        </div>
       </div>
     </div>
   )

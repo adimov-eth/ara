@@ -73,3 +73,10 @@
     font-size: 1.1rem; /* Adjust button font size for mobile */
   }
 }
+
+/* Add a consistent width for the navbar */
+.navbar {
+  max-width: 1280px; /* Match the root container */
+  margin: 0 auto; /* Center the navbar */
+  padding: 0 1rem; /* Add some padding */
+}
