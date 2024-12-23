@@ -1,5 +1,5 @@
 #root {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -46,6 +46,7 @@
 @media (max-width: 640px) {
   #root {
     padding: 1rem; /* Reduce padding for mobile */
+    width: 100%; /* Ensure full width on mobile */
   }
 
   .logo {
@@ -76,7 +77,7 @@
 
 /* Add a consistent width for the navbar */
 .navbar {
-  max-width: 1280px; /* Match the root container */
+  max-width: 100%; /* Match the root container */
   margin: 0 auto; /* Center the navbar */
   padding: 0 1rem; /* Add some padding */
 }

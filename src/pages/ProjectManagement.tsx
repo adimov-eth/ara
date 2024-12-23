@@ -37,7 +37,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
             <div className="flex items-center gap-4">
               <div>
                 <CreditCard className="h-4 w-4 inline mr-1" />
-                {project.fundings.toString()}
+                {project.fundings?.toString()}
               </div>
             </div>
           </div>

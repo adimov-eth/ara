@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { Aravt } from '@/types'
+import { Aravt, CreateAravt } from '@/types'
 import { api } from '@/lib/api'
 
 interface AravtsState {
@@ -10,6 +10,7 @@ interface AravtsState {
   fetchAravts: () => Promise<void>;
   fetchAravtDetails: (aravtId: number) => Promise<Aravt>;
   applyToAravt: (aravtId: number, text: string) => Promise<void>;
+  createAravt: (aravt: CreateAravt) => Promise<void>;
 }
 
 export const useAravtsStore = create<AravtsState>((set) => ({
@@ -44,6 +45,15 @@ export const useAravtsStore = create<AravtsState>((set) => ({
       set({ isLoading: false });
     } catch (err) {
       set({ error: err instanceof Error ? err.message : 'Failed to apply to aravt', isLoading: false });
+    }
+  },
+  createAravt: async (aravt: CreateAravt) => {
+    set({ isLoading: true, error: null });
+    try {
+      await api.aravt_create_aravt(aravt);
+      set({ isLoading: false });
+    } catch (err) {
+      set({ error: err instanceof Error ? err.message : 'Failed to create aravt', isLoading: false });
     }
   },
 })); 

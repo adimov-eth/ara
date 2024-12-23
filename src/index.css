@@ -139,14 +139,18 @@ button:focus-visible {
   }
 }
 
-/* Add responsive styles */
+/* Responsive styles */
 @media (max-width: 640px) {
-  body {
-    padding: 0; /* Remove body padding for mobile */
+  :root {
+    font-size: 14px; /* Adjust base font size for mobile */
   }
 
   h1 {
     font-size: 2.5em; /* Adjust heading size for mobile */
+  }
+
+  a {
+    font-size: 0.875rem; /* Adjust link font size for mobile */
   }
 
   button {

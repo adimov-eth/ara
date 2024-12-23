@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/store/auth'
-import { api } from '@/lib/api'
+import { useState } from 'react'
 
 const NavLink = ({ to, children }: { to: string; children: React.ReactNode }) => {
   const location = useLocation()
@@ -11,7 +11,7 @@ const NavLink = ({ to, children }: { to: string; children: React.ReactNode }) =>
     <Link 
       to={to} 
       className={cn(
-        "text-gray-900 hover:text-gray-500 px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap w-[100px] text-center inline-flex items-center justify-center",
+        "text-gray-900 hover:text-gray-500 px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap text-center inline-flex items-center justify-center",
         isActive && "bg-gray-100"
       )}
     >
@@ -27,37 +27,50 @@ export default function Layout() {
   const isSignUpPage = location.pathname === '/signup'
   const isLoginPage = location.pathname === '/login'
 
+  // State to manage the burger menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
+
   return (
-    <div className="min-h-screen flex flex-col w-full">
+    <div className="min-h-screen w-full">
       {!isSignUpPage && !isLoginPage && (
-        <header className="bg-white shadow w-full h-16 navbar">
+        <header className="bg-white shadow w-full h-28 navbar sm:h-16">
           <nav className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
-            <div className="flex h-full items-center flex-nowrap w-full">
-              <div className="flex items-center gap-4">
-                {
-                  user && (Boolean(aravt) ? (
-                  <div className="flex items-center gap-4 ml-8">
-                    <div className="text-xl">
-                      <NavLink to="/dashboard">
-                        Aravt
-                      </NavLink>
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center">
+                <button 
+                  className="sm:hidden p-2 text-gray-500"
+                  onClick={toggleMenu}
+                  aria-label="Toggle menu"
+                >
+                  {/* Burger Icon */}
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+                  </svg>
+                </button>
+                <div className={`${isMenuOpen ? 'flex' : 'hidden'} sm:flex`}>
+                  {
+                    user && (Boolean(aravt) ? (
+                    <div className="">
+                      <NavLink to="/dashboard">Aravt</NavLink>
+                      <NavLink to="/projects">Projects</NavLink>
+                      <NavLink to="/tasks">Tasks</NavLink>
+                      <NavLink to="/members">Members</NavLink>
+                      <NavLink to="/browse">Browse Aravts</NavLink>
+                      {isAdmin && <NavLink to="/admin">Admin</NavLink>}
+                      <NavLink to="/profile">{user.username}</NavLink>
                     </div>
-                    <NavLink to="/projects">Projects</NavLink>
-                    <NavLink to="/tasks">Tasks</NavLink>
-                    <NavLink to="/members">Members</NavLink>
-                    <NavLink to="/browse">Browse Aravts</NavLink>
-                    {isAdmin && <NavLink to="/admin">Admin</NavLink>}
-                    <div className="flex items-center text-sm text-gray-500 w-[100px] text-right truncate">  
-                      <NavLink to="/profile"> {user.username}</NavLink>
+                  ) : (
+                    <div className="flex sm:flex-row">
+                      <NavLink to="/browse">Browse Aravts</NavLink>
+                      <NavLink to="/profile">{user.username}</NavLink>
                     </div>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-4 ml-8">
-                    <NavLink to="/browse">Browse Aravts</NavLink>
-                    <NavLink to="/profile">Profile</NavLink>
-                  </div>
-                ))
-              }
+                  ))
+                }
+                </div>
               </div>
             </div>
           </nav>

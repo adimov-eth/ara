@@ -28,6 +28,7 @@ export interface Aravt {
   description: string;
   user_father_id: number;
   responsible_user_id: number;
+  init_user_id: number;
   is_draft: boolean;
   telegram_chat_link: string;
   //aravt_father_id: number;
@@ -58,11 +59,8 @@ export interface RegistrationData {
   full_name: string
 }
 
-export interface CreateAravt {
-  name: string
-  description: string
-  init_user_id: number
-}
+export type CreateAravt = Pick<Aravt, 'name' | 'description' | 'init_user_id'>;
+
 
 export interface Task {
   id: number,
