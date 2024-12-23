@@ -8,6 +8,7 @@ interface UserState {
   isLoading: boolean;
   error: string | null;
   fetchUserProfile: () => Promise<void>;
+  letUserCreateAravt: (user_id: number) => Promise<void>;
 }
 
 export const useUserStore = create<UserState>((set) => ({
@@ -25,4 +26,13 @@ export const useUserStore = create<UserState>((set) => ({
       set({ error: error instanceof Error ? error.message : 'Failed to fetch user profile', isLoading: false });
     }
   },
+  letUserCreateAravt: async (user_id: number) => {
+    set({ isLoading: true, error: null })
+    try {
+      await api.users_user_let_create_aravt(user_id);
+      set({ isLoading: false });
+    } catch (error) {
+      set({ error: error instanceof Error ? error.message : 'Failed to let user create aravt', isLoading: false });
+    }
+  }
 })); 

@@ -255,6 +255,7 @@ const AdminPanel = () => {
                   {members.map((member) => (
                     <MemberCard
                       key={member.id}
+                      isLeader={user.is_leader_of_aravt}
                       member={member}
                       onUpdateRole={updateMemberRole}
                       onRemoveMember={removeMember}

@@ -12,7 +12,8 @@ import { MemberCard } from '@/components/admin/MemberCard';
 import { RequestCard } from '@/components/admin/RequestCard';
 
 const MemberManagement = () => {
-  const { user } = useAuthStore();
+  const { user } = useAuthStore(); 
+  
   const { 
     members, 
     pendingRequests, 
@@ -99,6 +100,7 @@ const MemberManagement = () => {
             {members.map((member) => (
               <MemberCard
                 key={member.id}
+                isLeader={user?.is_leader_of_aravt}
                 member={member}
                 onUpdateRole={updateMemberRole}
                 onRemoveMember={removeMember}

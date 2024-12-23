@@ -116,7 +116,11 @@ export const useAdminStore = create<AdminState>()((set, get) => {
       set({ isLoading: true, error: null });
       try {
         const user_aravt = await api.aravt_aravt(aravt.id)
-        const Members: User[] = [user_aravt.leader, ...user_aravt.team]
+        const Aravt_Members: User[] = [user_aravt.leader, ...user_aravt.team]
+        const Members: User[] = await Promise.all(Aravt_Members.map(async member => {
+          const user = await api.users_user(member.id)          
+          return user
+        }))
 
         set({ 
           members: Members,
