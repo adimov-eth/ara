@@ -84,10 +84,10 @@ const AravtCard = ({ aravt }: AravtCardProps) => {
           {/* Buttons for Join and Get More Info */}
           <div className="mt-4 flex gap-2">
             <Button className="bg-black hover:bg-gray-700 text-white" onClick={() => setIsJoining(true)}>
-              Join Aravt
+              Join
             </Button>
             <Button className="bg-black hover:bg-gray-700 text-white" onClick={handleGetMoreInfo}>
-              {showDetails ? "Hide" : "Get More Info"}
+              {showDetails ? "Hide" : "Info"}
             </Button>
           </div>
 

@@ -65,31 +65,6 @@ export const MemberCard = ({ isLeader, member, onUpdateRole, onRemoveMember, isL
               )}
             </div>
           </div>
-          <div className="space-y-2">
-            <Select 
-              defaultValue={member.role}
-              onValueChange={(value: User['role']) => onUpdateRole(member.id, value)}
-              disabled={isLoading}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select role" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="User">User</SelectItem>
-                <SelectItem value="AravtLeader">Aravt Leader</SelectItem>
-                <SelectItem value="SuperAdmin">Super Admin</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="w-full text-red-500 hover:text-red-600"
-              onClick={() => onRemoveMember(member.id)}
-              disabled={isLoading}
-            >
-              Remove Member
-            </Button>
-          </div>
         </div>
         <div className="mt-4">
           {isLeader && (
@@ -128,15 +103,39 @@ export const MemberCard = ({ isLeader, member, onUpdateRole, onRemoveMember, isL
             <div className="text-sm font-medium">Success Rate</div>
             <div>
               <div className="flex justify-between items-center">
-                <span className="text-2xl font-bold">{member.completionRate}%</span>
+                <span className="text-2xl font-bold">{member.completionRate}</span>
               </div>
-              <Progress value={member.completionRate} className="mt-2" />
             </div>
           </div>
           <div>
             <div className="text-sm font-medium">Tokens</div>
             <div className="text-2xl font-bold">{member.tokenBalance}</div>
           </div>
+        </div>
+        <div className="mt-4 space-y-2">
+          <Select 
+            defaultValue={member.role}
+            onValueChange={(value: User['role']) => onUpdateRole(member.id, value)}
+            disabled={isLoading}
+          >
+            <SelectTrigger className="">
+              <SelectValue placeholder="Select role" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="User">User</SelectItem>
+              <SelectItem value="AravtLeader">Aravt Leader</SelectItem>
+              <SelectItem value="SuperAdmin">Super Admin</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button 
+            variant="outline" 
+            size="sm"
+            className="w-full text-red-500 hover:text-red-600"
+            onClick={() => onRemoveMember(member.id)}
+            disabled={isLoading}
+          >
+            Remove Member
+          </Button>
         </div>
       </CardContent>
     </Card>

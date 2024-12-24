@@ -67,7 +67,7 @@ const AravtDashboard = () => {
         </Alert>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <StatCard
           title="Tasks Completed"
           value={`${stats.tasksCompleted}/${stats.totalTasks}`}
@@ -77,11 +77,6 @@ const AravtDashboard = () => {
         <StatCard
           title="Tokens Earned"
           value={`${stats.tokensEarned} AT`}
-          icon={CreditCard}
-        />
-        <StatCard
-          title="USDT Earned"
-          value={`$${stats.usdtEarned}`}
           icon={CreditCard}
         />
         <StatCard

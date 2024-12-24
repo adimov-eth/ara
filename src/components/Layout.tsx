@@ -27,13 +27,6 @@ export default function Layout() {
   const isSignUpPage = location.pathname === '/signup'
   const isLoginPage = location.pathname === '/login'
 
-  // State to manage the burger menu
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
-
   return (
     <div className="min-h-screen w-full">
       {!isSignUpPage && !isLoginPage && (
@@ -41,17 +34,7 @@ export default function Layout() {
           <nav className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center">
-                <button 
-                  className="sm:hidden p-2 text-gray-500"
-                  onClick={toggleMenu}
-                  aria-label="Toggle menu"
-                >
-                  {/* Burger Icon */}
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-                  </svg>
-                </button>
-                <div className={`${isMenuOpen ? 'flex' : 'hidden'} sm:flex`}>
+                <div className="flex sm:flex">
                   {
                     user && (Boolean(aravt) ? (
                     <div className="">
