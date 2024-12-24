@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Globe, Home, CreditCard, Star } from 'lucide-react';
+import { Globe, Home, CreditCard, Star, Link as LinkIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Task } from '@/types';
@@ -71,6 +71,19 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
             <div className="flex items-center">
               <Star className="h-4 w-4 mr-1 text-gray-500" />
               <span>Due: {new Date(task.date_time).toLocaleDateString()}</span>
+            </div>
+            <div>
+              {task.link && (
+                <a 
+                  href={task.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center text-blue-500 hover:text-blue-600"
+                >
+                  <LinkIcon className="h-4 w-4 mr-1" />
+                  <span>View Resource</span>
+                </a>
+              )}
             </div>
           </div>
         </div>

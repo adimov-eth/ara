@@ -9,7 +9,7 @@ interface ProjectsState {
   isLoading: boolean;
   error: string | null;
   fetchProjects: () => Promise<void>;
-  createProject: (_project: Project) => Promise<void>;
+  createProject: (project: Omit<Project, 'id'>) => Promise<void>;
 }
 
 export const useProjectsStore = create<ProjectsState>((set, get) => {
@@ -23,18 +23,18 @@ export const useProjectsStore = create<ProjectsState>((set, get) => {
       set({ isLoading: true, error: null });
       try {
         const user_aravt = await api.aravt_aravt(aravt.id);
-        const projects: Project[] = user_aravt.business
+        const projects: Project[] = user_aravt.business;
         set({ projects: projects, isLoading: false });
       } catch (err) {
         set({ error: err instanceof Error ? err.message : 'Failed to fetch projects', isLoading: false });
       }
     },
-    createProject: async (_project: Project) => {
+    createProject: async (project: Omit<Project, 'id'>) => {
       set({ isLoading: true, error: null });
       try {
-        await api.aravt_set_business(_project);
-        
-        set({ projects: [...get().projects, _project], isLoading: false });
+        await api.aravt_set_business(project);
+        await get().fetchProjects();
+        set({ isLoading: false });
       } catch (err) {
         set({ error: err instanceof Error ? err.message : 'Failed to create project', isLoading: false });
       }

@@ -150,7 +150,7 @@ export const api = {
   },
 
 
-  async aravt_set_business(data: Project): Promise<MessageResponse> {
+  async aravt_set_business(data: Omit<Project, 'id'>): Promise<MessageResponse> {
     const response = await axios.post('/aravt/set_business/', data)
     return response.data
   },

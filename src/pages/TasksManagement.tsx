@@ -123,6 +123,18 @@ const TasksManagement = () => {
                     <Input id="reward" name="reward" type="number" step="1" min="0" required />
                   </div>
                   <div>
+                    <Label htmlFor="reward_type">Reward Type</Label>
+                    <Select name="reward_type" defaultValue="AT">
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select reward type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="AT">AT</SelectItem>
+                        <SelectItem value="USDT">USDT</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
                     <Label htmlFor="definition_of_done">Definition of Done</Label>
                     <Textarea id="definition_of_done" name="definition_of_done" placeholder="{}" required />
                   </div>
@@ -156,6 +168,18 @@ const TasksManagement = () => {
                         <SelectItem value="low">Low</SelectItem>
                         <SelectItem value="medium">Medium</SelectItem>
                         <SelectItem value="high">High</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="one_time">Task Type</Label>
+                    <Select name="one_time" defaultValue="true">
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select task type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="true">One Time</SelectItem>
+                        <SelectItem value="false">Recurring</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

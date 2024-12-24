@@ -90,11 +90,13 @@ export interface Project {
   name: string,
   description: string,
   link: string,
-  fundings: {},
+  fundings?: {
+    amount?: number,
+    currency?: string,
+  },
   logo: string,
-  status: ProjectStatus,
+  Status: ProjectStatus,
   location: string,
-  members: number;
   tasks: Task[],
 }
 

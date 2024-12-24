@@ -9,6 +9,7 @@ import { useAuthStore } from '@/store/auth';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { useProjectsStore } from '@/store/projects';
 import { Project } from "@/types";
+import { CreateProjectDialog } from '@/components/CreateProjectDialog';
 
 const ProjectCard = ({ project }: { project: Project }) => {
   const navigate = useNavigate();
@@ -26,8 +27,8 @@ const ProjectCard = ({ project }: { project: Project }) => {
               <CardDescription>{project.description}</CardDescription>
             </div>
           </div>
-          <Badge variant={project.status === 'Posted' ? 'default' : 'secondary'}>
-            {project.status}
+          <Badge variant={project.Status === 'Posted' ? 'default' : 'secondary'}>
+            {project.Status}
           </Badge>
         </div>
       </CardHeader>
@@ -35,10 +36,12 @@ const ProjectCard = ({ project }: { project: Project }) => {
         <div className="space-y-4">
           <div className="flex justify-between text-sm text-gray-500">
             <div className="flex items-center gap-4">
-              <div>
-                <CreditCard className="h-4 w-4 inline mr-1" />
-                {project.fundings?.toString()}
-              </div>
+              {project.fundings && (
+                <div>
+                  <CreditCard className="h-4 w-4 inline mr-1" />
+                  {project.fundings.amount} {project.fundings.currency}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -78,10 +81,7 @@ const ProjectManagement = () => {
           <h1 className="text-2xl font-bold">Projects</h1>
           <p className="text-gray-500">Manage your Aravt projects</p>
         </div>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Create Project
-        </Button>
+        <CreateProjectDialog />
       </div>
 
       {error && (
@@ -91,7 +91,7 @@ const ProjectManagement = () => {
       )}
 
       <div className="grid grid-cols-1 gap-4">
-        {projects.map((project: Project) => (
+        {projects?.map((project: Project) => (
           <ProjectCard key={project.id} project={project} />
         ))}
       </div>

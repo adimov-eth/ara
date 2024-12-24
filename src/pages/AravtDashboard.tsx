@@ -48,7 +48,7 @@ const AravtDashboard = () => {
     <div className="w-full max-w-6xl mx-auto mt-8 space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">{user?.aravt?.name} Dashboard</h1>
+          <h1 className="text-2xl font-bold">{user?.aravt?.name}</h1>
           <p className="text-gray-500">Welcome back, {user?.username}</p>
         </div>
         <div className="flex gap-2">
