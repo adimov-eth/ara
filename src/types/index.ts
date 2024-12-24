@@ -20,6 +20,7 @@ export interface User {
   completionRate?: number
   tokenBalance?: number
   is_subordinate?: boolean
+  wallet_address?: string
 }
 
 export interface Aravt {
@@ -39,6 +40,7 @@ export interface Aravt {
   offers: Offer[];
   skills: string[];
   //logo?: string;
+  wallet_address?: string;
 }
 
 export interface Feature {
@@ -123,11 +125,11 @@ export interface JoinRequest {
 }
 
 export interface TaskCompletion {
-  "id": number,
-  "task": Partial<Task>,
-  "user": Partial<User>,
-  "body": {},
-  "completed_at": string,
-  "is_approved": boolean,
-  "reward_paid": boolean
+  id: number,
+  task: Partial<Task>,
+  user: Partial<User>,
+  body: {},
+  completed_at: string,
+  is_approved: boolean,
+  reward_paid: boolean
 }

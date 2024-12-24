@@ -155,7 +155,7 @@ export const api = {
     return response.data
   },
 
-  async aravt_set_offer(data: Offer): Promise<MessageResponse> {
+  async aravt_set_offer(data: Omit<Offer, 'id'>): Promise<MessageResponse> {
     const response = await axios.post('/aravt/set_offer/', data)
     return response.data
   },
@@ -172,5 +172,15 @@ export const api = {
 
   async logout(): Promise<MessageResponse> {
     return await axios.get('/logout/')
+  },
+
+  async login_with_wallet(wallet_address: string): Promise<{ access_token: string, "token_type": "bearer", user: Pick<User, 'id' | 'username' | 'email'>}> {
+    const response = await axios.post('/login_with_wallet/', { wallet_address })
+    return response.data
+  },
+
+  async link_wallet(user_id: number, wallet_address: string): Promise<User> {
+    const response = await axios.post(`/link_wallet/${user_id}`, { wallet_address })
+    return response.data
   }
 }

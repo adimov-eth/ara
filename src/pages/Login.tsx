@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Wallet, ArrowRight, Globe } from 'lucide-react';
+import { ArrowRight, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -9,6 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuthStore } from '@/store/auth';
 import { User } from '@/types';
+import { TonConnectButton } from '@tonconnect/ui-react';
+import { useTonConnect } from '@/hooks/useTonConnect';
 
 import { api } from '@/lib/api';
 
@@ -20,12 +22,42 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
   const navigate = useNavigate();
   const setToken = useAuthStore(state => state.setToken);
   const login = useAuthStore(state => state.login);
+  const connectWallet = useAuthStore(state => state.connectWallet);
+  const { connected, sender } = useTonConnect();
   
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isWalletConnecting, setIsWalletConnecting] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    const handleWalletConnection = async () => {
+      if (connected && sender) {
+        try {
+          // Try to find user by wallet address
+          const { access_token, user } = await api.login_with_wallet(sender.address);
+          setToken(access_token);
+          const current_user: User = await api.users_user(user.id);
+          
+          login(current_user, access_token);
+          onLoginSuccess?.();
+          if (Boolean(current_user.aravt)) {
+            navigate('/dashboard');
+          } else {
+            navigate('/browse');
+          }
+        } catch (error: unknown) {
+          setError(
+            error instanceof Error 
+              ? error.message 
+              : 'No account found for this wallet. Please login with username first.'
+          );
+        }
+      }
+    };
+
+    handleWalletConnection();
+  }, [connected, sender, navigate, onLoginSuccess]);
 
   const handleUsernameLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,6 +68,11 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
       const { access_token, user } = await api.login(username, password);
       setToken(access_token)
       const current_user: User = await api.users_user(user.id);
+      
+      // If wallet is connected, link it to the user
+      if (connected && sender) {
+        await connectWallet(sender.address);
+      }
       
       login(current_user, access_token);
       onLoginSuccess?.();
@@ -48,25 +85,6 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
       setError(error instanceof Error ? error.message : 'Invalid credentials. Please try again.');
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleWalletConnect = async () => {
-    setIsWalletConnecting(true);
-    setError('');
-
-    try {
-      // TODO: Replace with TON wallet connection logic
-      onLoginSuccess?.();
-      navigate('/dashboard');
-    } catch (error: unknown) {
-      setError(
-        error instanceof Error 
-          ? error.message 
-          : 'Failed to connect wallet. Please make sure you have TON wallet installed.'
-      );
-    } finally {
-      setIsWalletConnecting(false);
     }
   };
 
@@ -91,20 +109,15 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
           
           <Tabs defaultValue="username" className="space-y-4">
             <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="username">Username</TabsTrigger>
+              <TabsTrigger value="username">Username</TabsTrigger>
               <TabsTrigger value="wallet">TON Wallet</TabsTrigger>  
             </TabsList>
 
             <TabsContent value="wallet">
               <div className="space-y-4">
-                <Button 
-                  className="w-full h-12 bg-black text-white hover:bg-gray-800"
-                  onClick={handleWalletConnect}
-                  disabled={isWalletConnecting}
-                >
-                  <Wallet className="mr-2 h-4 w-4" />
-                  {isWalletConnecting ? 'Connecting...' : 'Connect TON Wallet'}
-                </Button>
+                <div className="w-full flex justify-center">
+                  <TonConnectButton />
+                </div>
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
                     <span className="w-full border-t" />
@@ -116,14 +129,14 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
                   </div>
                 </div>
                 <CardFooter className="flex flex-col space-y-4">
-                <Button 
-                  variant="outline" 
-                  className="w-full"
-                  onClick={() => window.open('https://db.aravt.io', '_blank')}
-                >
-                  Don't have a TON wallet?
-                </Button>
-              </CardFooter>
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => window.open('https://db.aravt.io', '_blank')}
+                  >
+                    Don't have a TON wallet?
+                  </Button>
+                </CardFooter>
               </div>
             </TabsContent>
 

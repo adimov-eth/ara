@@ -6,12 +6,14 @@ import { api } from '@/lib/api';
 interface AuthState {
   user: User | null;
   token: string | null;
-  isAuthenticated: boolean; 
+  isAuthenticated: boolean;
+  aravt: Aravt | null;
   fetchUser: () => Promise<void>;
   setToken: (token: string) => void;
   login: (user: User, token: string) => void;
   logout: () => void;
-  aravt: Aravt | null;
+  connectWallet: (address: string) => Promise<void>;
+  disconnectWallet: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -33,6 +35,30 @@ export const useAuthStore = create<AuthState>()(
         set({ user, token, isAuthenticated: true, aravt: user.aravt }),
       logout: () => 
         set({ user: null, token: null, isAuthenticated: false, aravt: null }),
+      connectWallet: async (address: string) => {
+        const { user } = get();
+        if (user) {
+          try {
+            // Call API to link wallet to user
+            const updated_user = await api.link_wallet(user.id, address);
+            set({ user: updated_user });
+          } catch (error) {
+            console.error('Failed to link wallet:', error);
+            throw error;
+          }
+        }
+      },
+      disconnectWallet: () => {
+        const { user } = get();
+        if (user) {
+          set({ 
+            user: { 
+              ...user, 
+              wallet_address: undefined
+            } 
+          });
+        }
+      },
     }),
     {
       name: 'auth-storage',

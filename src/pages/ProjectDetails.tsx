@@ -86,8 +86,8 @@ const ProjectDetails = () => {
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto mt-8 space-y-6">
-      <div className="flex justify-between items-start">
+    <div className="max-w-xl mx-auto mt-8 space-y-6">
+      <div className="flex justify-between">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <h1 className="text-3xl font-bold">{mockProject.name}</h1>
@@ -107,7 +107,7 @@ const ProjectDetails = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm">Tasks Progress</CardTitle>
@@ -159,7 +159,7 @@ const ProjectDetails = () => {
       </div>
 
       <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2">
+        <div className="col-span-3">
           <Card>
             <CardContent className="p-6">
               <Tabs defaultValue="overview">
@@ -224,62 +224,63 @@ const ProjectDetails = () => {
             </CardContent>
           </Card>
         </div>
-
-        <div className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Team Members</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {mockProject.teamMembers.map((member) => (
-                  <div key={member.id} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <Avatar>
-                        <AvatarFallback>
-                          {member.name.split(' ').map(n => n[0]).join('')}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <div className="font-medium">{member.name}</div>
-                        <div className="text-sm text-gray-500">{member.role}</div>
-                      </div>
+      </div>
+      <div className="space-y-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Team Members</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {mockProject.teamMembers.map((member) => (
+                <div key={member.id} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Avatar>
+                      <AvatarFallback>
+                        {member.name.split(' ').map(n => n[0]).join('')}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <div className="font-medium">{member.name}</div>
+                      <div className="text-sm text-gray-500">{member.role}</div>
                     </div>
-                    <Badge variant={member.status === 'online' ? 'default' : 'secondary'}>
-                      {member.status}
-                    </Badge>
                   </div>
-                ))}
-                <Button variant="outline" className="w-full mt-4">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Member
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+                  <Badge variant={member.status === 'online' ? 'default' : 'secondary'}>
+                    {member.status}
+                  </Badge>
+                </div>
+              ))}
+              <Button variant="outline" className="w-full mt-4">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Member
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <Button variant="outline" className="w-full justify-start">
-                  <ListChecks className="h-4 w-4 mr-2" />
-                  View Task Board
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <CalendarDays className="h-4 w-4 mr-2" />
-                  Schedule Meeting
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Globe className="h-4 w-4 mr-2" />
-                  Project Website
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+      <div className="space-y-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Quick Actions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <Button variant="outline" className="w-full justify-start">
+                <ListChecks className="h-4 w-4 mr-2" />
+                View Task Board
+              </Button>
+              <Button variant="outline" className="w-full justify-start">
+                <CalendarDays className="h-4 w-4 mr-2" />
+                Schedule Meeting
+              </Button>
+              <Button variant="outline" className="w-full justify-start">
+                <Globe className="h-4 w-4 mr-2" />
+                Project Website
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
