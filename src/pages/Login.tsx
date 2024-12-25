@@ -22,42 +22,12 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
   const navigate = useNavigate();
   const setToken = useAuthStore(state => state.setToken);
   const login = useAuthStore(state => state.login);
-  const connectWallet = useAuthStore(state => state.connectWallet);
-  const { connected, sender } = useTonConnect();
   
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    const handleWalletConnection = async () => {
-      if (connected && sender) {
-        try {
-          // Try to find user by wallet address
-          const { access_token, user } = await api.login_with_wallet(sender.address);
-          setToken(access_token);
-          const current_user: User = await api.users_user(user.id);
-          
-          login(current_user, access_token);
-          onLoginSuccess?.();
-          if (Boolean(current_user.aravt)) {
-            navigate('/dashboard');
-          } else {
-            navigate('/browse');
-          }
-        } catch (error: unknown) {
-          setError(
-            error instanceof Error 
-              ? error.message 
-              : 'No account found for this wallet. Please login with username first.'
-          );
-        }
-      }
-    };
-
-    handleWalletConnection();
-  }, [connected, sender, navigate, onLoginSuccess]);
 
   const handleUsernameLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,11 +38,6 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
       const { access_token, user } = await api.login(username, password);
       setToken(access_token)
       const current_user: User = await api.users_user(user.id);
-      
-      // If wallet is connected, link it to the user
-      if (connected && sender) {
-        await connectWallet(sender.address);
-      }
       
       login(current_user, access_token);
       onLoginSuccess?.();
@@ -108,12 +73,13 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
           )}
           
           <Tabs defaultValue="username" className="space-y-4">
-            <TabsList className="grid w-full grid-cols-2">
+            {/*<TabsList className="grid w-full grid-cols-1">
               <TabsTrigger value="username">Username</TabsTrigger>
-              <TabsTrigger value="wallet">TON Wallet</TabsTrigger>  
+              {<TabsTrigger value="wallet">TON Wallet</TabsTrigger> }
             </TabsList>
+            */}
 
-            <TabsContent value="wallet">
+            {/* <TabsContent value="wallet">
               <div className="space-y-4">
                 <div className="w-full flex justify-center">
                   <TonConnectButton />
@@ -138,7 +104,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
                   </Button>
                 </CardFooter>
               </div>
-            </TabsContent>
+            </TabsContent> */}
 
             <TabsContent value="username">
               <form onSubmit={handleUsernameLogin} className="space-y-4">

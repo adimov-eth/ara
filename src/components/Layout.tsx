@@ -44,6 +44,7 @@ export default function Layout() {
                       <NavLink to="/members">Members</NavLink>
                       <NavLink to="/browse">Browse Aravts</NavLink>
                       {isAdmin && <NavLink to="/admin">Admin</NavLink>}
+                      <NavLink to="/wallet">Wallet</NavLink>
                       <NavLink to="/profile">{user.username}</NavLink>
                     </div>
                   ) : (

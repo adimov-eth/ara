@@ -16,6 +16,7 @@ import TasksManagement from '@/pages/TasksManagement'
 import MemberManagement from '@/pages/MemberManagement'
 import ProjectDetails from '@/pages/ProjectDetails'
 import Profile from '@/pages/Profile'
+import Wallet from '@/pages/Wallet'
 
 export function AppRoutes() {
   return (
@@ -40,6 +41,7 @@ export function AppRoutes() {
         <Route path="/projects/:id" element={<ProjectDetails />} />
         <Route path="/tasks" element={<TasksManagement />} />
         <Route path="/members" element={<MemberManagement />} />
+        <Route path="/wallet" element={<Wallet />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
