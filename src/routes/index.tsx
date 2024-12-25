@@ -17,7 +17,7 @@ import MemberManagement from '@/pages/MemberManagement'
 import ProjectDetails from '@/pages/ProjectDetails'
 import Profile from '@/pages/Profile'
 import Wallet from '@/pages/Wallet'
-
+import OffersManagement from '@/pages/OffersManagement'
 export function AppRoutes() {
   return (
     <Routes>
@@ -42,6 +42,7 @@ export function AppRoutes() {
         <Route path="/tasks" element={<TasksManagement />} />
         <Route path="/members" element={<MemberManagement />} />
         <Route path="/wallet" element={<Wallet />} />
+        <Route path="/offers" element={<OffersManagement />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

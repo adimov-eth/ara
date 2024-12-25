@@ -43,6 +43,7 @@ export default function Layout() {
                       <NavLink to="/tasks">Tasks</NavLink>
                       <NavLink to="/members">Members</NavLink>
                       <NavLink to="/browse">Browse Aravts</NavLink>
+                      <NavLink to="/offers">Offers</NavLink>
                       {isAdmin && <NavLink to="/admin">Admin</NavLink>}
                       <NavLink to="/wallet">Wallet</NavLink>
                       <NavLink to="/profile">{user.username}</NavLink>

@@ -105,6 +105,18 @@ export interface Project {
 export interface Offer {
   id: number,
   name: string,
+  business: Project,
+  description: string,
+  is_limited: boolean,
+  count_left: number,
+  duration: number,
+  price: number,
+  assets: {}
+}
+
+export interface CreateOffer {
+  id: number,
+  name: string,
   business_id: number,
   description: string,
   is_limited: boolean,

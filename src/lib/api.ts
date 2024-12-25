@@ -1,5 +1,5 @@
 import axios from './axios'
-import { User, RegistrationData, CreateAravt, Aravt, Project, Offer, Task, JoinRequest, TaskCompletion } from '@/types'
+import { User, RegistrationData, CreateAravt, Aravt, Project, Offer, CreateOffer, Task, JoinRequest, TaskCompletion } from '@/types'
 
 interface MessageResponse {
   message: string
@@ -155,13 +155,13 @@ export const api = {
     return response.data
   },
 
-  async aravt_set_offer(data: Omit<Offer, 'id'>): Promise<MessageResponse> {
+  async aravt_set_offer(data: Omit<CreateOffer, 'id'>): Promise<MessageResponse> {
     const response = await axios.post('/aravt/set_offer/', data)
     return response.data
   },
 
   async offers(): Promise<Offer[]> {
-    const response = await axios.get('/offers')
+    const response = await axios.get('/offers/')
     return response.data
   },
 

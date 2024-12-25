@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { Offer } from '@/types'
+import { Offer, CreateOffer } from '@/types'
 import { api } from '@/lib/api'
 
 interface OffersState {
@@ -7,7 +7,7 @@ interface OffersState {
   isLoading: boolean;
   error: string | null;
   fetchOffers: () => Promise<void>;
-  createOffer: (offer: Omit<Offer, 'id'>) => Promise<void>;
+  createOffer: (offer: Omit<CreateOffer, 'id'>) => Promise<void>;
 }
 
 export const useOffersStore = create<OffersState>((set, get) => {
@@ -24,7 +24,7 @@ export const useOffersStore = create<OffersState>((set, get) => {
         set({ error: err instanceof Error ? err.message : 'Failed to fetch offers', isLoading: false });
       }
     },
-    createOffer: async (offer: Omit<Offer, 'id'>) => {
+    createOffer: async (offer: Omit<CreateOffer, 'id'>) => {
       set({ isLoading: true, error: null });
       try {
         await api.aravt_set_offer(offer);
