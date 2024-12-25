@@ -61,6 +61,23 @@ const Wallet = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    const initWallet = async () => {
+      if (connected && sender && account?.address) {
+        try {
+          //await linkWallet();
+          await fetchWalletData();
+        } catch (err) {
+          console.error('Wallet initialization error:', err);
+          setError(err instanceof Error ? err.message : 'Failed to initialize wallet');
+        }
+      }
+    };
+
+    initWallet();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty dependency array to run only once
+
   const processAction = (action: Action): DisplayTransaction | null => {
     const baseFields = {
       status: action.status,
@@ -171,24 +188,17 @@ const Wallet = () => {
   };
 
   const linkWallet = async () => {
-    if (connected && sender && account?.address) {
-      try {
-        await connectWallet(account.address);
-      } catch (err) {
-        console.error('Wallet linking error:', err);
-        setError(err instanceof Error ? err.message : 'Failed to link wallet');
-      }
+    if (!connected || !account?.address) {
+      throw new Error('Wallet not connected');
+    }
+    
+    try {
+      await connectWallet(account.address);
+    } catch (err) {
+      console.error('Wallet linking error:', err);
+      throw err;
     }
   };
-
-  useEffect(() => {
-    if (connected && sender && account) {
-      console.log(account);
-
-      //linkWallet();
-      //fetchWalletData();
-    }
-  }, [connected, sender, account]);
 
   const formatDate = (timestamp: number) => {
     return new Date(timestamp * 1000).toLocaleString();
