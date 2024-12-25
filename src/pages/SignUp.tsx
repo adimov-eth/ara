@@ -86,7 +86,7 @@ const SignUp = () => {
                 type="password"
                 required
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100"
-                placeholder="password"
+                placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
                 />
@@ -99,7 +99,7 @@ const SignUp = () => {
                 type="text"
                 required
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100"
-                placeholder="city"
+                placeholder="City"
                 value={formData.city}
                 onChange={handleChange}
                 />
@@ -120,6 +120,7 @@ const SignUp = () => {
                 scrollableYearDropdown
                 showMonthDropdown
                 popperClassName="datepicker-popover"
+                wrapperClassName="w-full"
               />
             </div>
             <div>
@@ -130,7 +131,7 @@ const SignUp = () => {
                 type="text"
                 required
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100"
-                placeholder="full_name"
+                placeholder="Full name"
                 value={formData.full_name}
                 onChange={handleChange}
                 />

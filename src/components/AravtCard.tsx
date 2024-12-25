@@ -83,39 +83,38 @@ const AravtCard = ({ aravt }: AravtCardProps) => {
         </div>
       </div>
       <div className="mt-4">
+        {/* Display Selected Aravt Details */}
+        {showDetails && selectedAravtDetails && (
+        <div className="mt-4">
+          <h4 className="text-md font-semibold">Details:</h4>
+          <div className="flex items-center gap-1 text-gray-600">
+            <span>Leader:</span>
+            <span className="text-blue-500">{selectedAravtDetails.leader?.full_name}</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1 text-gray-600">
+              <Users className="h-4 w-4" />
+              <span>{selectedAravtDetails.team?.length + 1}/{10}</span>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2 mt-2">
+            {selectedAravtDetails.skills?.map((skill, index) => (
+              <span key={index} className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+        )}
        {/* Buttons for Join and Get More Info */}
        <div className="mt-4 flex gap-2">
-       <Button className="bg-black hover:bg-gray-700 text-white" onClick={handleGetMoreInfo}>
+          <Button className="bg-black hover:bg-gray-700 text-white" onClick={handleGetMoreInfo}>
             {showDetails ? "Hide" : "Info"}
           </Button>
           <Button className="bg-black hover:bg-gray-700 text-white" onClick={() => setIsJoining(!isJoining)}>
             Join
           </Button>
         </div>
-
-        {/* Display Selected Aravt Details */}
-        {showDetails && selectedAravtDetails && (
-          <div className="mt-4">
-            <h4 className="text-md font-semibold">Details:</h4>
-            <div className="flex items-center gap-1 text-gray-600">
-              <span>Leader:</span>
-              <span className="text-blue-500">{selectedAravtDetails.leader?.full_name}</span>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1 text-gray-600">
-                <Users className="h-4 w-4" />
-                <span>{selectedAravtDetails.team?.length + 1}/{10}</span>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {selectedAravtDetails.skills?.map((skill, index) => (
-                <span key={index} className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Display Join Request Form */}
         {isJoining && (
