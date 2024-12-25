@@ -49,6 +49,7 @@ interface AdminState {
   deleteTask: (taskId: number) => Promise<void>;
   settings: AravtSettings;
   updateSettings: (updates: Partial<AravtSettings>) => Promise<void>;
+  inviteMember: (email: string) => Promise<void>;
 }
 
 export const useAdminStore = create<AdminState>()((set, get) => {
@@ -300,6 +301,19 @@ export const useAdminStore = create<AdminState>()((set, get) => {
           error: error instanceof Error ? error.message : 'Failed to update settings', 
           isLoading: false 
         });
+      }
+    },
+
+    inviteMember: async (email: string) => {
+      try {
+        set({ isLoading: true, error: null });
+        await api.aravt_members_invite(email);
+        // Refresh member list
+        get().fetchAdminData();
+      } catch (error) {
+        set({ error: 'Failed to invite member' });
+      } finally {
+        set({ isLoading: false });
       }
     },
   }

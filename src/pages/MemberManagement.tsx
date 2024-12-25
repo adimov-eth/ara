@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Plus, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,6 +10,8 @@ import { useAdminStore } from '@/store/admin';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { MemberCard } from '@/components/admin/MemberCard';
 import { RequestCard } from '@/components/admin/RequestCard';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label';
 
 const MemberManagement = () => {
   const { user } = useAuthStore(); 
@@ -24,8 +26,19 @@ const MemberManagement = () => {
     updateMemberRole,
     removeMember,
     approveRequest,
-    rejectRequest
+    rejectRequest,
+    inviteMember
   } = useAdminStore();
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [email, setEmail] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await inviteMember(email);
+    setEmail('');
+    setDialogOpen(false);
+  };
 
   useEffect(() => {
     fetchAdminData();
@@ -46,10 +59,35 @@ const MemberManagement = () => {
           <h1 className="text-2xl font-bold">Members</h1>
           <p className="text-gray-500">Manage community members</p>
         </div>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Member
-        </Button>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Member
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Invite New Member</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email address</Label>
+                <Input 
+                  id="email"
+                  type="email"
+                  placeholder="Enter email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? <LoadingSpinner /> : null}
+                Send Invitation
+              </Button>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {error && (

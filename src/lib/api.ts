@@ -182,5 +182,10 @@ export const api = {
   async link_wallet(user_id: number, wallet_address: string): Promise<User> {
     const response = await axios.post(`/link_wallet/${user_id}`, { wallet_address })
     return response.data
+  },
+
+  async aravt_members_invite(email: string): Promise<MessageResponse> {
+    const response = await axios.post('/aravt/members/invite', { email })
+    return response.data
   }
 }
