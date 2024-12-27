@@ -1,5 +1,7 @@
 {
-  "url": "",
-  "name": "Example",
-  "iconUrl": ""
+  "url": "https://app.aravt.io",
+  "name": "ARAVT",
+  "iconUrl": "https://app.aravt.io/img/aravt2.png",
+  "termsOfUseUrl": "https://aravt.io/terms.html",
+  "privacyPolicyUrl": "https://aravt.io/privacy.html"
 }

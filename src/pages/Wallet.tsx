@@ -19,6 +19,7 @@ import {
   Refund
 } from '@ton-api/client';
 import { Address } from '@ton/core';
+import SellToken from '@/components/SellToken';
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -76,7 +77,7 @@ const Wallet = () => {
 
     initWallet();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Empty dependency array to run only once
+  }, [connected]); // Empty dependency array to run only once
 
   const processAction = (action: Action): DisplayTransaction | null => {
     const baseFields = {
@@ -223,6 +224,12 @@ const Wallet = () => {
           </Button>
         )}
       </div>
+      
+      <Card>
+        <CardContent>
+          <SellToken />
+        </CardContent>
+      </Card>
       
       <Card>
         <CardHeader>
