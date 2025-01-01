@@ -89,7 +89,7 @@ const AravtDashboard = () => {
 
       <div className="">
         {user?.able_to_create_aravt && (
-          <Button variant="outline" size="icon" onClick={() => setIsFormOpen(true)}>
+          <Button variant="outline" size="lg" onClick={() => setIsFormOpen(true)}>
             Create Aravt
           </Button>
         )}
