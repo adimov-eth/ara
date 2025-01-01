@@ -64,7 +64,7 @@ const SellToken: React.FC = () => {
 
     return (
         <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">Buy Aravt Token</h1>
+            <h1 className="text-2xl font-bold mb-4">Buy Aravt Tokens</h1>
             {sellError && <p className="text-red-500">{sellError}</p>}
             <form onSubmit={handleSubmit} className="grid grid-cols-1 items-center gap-4 max-w-xs mx-auto">
                 <input
@@ -89,10 +89,10 @@ const SellToken: React.FC = () => {
                     type="submit" 
                     disabled={!connected}
                     className={`${
-                        connected ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-400'
+                        connected ? 'bg-blue-500 hover:bg-green-600' : 'bg-gray-400'
                     } text-white px-8 py-2 rounded transition-colors w-full`}
                 >
-                    Buy Aravt Token
+                    Buy
                 </button>
             </form>
             {error && <p className="text-red-500">{error}</p>}

@@ -49,7 +49,7 @@ const AravtDashboard = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold">{user?.aravt?.name}</h1>
-          <p className="text-gray-500">Welcome back, {user?.username}</p>
+          <p className="text-gray-500">{user?.username} you are in the Aravt</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="icon">
@@ -76,7 +76,7 @@ const AravtDashboard = () => {
         />
         <StatCard
           title="Tokens Earned"
-          value={`${stats.tokensEarned} AT`}
+          value={`${stats.tokensEarned} ARAVT`}
           icon={CreditCard}
         />
         <StatCard

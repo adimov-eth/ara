@@ -47,7 +47,7 @@ const BrowseAravts = () => {
       {/* Aravts Section */}
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Aravts</h2>
+          <h2 className="text-2xl font-bold">🌀 14 </h2>
           <div className="relative">
             <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
             <Input 
