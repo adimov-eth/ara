@@ -32,10 +32,10 @@ export function CreateProjectDialog() {
       const amount = formData.get('fundingAmount') as string;
       const currency = formData.get('fundingCurrency') as string;
       
-      if (amount || currency) {
+      if (amount && currency) {
         newProject.fundings = {
-          amount: amount ? parseFloat(amount) : undefined,
-          currency: currency || undefined
+          amount: parseFloat(amount),
+          currency: currency
         };
       }
     }
