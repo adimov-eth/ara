@@ -4,7 +4,7 @@ import { User, JoinRequest } from '@/types';
 
 interface UserState {
   user: User | null;
-  // applications: JoinRequest[];
+  applications: JoinRequest[];
   isLoading: boolean;
   error: string | null;
   fetchUserProfile: () => Promise<void>;
@@ -13,15 +13,15 @@ interface UserState {
 
 export const useUserStore = create<UserState>((set) => ({
   user: null,
-  // applications: [],
+  applications: [],
   isLoading: false,
   error: null,
   fetchUserProfile: async () => {
     set({ isLoading: true, error: null });
     try {
       const user = await api.who_am_i(); // Fetch user data from API
-      //const applications = [] // await api.aravt_applications();
-      set({ user, isLoading: false });
+      const applications: JoinRequest[] = await api.check_my_applications();
+      set({ user, applications, isLoading: false });
     } catch (error) {
       set({ error: error instanceof Error ? error.message : 'Failed to fetch user profile', isLoading: false });
     }

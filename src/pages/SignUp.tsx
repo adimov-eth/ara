@@ -1,19 +1,40 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { api } from '@/lib/api';
 import { RegistrationData } from '@/types';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useAuthStore } from '@/store/auth';
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const referralInfo = useAuthStore(state => state.referralInfo);
+  
+  useEffect(() => {
+    // Parse referral data from URL on component mount
+    const searchParams = new URLSearchParams(location.search);
+    const ref = searchParams.get('ref');
+    const aravtId = searchParams.get('aravtId');
+
+    // Only set referral info if we don't already have it or if URL has new info
+    if ((ref || aravtId) && (!referralInfo || 
+        ref !== referralInfo.referredById?.toString() || 
+        aravtId !== referralInfo.aravtId?.toString())) {
+      useAuthStore.getState().setReferralInfo({
+        referredById: ref ? parseInt(ref) : undefined,
+        aravtId: aravtId ? parseInt(aravtId) : undefined,
+      });
+    }
+  }, [location, referralInfo]);
+
   const [formData, setFormData] = useState<RegistrationData>({
     username: '',
     email: '',
     password: '',
     city: '',
     date_of_birth: '',
-    full_name: ''
+    full_name: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement> | Date | null) => {
@@ -39,8 +60,20 @@ const SignUp = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await api.register(formData);
-      navigate('/login');
+      const registrationData = {
+        ...formData,
+        refered_by_id: referralInfo?.referredById
+      };
+      
+      await api.register(registrationData);
+      // Navigate to login while preserving referral info in the URL
+      if (referralInfo) {
+        navigate(`/login?ref=${referralInfo.referredById}${
+          referralInfo.aravtId ? `&aravtId=${referralInfo.aravtId}` : ''
+        }`);
+      } else {
+        navigate('/login');
+      }
     } catch (error) {
       console.error('Registration failed:', error);
     }

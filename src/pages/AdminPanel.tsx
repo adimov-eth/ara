@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAdminStore } from '@/store/admin';
 import { useAuthStore } from '@/store/auth';
-import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { StatsCard } from '@/components/admin/StatsCard';
 import { RequestCard } from '@/components/admin/RequestCard';
 import { Input } from '@/components/ui/input';

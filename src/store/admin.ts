@@ -204,8 +204,7 @@ export const useAdminStore = create<AdminState>()((set, get) => {
     removeMember: async (userId: number) => {
       set({ isLoading: true, error: null });
       try {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
+        await api.aravt_drop_user(userId);
         const state = get();
         const updatedMembers = state.members.filter(member => member.id !== userId);
         set({ 
@@ -305,10 +304,10 @@ export const useAdminStore = create<AdminState>()((set, get) => {
     },
 
     inviteMember: async (email: string) => {
+      set({ isLoading: true, error: null });
       try {
-        set({ isLoading: true, error: null });
-        await api.aravt_members_invite(email);
-        // Refresh member list
+        const { user } = useAuthStore.getState();
+        await api.send_invitation(email, user?.aravt?.id as number, user?.id as number);
         get().fetchAdminData();
       } catch (error) {
         set({ error: 'Failed to invite member' });

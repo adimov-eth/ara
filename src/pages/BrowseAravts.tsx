@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { useAravtsStore } from '@/store/aravts';
 import { useAuthStore } from '@/store/auth';
-import AravtCard from '@/components/AravtCard'; // Import the new component
-import { Card } from '@/components/ui/card'; 
+import AravtCard from '@/components/client/AravtCard';
+import { Card } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Aravt } from '@/types';
 
 const BrowseAravts = () => {
   const { aravts, isLoading, error, fetchAravts } = useAravtsStore();
+  const user = useAuthStore(state => state.user);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -29,14 +30,16 @@ const BrowseAravts = () => {
 
   return (
     <div className="w-full max-w-6xl mx-auto p-8 space-y-8">
-      {/* Welcome Message */}
-      <Card className="bg-blue-50 border-none p-6">
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-2xl">👋</span>
-          <h2 className="text-xl font-semibold">Welcome to Aravt!</h2>
-        </div>
-        <p className="text-gray-600">You need to join one of the active Aravts to continue.</p>
-      </Card>
+      {/* Welcome Message - Only show if user is not in an Aravt */}
+      {!user?.aravt?.id && (
+        <Card className="bg-blue-50 border-none p-6">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-2xl">👋</span>
+            <h2 className="text-xl font-semibold">Welcome to Aravt!</h2>
+          </div>
+          <p className="text-gray-600">You need to join one of the active Aravts to continue.</p>
+        </Card>
+      )}
 
       {error && (
         <Alert variant="destructive">

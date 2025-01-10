@@ -19,7 +19,7 @@ import {
   Refund
 } from '@ton-api/client';
 import { Address } from '@ton/core';
-import SellToken from '@/components/SellToken';
+import SellToken from '@/components/client/SellToken';
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 

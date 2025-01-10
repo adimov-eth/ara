@@ -8,10 +8,15 @@ interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
   aravt: Aravt | null;
+  referralInfo: {
+    aravtId?: number;
+    referredById?: number;
+  } | null;
   fetchUser: () => Promise<void>;
   setToken: (token: string) => void;
   login: (user: User, token: string) => void;
   logout: () => void;
+  setReferralInfo: (data: { aravtId?: number; referredById?: number } | null) => void;
   connectWallet: (address: string) => Promise<void>;
   disconnectWallet: () => void;
 }
@@ -23,6 +28,7 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       isAuthenticated: false,
       aravt: null,
+      referralInfo: null,
       fetchUser: async () => {
         const st_user = get().user;
         if (st_user) {
@@ -34,12 +40,12 @@ export const useAuthStore = create<AuthState>()(
       login: (user: User, token: string) => 
         set({ user, token, isAuthenticated: true, aravt: user.aravt }),
       logout: () => 
-        set({ user: null, token: null, isAuthenticated: false, aravt: null }),
+        set({ user: null, token: null, isAuthenticated: false, aravt: null, referralInfo: null }),
+      setReferralInfo: (data) => set({ referralInfo: data }),
       connectWallet: async (address: string) => {
         const { user } = get();
         if (user) {
           try {
-            // Call API to link wallet to user
             const updated_user = await api.link_wallet(user.id, address);
             set({ user: updated_user });
           } catch (error) {

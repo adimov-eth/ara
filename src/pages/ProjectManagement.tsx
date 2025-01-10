@@ -6,13 +6,18 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { useAuthStore } from '@/store/auth';
-import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { useProjectsStore } from '@/store/projects';
 import { Project } from "@/types";
-import { CreateProjectDialog } from '@/components/CreateProjectDialog';
+import { CreateProjectDialog } from '@/components/client/CreateProjectDialog';
+import { useOffersStore } from '@/store/offers';
 
 const ProjectCard = ({ project }: { project: Project }) => {
   const navigate = useNavigate();
+  const { offers } = useOffersStore();
+  
+  // Get offers count for this project
+  const projectOffers = offers.filter(offer => offer.business.id === project.id);
 
   return (
     <Card>
@@ -42,6 +47,11 @@ const ProjectCard = ({ project }: { project: Project }) => {
                   {project.fundings.amount} {project.fundings.currency}
                 </div>
               )}
+              <div>
+                <Badge variant="secondary">
+                  {projectOffers.length} Offers
+                </Badge>
+              </div>
             </div>
           </div>
         </div>
@@ -54,6 +64,13 @@ const ProjectCard = ({ project }: { project: Project }) => {
             onClick={() => navigate(`/projects/${project.id}`)}
           >
             View Details
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => navigate(`/offers?projectId=${project.id}`)}
+          >
+            View Offers
           </Button>
           <Button variant="outline" size="sm">Task Board</Button>
         </div>

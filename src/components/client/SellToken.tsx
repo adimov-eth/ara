@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useTonConnect } from '../hooks/useTonConnect';
-import { useSell } from '../hooks/useSell';
+import { useTonConnect } from '../../hooks/useTonConnect';
+import { useSell } from '../../hooks/useSell';
 import { toNano } from '@ton/core';
 
 const SellToken: React.FC = () => {

@@ -85,45 +85,44 @@ export interface Task {
   }
 }
 
-export type ProjectStatus = "Posted" | "Not Posted"
+export type ProjectStatus = 'Posted' | 'Not Posted';
 
 export interface Project {
-  id: number,
-  name: string,
-  description: string,
-  link: string,
+  id: number;
+  name: string;
+  description: string;
+  link: string;
   fundings?: {
-    amount?: number,
-    currency?: string,
-  },
-  logo: string,
-  Status: ProjectStatus,
-  location: string,
-  tasks: Task[],
+    amount: number;
+    currency: string;
+  };
+  logo?: string;
+  Status: ProjectStatus;
+  location: string;
+  tasks: Task[];
 }
 
 export interface Offer {
-  id: number,
-  name: string,
-  business: Project,
-  description: string,
-  is_limited: boolean,
-  count_left: number,
-  duration: number,
-  price: number,
-  assets: {}
+  id: number;
+  name: string;
+  business: Project;
+  description: string;
+  is_limited: boolean;
+  count_left: number;
+  duration: number;
+  price: number;
+  assets: {};
 }
 
 export interface CreateOffer {
-  id: number,
-  name: string,
-  business_id: number,
-  description: string,
-  is_limited: boolean,
-  count_left: number,
-  duration: number,
-  price: number,
-  assets: {}
+  name: string;
+  business_id: number;
+  description: string;
+  is_limited: boolean;
+  count_left: number;
+  duration: number;
+  price: number;
+  assets: {};
 }
 
 export interface JoinRequest {

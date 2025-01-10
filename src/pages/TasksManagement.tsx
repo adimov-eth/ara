@@ -11,8 +11,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuthStore } from '@/store/auth';
 import { useTasksStore } from '@/store/tasks';
-import { LoadingSpinner } from '@/components/LoadingSpinner';
-import { TaskCard } from '@/components/TaskCard';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { TaskCard } from '@/components/client/TaskCard';
 import { api } from '@/lib/api';
 
 const TasksManagement = () => {
@@ -35,24 +35,32 @@ const TasksManagement = () => {
     try {
       const formData = new FormData(e.currentTarget);
       const responsibleUsers = formData.get('responsible_users_ids') as string;
+      
+      // Handle both string and array inputs for responsible users
+      const responsible_users_ids = responsibleUsers ?
+          responsibleUsers.trim().startsWith('[') ?
+            JSON.parse(responsibleUsers) :
+            responsibleUsers.split(',').map(id => Number(id.trim()))
+        : [];
+
       const taskData = {
         title: formData.get('title') as string,
         description: formData.get('description') as string,
-        link: formData.get('link') as string,
+        link: formData.get('link') as string || '',
         reward: Math.floor(Number(formData.get('reward'))),
         reward_type: (formData.get('reward_type') === 'AT' ? 'AT' : 'USDT') as 'AT' | 'USDT',
         definition_of_done: JSON.parse(formData.get('definition_of_done') as string || '{}'),
-        responsible_users_ids: responsibleUsers ? responsibleUsers.split(',').map(id => Number(id.trim())) : [],
+        responsible_users_ids,
         is_done: false,
         is_global: formData.get('is_global') === 'true',
         date_time: formData.get('deadline') as string,
         priority: formData.get('priority') as 'low' | 'medium' | 'high',
         one_time: formData.get('one_time') === 'true',
         completions: {
-          "completions_amount": 0,
-          "is_completion_approved": false,
-          "num_of_approved": 0
-       }
+          completions_amount: 0,
+          is_completion_approved: false,
+          num_of_approved: 0
+        }
       };
       await api.tasks_set_task(taskData);
       await fetchTasksData();
@@ -106,85 +114,116 @@ const TasksManagement = () => {
               </DialogHeader>
               <form onSubmit={handleCreateTask}>
                 <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="title">Title</Label>
-                    <Input id="title" name="title" required />
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="title">Title *</Label>
+                      <Input id="title" name="title" required />
+                    </div>
+                    <div>
+                      <Label htmlFor="description">Description *</Label>
+                      <Textarea id="description" name="description" required />
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea id="description" name="description" required />
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="reward">Reward *</Label>
+                      <div className="flex gap-2">
+                        <Input 
+                          id="reward" 
+                          name="reward" 
+                          type="number" 
+                          step="1" 
+                          min="0" 
+                          required 
+                          className="flex-1"
+                        />
+                        <div className="w-24">
+                          <Select name="reward_type" defaultValue="AT">
+                            <SelectTrigger>
+                              <SelectValue placeholder="Type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="AT">AT</SelectItem>
+                              <SelectItem value="USDT">USDT</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="deadline">Deadline *</Label>
+                      <Input id="deadline" name="deadline" type="datetime-local" required />
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="link">Link (Optional)</Label>
-                    <Input id="link" name="link" />
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="priority">Priority *</Label>
+                      <Select name="priority" defaultValue="medium">
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="low">Low</SelectItem>
+                          <SelectItem value="medium">Medium</SelectItem>
+                          <SelectItem value="high">High</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="is_global">Scope *</Label>
+                      <Select name="is_global" defaultValue="false">
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="false">Local</SelectItem>
+                          <SelectItem value="true">Global</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="one_time">Frequency *</Label>
+                      <Select name="one_time" defaultValue="true">
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="true">One Time</SelectItem>
+                          <SelectItem value="false">Recurring</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="reward">Reward</Label>
-                    <Input id="reward" name="reward" type="number" step="1" min="0" required />
-                  </div>
-                  <div>
-                    <Label htmlFor="reward_type">Reward Type</Label>
-                    <Select name="reward_type" defaultValue="AT">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select reward type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="AT">AT</SelectItem>
-                        <SelectItem value="USDT">USDT</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="definition_of_done">Definition of Done</Label>
-                    <Textarea id="definition_of_done" name="definition_of_done" placeholder="{}" required />
-                  </div>
-                  <div>
-                    <Label htmlFor="responsible_users_ids">Responsible Users (comma-separated IDs)</Label>
-                    <Input id="responsible_users_ids" name="responsible_users_ids" placeholder="e.g. 1, 2, 3" />
-                  </div>
-                  <div>
-                    <Label htmlFor="deadline">Deadline</Label>
-                    <Input id="deadline" name="deadline" type="datetime-local" required />
-                  </div>
-                  <div>
-                    <Label htmlFor="is_global">Task Type</Label>
-                    <Select name="is_global" defaultValue="false">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select task type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="false">Local</SelectItem>
-                        <SelectItem value="true">Global</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="priority">Priority</Label>
-                    <Select name="priority" defaultValue="medium">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select priority" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="low">Low</SelectItem>
-                        <SelectItem value="medium">Medium</SelectItem>
-                        <SelectItem value="high">High</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="one_time">Task Type</Label>
-                    <Select name="one_time" defaultValue="true">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select task type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="true">One Time</SelectItem>
-                        <SelectItem value="false">Recurring</SelectItem>
-                      </SelectContent>
-                    </Select>
+
+                  <div className="space-y-4 pt-4 border-t">
+                    <h3 className="text-sm font-medium text-gray-500">Optional Details</h3>
+                    <div>
+                      <Label htmlFor="link">Resource Link</Label>
+                      <Input id="link" name="link" placeholder="https://" />
+                    </div>
+                    <div>
+                      <Label htmlFor="responsible_users_ids">Responsible Users (comma-separated IDs)</Label>
+                      <Input 
+                        id="responsible_users_ids" 
+                        name="responsible_users_ids" 
+                        placeholder="e.g. 1, 2, 3" 
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="definition_of_done">Definition of Done (JSON)</Label>
+                      <Textarea 
+                        id="definition_of_done" 
+                        name="definition_of_done" 
+                        placeholder="{}"
+                        defaultValue="{}"
+                      />
+                    </div>
                   </div>
                 </div>
-                <DialogFooter className="mt-4">
+
+                <DialogFooter className="mt-6">
                   <Button type="button" variant="outline" onClick={() => setShowCreateTaskForm(false)}>
                     Cancel
                   </Button>

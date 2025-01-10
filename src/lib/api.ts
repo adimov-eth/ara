@@ -88,8 +88,18 @@ export const api = {
     return response.data
   },
 
+  async aravt_drop_user(user_id: number): Promise<MessageResponse> {
+    const response = await axios.delete('/aravt/drop_user/' + `${user_id}`)
+    return response.data
+  },
+
   async aravt_applications(): Promise<JoinRequest[]> {
     const response = await axios.get('/aravt/applications/')
+    return response.data
+  },
+
+  async check_my_applications(): Promise<JoinRequest[]> {
+    const response = await axios.get('/aravt/check_my_applications/')
     return response.data
   },
 
@@ -155,7 +165,7 @@ export const api = {
     return response.data
   },
 
-  async aravt_set_offer(data: Omit<CreateOffer, 'id'>): Promise<MessageResponse> {
+  async aravt_set_offer(data: CreateOffer): Promise<MessageResponse> {
     const response = await axios.post('/aravt/set_offer/', data)
     return response.data
   },
@@ -184,8 +194,12 @@ export const api = {
     return response.data
   },
 
-  async aravt_members_invite(email: string): Promise<MessageResponse> {
-    const response = await axios.post('/aravt/members/invite', { email })
-    return response.data
+  async send_invitation(email: string, aravtId: number, referrerId: number): Promise<MessageResponse> {
+    const response = await axios.post('/send_invitation/', {
+      email,
+      aravt_id: aravtId,
+      referrer_id: referrerId
+    });
+    return response.data;
   }
 }

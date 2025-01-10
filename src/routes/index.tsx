@@ -18,6 +18,8 @@ import ProjectDetails from '@/pages/ProjectDetails'
 import Profile from '@/pages/Profile'
 import Wallet from '@/pages/Wallet'
 import OffersManagement from '@/pages/OffersManagement'
+import AravtDetails from '@/pages/AravtDetails'
+
 export function AppRoutes() {
   return (
     <Routes>
@@ -32,11 +34,13 @@ export function AppRoutes() {
       
       {/* Protected routes */}
       <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<AravtDashboard />} />
+        <Route path="/home" element={<Home/>} />
         <Route path="/about" element={<About />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/dashboard" element={<AravtDashboard />} />
+        <Route path="/aravts/:id" element={<AravtDetails/>} />
         <Route path="/projects" element={<ProjectManagement />} />
         <Route path="/projects/:id" element={<ProjectDetails />} />
         <Route path="/tasks" element={<TasksManagement />} />

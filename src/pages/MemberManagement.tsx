@@ -7,11 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuthStore } from '@/store/auth';
 import { useAdminStore } from '@/store/admin';
-import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { MemberCard } from '@/components/admin/MemberCard';
 import { RequestCard } from '@/components/admin/RequestCard';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label';
+import { toast } from 'react-toastify';
 
 const MemberManagement = () => {
   const { user } = useAuthStore(); 
@@ -32,12 +33,26 @@ const MemberManagement = () => {
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [email, setEmail] = useState('');
+  const [isInviting, setIsInviting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
-    await inviteMember(email);
-    setEmail('');
-    setDialogOpen(false);
+    if (!email) {
+      toast.error('Please enter an email address');
+      return;
+    }
+
+    setIsInviting(true);
+    try {
+      await inviteMember(email);
+      setEmail('');
+      setDialogOpen(false);
+      toast.info('Please send the invitation email in your email client');
+    } catch (error) {
+      // Error is handled in the store
+    } finally {
+      setIsInviting(false);
+    }
   };
 
   useEffect(() => {
@@ -70,7 +85,7 @@ const MemberManagement = () => {
             <DialogHeader>
               <DialogTitle>Invite New Member</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleInvite} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email address</Label>
                 <Input 
@@ -79,11 +94,22 @@ const MemberManagement = () => {
                   placeholder="Enter email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  disabled={isInviting}
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? <LoadingSpinner /> : null}
-                Send Invitation
+              <Button 
+                type="submit" 
+                className="w-full" 
+                disabled={isInviting}
+              >
+                {isInviting ? (
+                  <div className="mr-2">
+                    <LoadingSpinner/>
+                    Sending Invitation...
+                  </div>
+                ) : (
+                  'Send Invitation'
+                )}
               </Button>
             </form>
           </DialogContent>

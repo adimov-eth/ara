@@ -22,6 +22,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
   const navigate = useNavigate();
   const setToken = useAuthStore(state => state.setToken);
   const login = useAuthStore(state => state.login);
+  const referralInfo = useAuthStore(state => state.referralInfo);
   
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -41,7 +42,11 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
       
       login(current_user, access_token);
       onLoginSuccess?.();
-      if (Boolean(current_user.aravt)) {
+
+      if (referralInfo?.aravtId) {
+        useAuthStore.getState().setReferralInfo(null);
+        navigate(`/aravts/${referralInfo.aravtId}`);
+      } else if (Boolean(current_user.aravt)) {
         navigate('/dashboard');
       } else {
         navigate('/browse');
@@ -145,7 +150,15 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
                 </Button>
                 <div className="text-center text-sm">
                   Don't have an account?{" "}
-                  <Link to="/signup" className="text-primary hover:underline">
+                  <Link 
+                    to={`/signup${referralInfo ? 
+                      `?ref=${referralInfo.referredById}${
+                        referralInfo.aravtId ? `&aravtId=${referralInfo.aravtId}` : ''
+                      }` 
+                      : ''
+                    }`} 
+                    className="text-primary hover:underline"
+                  >
                     Sign up
                   </Link>
                 </div>

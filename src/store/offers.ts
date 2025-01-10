@@ -7,7 +7,7 @@ interface OffersState {
   isLoading: boolean;
   error: string | null;
   fetchOffers: () => Promise<void>;
-  createOffer: (offer: Omit<CreateOffer, 'id'>) => Promise<void>;
+  createOffer: (offer: CreateOffer) => Promise<void>;
 }
 
 export const useOffersStore = create<OffersState>((set, get) => {
@@ -21,17 +21,24 @@ export const useOffersStore = create<OffersState>((set, get) => {
         const offers: Offer[] = await api.offers();
         set({ offers: offers, isLoading: false });
       } catch (err) {
-        set({ error: err instanceof Error ? err.message : 'Failed to fetch offers', isLoading: false });
+        set({ 
+          error: err instanceof Error ? err.message : 'Failed to fetch offers', 
+          isLoading: false 
+        });
       }
     },
-    createOffer: async (offer: Omit<CreateOffer, 'id'>) => {
+
+    createOffer: async (offer: CreateOffer) => {
       set({ isLoading: true, error: null });
       try {
         await api.aravt_set_offer(offer);
         await get().fetchOffers();
         set({ isLoading: false });
       } catch (err) {
-        set({ error: err instanceof Error ? err.message : 'Failed to create offer', isLoading: false });
+        set({ 
+          error: err instanceof Error ? err.message : 'Failed to create offer',
+          isLoading: false 
+        });
       }
     }
   }

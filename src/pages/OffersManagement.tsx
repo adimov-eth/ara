@@ -15,37 +15,43 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Offer, Project } from '@/types'
-import { LoadingSpinner } from '@/components/LoadingSpinner'
+import { Offer, Project, CreateOffer } from '@/types'
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
+import { useSearchParams } from 'react-router-dom'
 
 const OffersManagement = () => {
-  const { offers, isLoading: offersLoading, error: offersError, fetchOffers } = useOffersStore()
+  const { offers, isLoading, error, fetchOffers } = useOffersStore()
   const { projects, isLoading: projectsLoading, fetchProjects } = useProjectsStore()
+  const [searchParams] = useSearchParams();
+  const projectId = searchParams.get('projectId');
 
   useEffect(() => {
     fetchOffers()
     fetchProjects()
   }, [fetchOffers, fetchProjects])
 
-  if (offersLoading || projectsLoading) {
+  if (isLoading || projectsLoading) {
     return <LoadingSpinner />
   }
 
-  if (offersError) {
-    return <div className="text-red-500">Error: {offersError}</div>
+  if (error) {
+    return <div className="text-red-500">Error: {error}</div>
   }
 
-  // Group offers by project
-  const offersByProject = offers.reduce((acc, offer) => {
+  // Filter projects if projectId is provided
+  const filteredProjects = projectId 
+    ? projects.filter(p => p.id === Number(projectId))
+    : projects;
+
+  // Group offers by project with type safety
+  const offersByProject = offers.reduce<Record<number, Offer[]>>((acc, offer) => {
     const projectId = offer.business.id
     if (!acc[projectId]) {
       acc[projectId] = []
     }
     acc[projectId].push(offer)
     return acc
-  }, {} as Record<number, Offer[]>)
-
-  console.log(offersByProject)
+  }, {})
 
   return (
     <div className="container mx-auto py-6 space-y-8">
@@ -57,7 +63,7 @@ const OffersManagement = () => {
         <CreateOfferDialog projects={projects} />
       </div>
 
-      {projects.map((project) => (
+      {filteredProjects.map((project) => (
         <div key={project.id} className="space-y-4">
           <div className="flex items-center gap-2">
             <h2 className="text-xl font-semibold">{project.name}</h2>
@@ -101,38 +107,36 @@ function OfferCard({ offer }: { offer: Offer }) {
 }
 
 function CreateOfferDialog({ projects }: { projects: Project[] }) {
-  const { createOffer } = useOffersStore()
   const [isLimited, setIsLimited] = useState(false)
+  const { createOffer } = useOffersStore()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     
-    const data = {
-      business_id: Number(formData.get('business_id')),
+    const newOffer: CreateOffer = {
       name: formData.get('name') as string,
+      business_id: Number(formData.get('business_id')),
       description: formData.get('description') as string,
-      price: Number(formData.get('price')),
-      duration: Number(formData.get('duration')),
-      is_limited: formData.get('is_limited') === 'on',
+      is_limited: isLimited,
       count_left: isLimited ? Number(formData.get('count_left')) : 0,
+      duration: Number(formData.get('duration')),
+      price: Number(formData.get('price')),
       assets: {}
     }
 
-    await createOffer(data)
-    e.currentTarget.reset()
-    setIsLimited(false)
+    await createOffer(newOffer)
   }
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button>
-          <Plus className="w-4 h-4 mr-2" />
+          <Plus className="mr-2 h-4 w-4" />
           Create Offer
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-md">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Create New Offer</DialogTitle>
           <DialogDescription>

@@ -73,7 +73,7 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
               <span>Due: {new Date(task.date_time).toLocaleDateString()}</span>
             </div>
             <div>
-              {task.link && (
+              {task.link && (task.link !== 'No link yet') && (
                 <a 
                   href={task.link}
                   target="_blank"

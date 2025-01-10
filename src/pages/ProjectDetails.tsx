@@ -1,17 +1,18 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { 
   Bell, Settings, CreditCard, Users, CalendarDays, 
   Globe, ListChecks, Plus 
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useAuthStore } from '@/store/auth';
-import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { useOffersStore } from '@/store/offers';
 
 interface ProjectMockData {
   id: number;
@@ -76,6 +77,11 @@ const mockProject: ProjectMockData = {
 const ProjectDetails = () => {
   const { id } = useParams();
   const { user } = useAuthStore();
+  const { offers } = useOffersStore();
+  const navigate = useNavigate();
+
+  // Filter offers for this project
+  const projectOffers = offers.filter(offer => offer.business.id === Number(id));
 
   useEffect(() => {
     // TODO: Fetch project details
@@ -254,6 +260,46 @@ const ProjectDetails = () => {
                 <Plus className="h-4 w-4 mr-2" />
                 Add Member
               </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="space-y-4">
+        <Card>
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle>Project Offers</CardTitle>
+              <Button variant="outline" size="sm" onClick={() => navigate('/offers')}>
+                View All Offers
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 gap-4">
+              {projectOffers.length > 0 ? (
+                projectOffers.map((offer) => (
+                  <Card key={offer.id}>
+                    <CardHeader>
+                      <CardTitle className="text-lg">{offer.name}</CardTitle>
+                      <CardDescription>{offer.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        <p className="font-medium">Price: ${offer.price}</p>
+                        {offer.is_limited && (
+                          <p className="text-amber-600">
+                            {offer.count_left} spots remaining
+                          </p>
+                        )}
+                        <p>Duration: {offer.duration} days</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                <p className="text-gray-500">No offers available for this project</p>
+              )}
             </div>
           </CardContent>
         </Card>
