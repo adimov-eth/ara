@@ -195,7 +195,7 @@ export const api = {
   },
 
   async send_invitation(email: string, aravtId: number, referrerId: number): Promise<MessageResponse> {
-    const response = await axios.post('/send_invitation/', {
+    const response = await axios.post('/send_invite_link', {
       email,
       aravt_id: aravtId,
       referrer_id: referrerId
