@@ -4,7 +4,7 @@ import {
   Briefcase, ListTodo, ChevronRight, MessageCircle 
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -58,6 +58,7 @@ const ActivityFeed = () => (
 );
 
 const QuickActions = () => (
+  /* To do
   <Card>
     <CardHeader>
       <CardTitle>Quick Actions</CardTitle>
@@ -76,6 +77,22 @@ const QuickActions = () => (
           Create Task
         </span>
         <ChevronRight className="h-4 w-4" />
+      </Button>
+    </CardContent>
+  </Card>
+  */
+  <Card>
+    <CardHeader className="pb-2">
+      <CardTitle className="text-sm">Quick Actions</CardTitle>
+    </CardHeader>
+    <CardContent className="space-y-1">
+      <Button variant="outline" size="sm" className="w-full justify-start text-sm">
+        <Users className="mr-2 h-3 w-3" />
+        Manage Team
+      </Button>
+      <Button variant="outline" size="sm" className="w-full justify-start text-sm">
+        <ListTodo className="mr-2 h-3 w-3" />
+        Create Task
       </Button>
     </CardContent>
   </Card>
@@ -267,22 +284,6 @@ const AravtDashboard = () => {
       )}
 
       <QuickActions />
-
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Quick Actions</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-1">
-          <Button variant="outline" size="sm" className="w-full justify-start text-sm">
-            <Users className="mr-2 h-3 w-3" />
-            Manage Team
-          </Button>
-          <Button variant="outline" size="sm" className="w-full justify-start text-sm">
-            <ListTodo className="mr-2 h-3 w-3" />
-            Create Task
-          </Button>
-        </CardContent>
-      </Card>
 
       {user?.able_to_create_aravt && (
         <Button 

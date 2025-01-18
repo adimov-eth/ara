@@ -80,14 +80,19 @@ const ProjectCard = ({ project }: { project: Project }) => {
 };
 
 const ProjectManagement = () => {
-  const { user } = useAuthStore();
-  const { projects, isLoading, error, fetchProjects } = useProjectsStore();
+  const navigate = useNavigate();
+  const { user, aravt } = useAuthStore();
+  const { projects, isLoading, error, fetchProjectsForAravt } = useProjectsStore();
 
   useEffect(() => {
-    fetchProjects();
-  }, [fetchProjects]);
+    if (!user || !user.aravt?.id) {
+      navigate('/login');
+      return;
+    }
+    fetchProjectsForAravt(user?.aravt?.id);
+  }, [user, fetchProjectsForAravt, navigate]);
 
-  if (!user || isLoading) {
+  if (!user || !aravt || isLoading) {
     return <LoadingSpinner />;
   }
 
@@ -98,7 +103,7 @@ const ProjectManagement = () => {
           <h1 className="text-2xl font-bold">Projects</h1>
           <p className="text-gray-500">Manage your Aravt projects</p>
         </div>
-        <CreateProjectDialog />
+        <CreateProjectDialog aravt_id={aravt.id}/>
       </div>
 
       {error && (

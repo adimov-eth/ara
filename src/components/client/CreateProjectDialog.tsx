@@ -9,7 +9,7 @@ import { Project, ProjectStatus } from '@/types';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 
-export function CreateProjectDialog() {
+export function CreateProjectDialog({ aravt_id }: { aravt_id: number }) {
   const [open, setOpen] = useState(false);
   const [includeFunding, setIncludeFunding] = useState(false);
   const { createProject } = useProjectsStore();
@@ -40,7 +40,7 @@ export function CreateProjectDialog() {
       }
     }
 
-    await createProject(newProject);
+    await createProject(aravt_id, newProject);
     setOpen(false);
   };
 

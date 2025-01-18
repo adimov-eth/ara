@@ -1,14 +1,12 @@
 import { Routes, Route } from 'react-router-dom'
 import Layout from '../components/Layout'
 import { ProtectedRoute } from '../components/ProtectedRoute'
-import Home from '../pages/Home'
-import About from '../pages/About'
 import NotFound from '../pages/NotFound'
 import Login from '@/pages/Login'
 import SignUp from '@/pages/SignUp'
 import CompleteRegistration from '@/pages/CompleteRegistration'
 import BrowseAravts from '@/pages/BrowseAravts'
-import ExploreFeatures from '@/pages/ExploreFeatures'
+import Learn from '@/pages/Learn'
 import AdminPanel from '@/pages/AdminPanel'
 import AravtDashboard from '@/pages/AravtDashboard'
 import ProjectManagement from '@/pages/ProjectManagement'
@@ -27,16 +25,14 @@ export function AppRoutes() {
       <Route element={<Layout />}>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/learn" element={<Learn />} />
         <Route path="/complete_registration" element={<CompleteRegistration/>} /> 
-        <Route path="/explore" element={<ExploreFeatures />} />
         <Route path="/browse" element={<BrowseAravts /> }/>
       </Route>
       
       {/* Protected routes */}
       <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route path="/" element={<AravtDashboard />} />
-        <Route path="/home" element={<Home/>} />
-        <Route path="/about" element={<About />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/dashboard" element={<AravtDashboard />} />

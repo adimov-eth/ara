@@ -18,17 +18,24 @@ import { Textarea } from '@/components/ui/textarea'
 import { Offer, Project, CreateOffer } from '@/types'
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
 import { useSearchParams } from 'react-router-dom'
+import { useAuthStore } from '@/store/auth';
 
 const OffersManagement = () => {
+  const { user, aravt } = useAuthStore();
   const { offers, isLoading, error, fetchOffers } = useOffersStore()
-  const { projects, isLoading: projectsLoading, fetchProjects } = useProjectsStore()
+  const { projects, isLoading: projectsLoading, fetchProjectsForAravt } = useProjectsStore()
   const [searchParams] = useSearchParams();
   const projectId = searchParams.get('projectId');
 
   useEffect(() => {
     fetchOffers()
-    fetchProjects()
-  }, [fetchOffers, fetchProjects])
+  }, [fetchOffers])
+
+  useEffect(() => {
+    if (user && aravt) {
+      fetchProjectsForAravt(aravt.id)
+    }
+  }, [user, fetchProjectsForAravt])
 
   if (isLoading || projectsLoading) {
     return <LoadingSpinner />
@@ -38,20 +45,30 @@ const OffersManagement = () => {
     return <div className="text-red-500">Error: {error}</div>
   }
 
-  // Filter projects if projectId is provided
-  const filteredProjects = projectId 
-    ? projects.filter(p => p.id === Number(projectId))
-    : projects;
+  // Filter if projectId is provided
+  const filteredOffers = projectId 
+    ? offers.filter(o => (o.business?.id === Number(projectId)))
+    : offers;
 
   // Group offers by project with type safety
-  const offersByProject = offers.reduce<Record<number, Offer[]>>((acc, offer) => {
-    const projectId = offer.business.id
+  const offersByProject = filteredOffers.reduce<{[K: number]: Offer[]}>((acc, offer) => {
+    const projectId = offer.business?.id
     if (!acc[projectId]) {
       acc[projectId] = []
     }
     acc[projectId].push(offer)
     return acc
   }, {})
+
+  const filteredProjectsMap = filteredOffers.reduce<{[K: number]: Project}>((acc, offer) => {
+    const projectId = offer.business?.id
+    if (!acc[projectId]) {
+      acc[projectId] = offer.business
+    }
+    return acc
+  }, {})
+  
+  const filteredProjects = Object.values(filteredProjectsMap)
 
   return (
     <div className="container mx-auto py-6 space-y-8">
@@ -96,7 +113,7 @@ function OfferCard({ offer }: { offer: Offer }) {
           <p className="font-medium">Price: ${offer.price}</p>
           {offer.is_limited && (
             <p className="text-amber-600">
-              {offer.count_left} spots remaining
+              {offer.count_left} remaining
             </p>
           )}
           <p>Duration: {offer.duration} days</p>

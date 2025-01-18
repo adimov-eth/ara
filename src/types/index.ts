@@ -104,14 +104,20 @@ export interface Project {
 
 export interface Offer {
   id: number;
-  name: string;
   business: Project;
+  aravt: {
+    id: number;
+    name: string;
+    description: string;
+    is_draft: boolean;
+  };
+  name: string;
   description: string;
   is_limited: boolean;
-  count_left: number;
-  duration: number;
+  count_left?: number;
+  duration?: number;
   price: number;
-  assets: {};
+  assets?: any;
 }
 
 export interface CreateOffer {
@@ -143,4 +149,10 @@ export interface TaskCompletion {
   completed_at: string,
   is_approved: boolean,
   reward_paid: boolean
+}
+
+export interface Skill {
+  id: number;
+  name: string;
+  description: string;
 }

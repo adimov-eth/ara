@@ -1,7 +1,6 @@
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/store/auth'
-import { useState } from 'react'
 
 const NavLink = ({ to, children }: { to: string; children: React.ReactNode }) => {
   const location = useLocation()
@@ -41,6 +40,7 @@ export default function Layout() {
                       <NavLink to="/dashboard">Aravt</NavLink>
                       <NavLink to="/projects">Projects</NavLink>
                       <NavLink to="/tasks">Tasks</NavLink>
+                      <NavLink to="/Learn">Learn</NavLink>
                       <NavLink to="/members">Members</NavLink>
                       <NavLink to="/browse">Browse Aravts</NavLink>
                       <NavLink to="/offers">Offers</NavLink>
@@ -50,6 +50,7 @@ export default function Layout() {
                     </div>
                   ) : (
                     <div className="flex sm:flex-row">
+                      <NavLink to="/Learn">Learn</NavLink>
                       <NavLink to="/browse">Browse Aravts</NavLink>
                       <NavLink to="/profile">{user.username}</NavLink>
                     </div>
