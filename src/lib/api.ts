@@ -1,5 +1,5 @@
 import axios from './axios'
-import { User, RegistrationData, CreateAravt, Aravt, Project, Offer, CreateOffer, Task, JoinRequest, TaskCompletion } from '@/types'
+import { User, RegistrationData, CreateAravt, Aravt, Project, Offer, CreateOffer, Task, JoinRequest, TaskCompletion, Skill, UserSkill } from '@/types'
 
 interface MessageResponse {
   message: string
@@ -201,5 +201,34 @@ export const api = {
       referrer_id: referrerId
     });
     return response.data;
+  },
+
+  async link_telegram(token: string): Promise<MessageResponse> {
+    const response = await axios.post('/link_telegram/' + `${token}`)
+    return response.data
+  },
+
+  // Skills API methods
+  async getSkills(): Promise<Skill[]> {
+    const response = await axios.get('/users/skills/')
+    return response.data
+  },
+
+  async createSkill(data: { name: string, description?: string }): Promise<Skill> {
+    const response = await axios.post('/users/skills/', data)
+    return response.data
+  },
+
+  async addUserSkill(userId: number, data: { skill_id: number, level: number, experience_years: number }): Promise<{
+    message: string,
+    skill: UserSkill
+  }> {
+    const response = await axios.post(`/users/user/${userId}/skills`, data)
+    return response.data
+  },
+
+  async removeUserSkill(userId: number, skillId: number): Promise<MessageResponse> {
+    const response = await axios.delete(`/users/user/${userId}/skills/${skillId}`)
+    return response.data
   }
 }

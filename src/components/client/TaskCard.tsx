@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Globe, Home, CreditCard, Star, Link as LinkIcon } from 'lucide-react';
+import { Globe, Home, CreditCard, Star, Link as LinkIcon, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Task } from '@/types';
@@ -32,8 +32,28 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
                 {task.priority}
               </Badge>
             )}
+            {task.business && (
+              <Badge variant="outline" className="flex items-center gap-1">
+                <Briefcase className="h-3 w-3" />
+                {task.business.name}
+              </Badge>
+            )}
           </div>
           <p className="text-gray-500">{task.description}</p>
+          {task.business && (
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <span>Business:</span>
+              <a 
+                href={task.business.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline flex items-center gap-1"
+              >
+                {task.business.name}
+                <LinkIcon className="h-3 w-3" />
+              </a>
+            </div>
+          )}
         </div>
         <div className="flex gap-2">
           {onUpdate && (

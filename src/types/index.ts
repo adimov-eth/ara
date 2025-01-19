@@ -1,3 +1,8 @@
+export interface UserSkill extends Skill {
+  level: number;
+  experience_years: number;
+}
+
 export interface User {
   id: number
   username: string
@@ -15,7 +20,7 @@ export interface User {
   rating?: number
   aravt_id?: number
   aravt?: Aravt | null
-  skills?: string[]
+  skills?: UserSkill[]
   tasksCompleted?: number
   completionRate?: number
   tokenBalance?: number
@@ -78,6 +83,8 @@ export interface Task {
   date_time: string
   priority: 'low' | 'medium' | 'high';
   one_time: boolean;
+  business?: Project | null;
+  business_id?: number;
   completions: {
     completions_amount: number,
     is_completion_approved: boolean,

@@ -14,6 +14,7 @@ import { useTasksStore } from '@/store/tasks';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { TaskCard } from '@/components/client/TaskCard';
 import { api } from '@/lib/api';
+import { Project } from '@/types';
 
 const TasksManagement = () => {
   const { user } = useAuthStore();
@@ -29,6 +30,21 @@ const TasksManagement = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [priorityFilter, setPriorityFilter] = useState('all');
+  const [businesses, setBusinesses] = useState<Project[]>([]);
+
+  useEffect(() => {
+    const fetchBusinesses = async () => {
+      if (user?.aravt) {
+        try {
+          const aravtData = await api.aravt_aravt(user.aravt.id);
+          setBusinesses(aravtData.business || []);
+        } catch (error) {
+          console.error('Error fetching businesses:', error);
+        }
+      }
+    };
+    fetchBusinesses();
+  }, [user?.aravt]);
 
   const handleCreateTask = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -56,6 +72,7 @@ const TasksManagement = () => {
         date_time: formData.get('deadline') as string,
         priority: formData.get('priority') as 'low' | 'medium' | 'high',
         one_time: formData.get('one_time') === 'true',
+        business_id: formData.get('business_id') ? Number(formData.get('business_id')) : undefined,
         completions: {
           completions_amount: 0,
           is_completion_approved: false,
@@ -202,6 +219,22 @@ const TasksManagement = () => {
                     <div>
                       <Label htmlFor="link">Resource Link</Label>
                       <Input id="link" name="link" placeholder="https://" />
+                    </div>
+                    <div>
+                      <Label htmlFor="business_id">Business</Label>
+                      <Select name="business_id">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a business" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="project_id">None</SelectItem>
+                          {businesses?.map((business) => (
+                            <SelectItem key={business.id} value={business.id.toString()}>
+                              {business.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div>
                       <Label htmlFor="responsible_users_ids">Responsible Users (comma-separated IDs)</Label>
