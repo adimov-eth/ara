@@ -208,10 +208,10 @@ export const api = {
     return response.data;
   },
 
-  async link_telegram(token: string): Promise<MessageResponse> {
-    const response = await axios.post('/link_telegram/' + `${token}`)
-    return response.data
-  },
+  // async link_telegram(token: string): Promise<MessageResponse> {
+  //   const response = await axios.post('/link_telegram/' + `${token}`)
+  //   return response.data
+  // },
 
   // Skills API methods
   async getSkills(): Promise<Skill[]> {

@@ -37,7 +37,7 @@ export const RequestCard = ({ request, onApprove, onReject, isLoading }: Request
             <div className="flex gap-2 mt-2">
               {request.user.skills?.map((skill, index) => (
                 <Badge key={index} variant="secondary">
-                  {skill}
+                  {/* {skill} */}
                 </Badge>
               ))}
             </div>
