@@ -21,6 +21,11 @@ export const api = {
     return response.data
   },
 
+  async link_telegram(token: string): Promise<{ access_token: string, "token_type": "bearer", message: string }> {
+    const response = await axios.get('/link_telegram/'+`${token}`)
+    return response.data
+  },
+
   async who_am_i(): Promise<User> {
     const response = await axios.get('/who_am_i')
     return response.data

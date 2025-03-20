@@ -5,6 +5,7 @@ import NotFound from '../pages/NotFound'
 import Login from '@/pages/Login'
 import SignUp from '@/pages/SignUp'
 import CompleteRegistration from '@/pages/CompleteRegistration'
+import LinkTelegram from '@/pages/LinkTelegram'
 import BrowseAravts from '@/pages/BrowseAravts'
 import Learn from '@/pages/Learn'
 import AdminPanel from '@/pages/AdminPanel'
@@ -27,6 +28,7 @@ export function AppRoutes() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/learn" element={<Learn />} />
         <Route path="/complete_registration" element={<CompleteRegistration/>} /> 
+        <Route path="/link_telegram" element={<LinkTelegram/>} /> !!
         <Route path="/browse" element={<BrowseAravts /> }/>
       </Route>
       
