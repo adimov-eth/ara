@@ -74,8 +74,8 @@ const OffersManagement = () => {
     <div className="container mx-auto py-6 space-y-8">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">Offers Management</h1>
-          <p className="text-gray-500">Manage offers for your projects</p>
+          <h1 className="text-2xl font-bold">Offers by Aravts</h1>
+          <p className="text-gray-500">Browse offers by all Aravts</p>
         </div>
         <CreateOfferDialog projects={projects} />
       </div>
@@ -109,7 +109,7 @@ function OfferCard({ offer }: { offer: Offer }) {
         <CardDescription>{offer.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-2">
+        <div className="">
           <p className="font-medium">Price: ${offer.price}</p>
           {offer.is_limited && (
             <p className="text-amber-600">
@@ -118,6 +118,9 @@ function OfferCard({ offer }: { offer: Offer }) {
           )}
           <p>Duration: {offer.duration} days</p>
         </div>
+
+        <Button className="mt-2" variant="outline" size="sm">Buy Now</Button>
+
       </CardContent>
     </Card>
   )

@@ -65,7 +65,7 @@ const Profile = () => {
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow">
-      <h2 className="text-2xl font-bold mb-4">User Profile</h2>
+      <h2 className="text-2xl font-bold mb-4">Your Profile</h2>
       <div className="space-y-2">
         <p><strong>Username:</strong> {user?.username}</p>
         <p><strong>Email:</strong> {user?.email}</p>
@@ -75,7 +75,7 @@ const Profile = () => {
       </div>
 
       {/* Skills Section */}
-      <Card className="mt-6">
+      <Card className="mt-4">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Skills</CardTitle>
           <Dialog open={isAddingSkill} onOpenChange={setIsAddingSkill}>
@@ -151,6 +151,28 @@ const Profile = () => {
           )}
         </CardContent>
       </Card>
+
+            {/* Aravt Info */}
+            <Card className="mt-6">
+        <CardHeader>
+          <CardTitle>Your Aravt</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {user?.aravt ? (
+            <>
+              <div className="p-4 border rounded-lg">
+                <p className="font-medium">{user.aravt.name} (№{user.aravt.id})</p>
+                <p className="text-sm text-gray-500">{user.aravt.description}</p>
+              </div>
+              <Button asChild className="w-full">
+                <Link to="/dashboard">Aravt Dashboard</Link>
+              </Button>
+            </>
+          ) : (
+            <p className="text-gray-500">Not a member of any Aravt</p>
+          )}
+        </CardContent>
+      </Card>
   
 {       <div className="mt-4">
         <h3 className="text-md font-semibold">Join Requests</h3>
@@ -163,9 +185,13 @@ const Profile = () => {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500">No join requests found.</p>
+          <p className="text-gray-500">No join requests to other Aravts</p>
         )}
       </div>}
+
+      
+
+
 
       <div>
         <button 
@@ -181,27 +207,6 @@ const Profile = () => {
       </button>
       </div>
 
-      {/* Aravt Info */}
-      <Card className="mt-10">
-        <CardHeader>
-          <CardTitle>Aravt Membership</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {user?.aravt ? (
-            <>
-              <div className="p-4 border rounded-lg">
-                <p className="font-medium">{user.aravt.name}</p>
-                <p className="text-sm text-gray-500">{user.aravt.description}</p>
-              </div>
-              <Button asChild className="w-full">
-                <Link to="/dashboard">Aravt Dashboard</Link>
-              </Button>
-            </>
-          ) : (
-            <p className="text-gray-500">Not a member of any Aravt</p>
-          )}
-        </CardContent>
-      </Card>
     </div>
   );
 };

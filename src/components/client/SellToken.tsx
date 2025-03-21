@@ -67,15 +67,7 @@ const SellToken: React.FC = () => {
             <h1 className="text-2xl font-bold mb-4">Buy Aravt Tokens</h1>
             {sellError && <p className="text-red-500">{sellError}</p>}
             <form onSubmit={handleSubmit} className="grid grid-cols-1 items-center gap-4 max-w-xs mx-auto">
-                <input
-                    type="text"
-                    name="amount"
-                    placeholder="Enter amount in TON"
-                    value={amount}
-                    onChange={handleChange}
-                    required
-                    className="text-center bg-gray-200 placeholder-gray-800 border py-2 w-full rounded"
-                />
+                
                 <input
                     type="text"
                     name="tokenAmount"
@@ -85,6 +77,17 @@ const SellToken: React.FC = () => {
                     required
                     className="text-center bg-gray-200 placeholder-gray-800 border py-2 w-full rounded"
                 />
+
+                <input
+                    type="text"
+                    name="amount"
+                    placeholder="Enter amount in TON"
+                    value={amount}
+                    onChange={handleChange}
+                    required
+                    className="text-center bg-gray-200 placeholder-gray-800 border py-2 w-full rounded"
+                />
+                
                 <button 
                     type="submit" 
                     disabled={!connected}

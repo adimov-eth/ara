@@ -37,21 +37,21 @@ export default function Layout() {
                   {
                     user && (Boolean(aravt) ? (
                     <div className="">
-                      <NavLink to="/dashboard">Aravt</NavLink>
-                      <NavLink to="/projects">Projects</NavLink>
-                      <NavLink to="/tasks">Tasks</NavLink>
-                      <NavLink to="/Learn">Learn</NavLink>
+                      <NavLink to="/dashboard">My Aravt</NavLink>
                       <NavLink to="/members">Members</NavLink>
-                      <NavLink to="/browse">Browse Aravts</NavLink>
+                      <NavLink to="/projects">Projects</NavLink>
+                      <NavLink to="/tasks">Tasks</NavLink>                      
+                      <NavLink to="/browse">All Aravts</NavLink>
                       <NavLink to="/offers">Offers</NavLink>
-                      {isAdmin && <NavLink to="/admin">Admin</NavLink>}
                       <NavLink to="/wallet">Wallet</NavLink>
+                      <NavLink to="/Learn">Learn</NavLink>
+                      {isAdmin && <NavLink to="/admin">Admin</NavLink>}
                       <NavLink to="/profile">{user.username}</NavLink>
                     </div>
                   ) : (
                     <div className="flex sm:flex-row">
+                      <NavLink to="/browse">All Aravts</NavLink>
                       <NavLink to="/Learn">Learn</NavLink>
-                      <NavLink to="/browse">Browse Aravts</NavLink>
                       <NavLink to="/profile">{user.username}</NavLink>
                     </div>
                   ))

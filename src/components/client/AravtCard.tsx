@@ -54,29 +54,24 @@ const AravtCard = ({ aravt }: AravtCardProps) => {
     <Card className="p-6 hover:bg-gray-50 transition-colors">
       {/* Basic Info - Always Visible */}
       <div className="flex items-start gap-6">
-        <Avatar className="h-[100px] w-[100px] rounded-lg">
-          <AvatarFallback className="rounded-lg bg-gray-100">
-            {aravt.name.substring(0, 2)}
-          </AvatarFallback>
-        </Avatar>
+        
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
-              <h3 className="text-lg font-semibold">{aravt.name}</h3>
+              <h3 className="text-lg font-semibold">{aravt.id}. {aravt.name}</h3>
               <p className="text-gray-500">{aravt.description}</p>
               
               {/* Additional Basic Info */}
               <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-3 text-sm">
-                <div>
-                  <span className="text-gray-500">ID:</span>
-                  <span className="ml-2 font-medium">{aravt.id}</span>
-                </div>
+                
                 {aravt.responsible_user_id && (
                   <div>
                     <span className="text-gray-500">Responsible User:</span>
                     <span className="ml-2 font-medium">#{aravt.responsible_user_id}</span>
                   </div>
                 )}
+
+                
                 {aravt.is_draft !== undefined && (
                   <div>
                     <span className="text-gray-500">Status:</span>
@@ -89,6 +84,12 @@ const AravtCard = ({ aravt }: AravtCardProps) => {
             </div>
           </div>
         </div>
+
+        <Avatar className="h-[100px] w-[100px] rounded-lg">
+          <AvatarFallback className="rounded-lg bg-gray-100">
+            {aravt.name.substring(0, 2)}
+          </AvatarFallback>
+        </Avatar>
       </div>
 
       {/* Expanded Details */}

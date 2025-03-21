@@ -22,11 +22,12 @@ const JoinRequestForm = ({ aravtId, onSubmit, onClose }: JoinRequestFormProps) =
       <h3 className="text-lg font-semibold">Join Aravt {aravtId}</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Reason for Joining</label>
+          <label className="block text-sm font-medium text-gray-700">Motivation for Joining</label>
           <Input 
             type="text" 
             value={reason} 
             onChange={(e) => setReason(e.target.value)} 
+            placeholder='I want to jin to your Aravt ...'
             required 
           />
         </div>

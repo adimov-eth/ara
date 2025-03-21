@@ -233,7 +233,7 @@ const Wallet = () => {
       
       <Card>
         <CardHeader>
-          <CardTitle>Aravt Wallet</CardTitle>
+          <CardTitle>Your Wallet</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {isLoading && (

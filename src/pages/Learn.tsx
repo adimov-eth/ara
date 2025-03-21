@@ -8,8 +8,8 @@ const Learn = () => {
   return (
     <div className="w-full max-w-6xl mx-auto p-8 space-y-8">
       <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold">Welcome to Aravt</h1>
-        <p className="text-xl text-gray-600">Learn how Aravt works and get started</p>
+        <h1 className="text-4xl font-bold">Aravt University</h1>
+        <p className="text-xl text-gray-600">Knowledge about Aravts</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
