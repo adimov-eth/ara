@@ -15,7 +15,7 @@ export const TaskManagementCard = ({ task, onUpdate, onDelete, isLoading }: Task
     <CardContent className="p-6">
       <div className="flex items-start justify-between">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="">
             <h3 className="text-lg font-medium">{task.title}</h3>
             <Badge variant={
               task.priority === 'high' ? 'destructive' :

@@ -14,7 +14,7 @@ interface TaskCardProps {
 export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps) => (
   <Card className="hover:bg-gray-50 max-w-3xl w-full">
     <CardHeader className="p-4">
-      <div className="flex justify-between items-start">
+      <div className="">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             {task.is_global ? (
@@ -22,7 +22,7 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
             ) : (
               <Home className="h-4 w-4 text-green-500" />
             )}
-            <CardTitle className="text-lg">{task.title}</CardTitle>
+            <CardTitle style={{textAlign:'left'}} className="text-lg">{task.title}</CardTitle>
             {task.priority && (
               <Badge variant={
                 task.priority === 'high' ? 'destructive' :
@@ -39,10 +39,10 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
               </Badge>
             )}
           </div>
-          <p className="text-gray-500">{task.description}</p>
+          <p style={{textAlign:'left'}} className="pb-2 pt-1 text-gray-500">{task.description}</p>
           {task.business && (
             <div className="flex items-center gap-2 text-sm text-gray-500">
-              <span>Business:</span>
+              <span>Project:</span>
               <a 
                 href={task.business.link} 
                 target="_blank" 
@@ -55,7 +55,38 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
             </div>
           )}
         </div>
-        <div className="flex gap-2">
+        
+      </div>
+    </CardHeader>
+    <CardContent className="p-4 pt-0">
+      <div className="space-y-4">
+        <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center">
+              <CreditCard className="h-4 w-4 mr-1 text-gray-500" />
+              <span>{task.reward} {task.reward_type}</span>
+            </div>
+            
+            <div>
+              {task.link && (task.link !== 'No link yet') && (
+                <a 
+                  href={task.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center text-blue-500 hover:text-blue-600"
+                >
+                  <LinkIcon className="h-4 w-4 mr-1" />
+                  <span>Link</span>
+                </a>
+              )}
+            </div>
+
+            <div className="flex items-center">
+              <Star className="h-4 w-4 mr-1 text-gray-500" />
+              <span>{new Date(task.date_time).toLocaleDateString()}</span>
+            </div>
+
+            <div className="flex gap-2">
           {onUpdate && (
             <Button 
               variant="outline" 
@@ -78,36 +109,12 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
             </Button>
           )}
         </div>
-      </div>
-    </CardHeader>
-    <CardContent className="p-4 pt-0">
-      <div className="space-y-4">
-        <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center">
-              <CreditCard className="h-4 w-4 mr-1 text-gray-500" />
-              <span>{task.reward} {task.reward_type}</span>
-            </div>
-            <div className="flex items-center">
-              <Star className="h-4 w-4 mr-1 text-gray-500" />
-              <span>Due: {new Date(task.date_time).toLocaleDateString()}</span>
-            </div>
-            <div>
-              {task.link && (task.link !== 'No link yet') && (
-                <a 
-                  href={task.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center text-blue-500 hover:text-blue-600"
-                >
-                  <LinkIcon className="h-4 w-4 mr-1" />
-                  <span>View Resource</span>
-                </a>
-              )}
-            </div>
+
           </div>
         </div>
       </div>
+
+      
     </CardContent>
   </Card>
 );

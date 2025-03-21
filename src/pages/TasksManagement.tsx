@@ -112,11 +112,11 @@ const TasksManagement = () => {
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto mt-8 space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="w-full max-w-6xl mx-auto mt-0 space-y-6">
+      <div className="">
         <div>
           <h1 className="text-2xl font-bold">Tasks</h1>
-          <p className="text-gray-500">Manage your tasks and track progress</p>
+          <p className="text-gray-500 mb-2">Manage your Aravt tasks and track progress</p>
         </div>
         <Button onClick={() => setShowCreateTaskForm(true)}>
           <Plus className="h-4 w-4 mr-2" />
@@ -189,7 +189,7 @@ const TasksManagement = () => {
                       </Select>
                     </div>
                     <div>
-                      <Label htmlFor="is_global">Scope *</Label>
+                      <Label htmlFor="is_global">Local or Global Task? *</Label>
                       <Select name="is_global" defaultValue="false">
                         <SelectTrigger>
                           <SelectValue />
@@ -201,27 +201,27 @@ const TasksManagement = () => {
                       </Select>
                     </div>
                     <div>
-                      <Label htmlFor="one_time">Frequency *</Label>
+                      <Label htmlFor="one_time">One Time task or Multiple members? *</Label>
                       <Select name="one_time" defaultValue="true">
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="true">One Time</SelectItem>
-                          <SelectItem value="false">Recurring</SelectItem>
+                          <SelectItem value="false">Task for Multiple members</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
 
                   <div className="space-y-4 pt-4 border-t">
-                    <h3 className="text-sm font-medium text-gray-500">Optional Details</h3>
+                    <h3 className="text-sm font-medium text-gray-500">Optional</h3>
                     <div>
-                      <Label htmlFor="link">Resource Link</Label>
+                      <Label htmlFor="link">Online Link</Label>
                       <Input id="link" name="link" placeholder="https://" />
                     </div>
                     <div>
-                      <Label htmlFor="business_id">Business</Label>
+                      <Label htmlFor="business_id">Aravt Project</Label>
                       <Select name="business_id">
                         <SelectTrigger>
                           <SelectValue placeholder="Select a business" />
@@ -237,20 +237,21 @@ const TasksManagement = () => {
                       </Select>
                     </div>
                     <div>
-                      <Label htmlFor="responsible_users_ids">Responsible Users (comma-separated IDs)</Label>
+                      <Label htmlFor="responsible_users_ids">Responsible Users (IDs)</Label>
                       <Input 
                         id="responsible_users_ids" 
                         name="responsible_users_ids" 
-                        placeholder="e.g. 1, 2, 3" 
+                        placeholder="1, 2, 3" 
                       />
                     </div>
                     <div>
-                      <Label htmlFor="definition_of_done">Definition of Done (JSON)</Label>
-                      <Textarea 
+                      {/* <Label htmlFor="definition_of_done">Definition of Done (JSON)</Label> */}
+                      <Input 
                         id="definition_of_done" 
                         name="definition_of_done" 
                         placeholder="{}"
                         defaultValue="{}"
+                        type="hidden"
                       />
                     </div>
                   </div>
@@ -283,11 +284,11 @@ const TasksManagement = () => {
             <TabsList>
               <TabsTrigger value="local" className="flex items-center gap-2">
                 <Home className="h-4 w-4" />
-                Local Tasks ({filteredLocalTasks.length})
+                Local ({filteredLocalTasks.length})
               </TabsTrigger>
               <TabsTrigger value="global" className="flex items-center gap-2">
                 <Globe className="h-4 w-4" />
-                Global Tasks ({filteredGlobalTasks.length})
+                Global ({filteredGlobalTasks.length})
               </TabsTrigger>
             </TabsList>
 
