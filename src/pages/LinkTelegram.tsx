@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { api } from '@/lib/api';
 import { useSearchParams } from 'react-router-dom';
 
 const LinkTelegram = () => {
   const [searchParams] = useSearchParams();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [error, setError] = useState('');
 
   const token = searchParams.get('token');
@@ -19,7 +19,7 @@ const LinkTelegram = () => {
 
       await api.link_telegram(token);
 
-      // navigate('/login');
+      navigate('/login');
       console.log(token);
 
     } catch (err) {
