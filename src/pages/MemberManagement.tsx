@@ -68,11 +68,11 @@ const MemberManagement = () => {
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto mt-8 space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="w-full max-w-6xl mx-auto space-y-6">
+      <div className="">
         <div>
           <h1 className="text-2xl font-bold">Members</h1>
-          <p className="text-gray-500">Manage community members</p>
+          <p className="text-gray-500 mb-2 ">Manage aravt members</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
@@ -87,7 +87,7 @@ const MemberManagement = () => {
             </DialogHeader>
             <form onSubmit={handleInvite} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email address</Label>
+                <Label htmlFor="email">Email address to send invite:</Label>
                 <Input 
                   id="email"
                   type="email"
@@ -124,7 +124,24 @@ const MemberManagement = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Members Management</CardTitle>
+          <CardTitle>Pending Join Requests</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {pendingRequests.map((application) => (
+            <RequestCard
+              key={application.id}
+              request={application}
+              onApprove={approveRequest}
+              onReject={rejectRequest}
+              isLoading={isLoading}
+            />
+          ))}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Aravt Management</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-col md:flex-row md:items-center gap-4">
@@ -175,22 +192,7 @@ const MemberManagement = () => {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Pending Join Requests</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {pendingRequests.map((application) => (
-            <RequestCard
-              key={application.id}
-              request={application}
-              onApprove={approveRequest}
-              onReject={rejectRequest}
-              isLoading={isLoading}
-            />
-          ))}
-        </CardContent>
-      </Card>
+      
     </div>
   );
 };
