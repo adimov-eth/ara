@@ -19,8 +19,8 @@ const LinkTelegram = () => {
 
       await api.link_telegram(token);
 
-      navigate('/login');
-      console.log(token);
+      navigate('/dashboard');
+      // console.log(token);
 
     } catch (err) {
       setError('Failed to link telegram');
