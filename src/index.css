@@ -158,3 +158,23 @@ button:focus-visible {
     font-size: 1rem; /* Adjust button font size for mobile */
   }
 }
+
+/* Add these styles to your global CSS file */
+.aravt-tree {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.aravt-tree .link {
+  transition: stroke 0.3s;
+}
+
+.aravt-tree .node:hover circle {
+  fill: #3b82f6;
+  r: 7;
+  transition: all 0.2s;
+}
+
+.aravt-tree .node text {
+  font-size: 12px;
+  pointer-events: none;
+}

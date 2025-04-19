@@ -42,35 +42,28 @@ interface ProjectMockData {
 // Mock data - replace with actual API calls
 const mockProject: ProjectMockData = {
   id: 1,
-  name: 'DeFi Protocol',
-  description: 'Building decentralized exchange platform',
+  name: 'Test Project',
+  description: 'description of the project goes here. It is a long description that explains the project in detail.',
   status: 'active',
-  progress: 65,
-  taskCount: 8,
-  memberCount: 5,
+  progress: 0,
+  taskCount: 0,
+  memberCount: 1,
   funding: '50000 USDT',
   stats: {
-    tasksCompleted: 12,
-    totalTasks: 15,
-    tokensEarned: 2450,
-    usdtEarned: 1200,
-    progress: 65,
+    tasksCompleted: 0,
+    totalTasks: 0,
+    tokensEarned: 0,
+    usdtEarned: 0,
+    progress: 0,
   },
   teamMembers: [
     {
       id: 1,
-      name: 'Alex Chen',
-      role: 'Project Lead',
-      tasksCompleted: 8,
+      name: 'Test User',
+      role: 'software developer',
+      tasksCompleted: 0,
       status: 'online',
-    },
-    {
-      id: 2,
-      name: 'Maria Garcia',
-      role: 'Smart Contract Dev',
-      tasksCompleted: 6,
-      status: 'offline',
-    },
+    }
   ],
 };
 

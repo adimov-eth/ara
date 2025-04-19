@@ -74,13 +74,35 @@ const Profile = () => {
         <p><strong>Full Name:</strong> {user?.full_name}</p>
       </div>
 
+      {/* Aravt Info */}
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle>Your Aravt</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {user?.aravt ? (
+            <>
+              <div className="p-4 border rounded-lg">
+                <p className="font-medium">{user.aravt.name} (№{user.aravt.id})</p>
+                <p className="text-sm text-gray-500">{user.aravt.description}</p>
+              </div>
+              <Button asChild className="w-full">
+                <Link to="/dashboard">Aravt Dashboard</Link>
+              </Button>
+            </>
+          ) : (
+            <p className="text-gray-500">Not a member of any Aravt</p>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Skills Section */}
       <Card className="mt-4">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Skills</CardTitle>
           <Dialog open={isAddingSkill} onOpenChange={setIsAddingSkill}>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm">Add Skill</Button>
+              <Button variant="outline" disabled size="sm">Add Skill</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -152,29 +174,9 @@ const Profile = () => {
         </CardContent>
       </Card>
 
-            {/* Aravt Info */}
-            <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>Your Aravt</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {user?.aravt ? (
-            <>
-              <div className="p-4 border rounded-lg">
-                <p className="font-medium">{user.aravt.name} (№{user.aravt.id})</p>
-                <p className="text-sm text-gray-500">{user.aravt.description}</p>
-              </div>
-              <Button asChild className="w-full">
-                <Link to="/dashboard">Aravt Dashboard</Link>
-              </Button>
-            </>
-          ) : (
-            <p className="text-gray-500">Not a member of any Aravt</p>
-          )}
-        </CardContent>
-      </Card>
+            
   
-{       <div className="mt-4">
+      {<div className="mt-4">
         <h3 className="text-md font-semibold">Join Requests</h3>
         {applications?.length > 0 ? (
           <ul className="list-disc pl-5">

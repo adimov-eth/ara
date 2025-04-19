@@ -74,8 +74,8 @@ const OffersManagement = () => {
     <div className="container mx-auto py-6 space-y-8">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">Offers by Aravts</h1>
-          <p className="text-gray-500">Browse offers by all Aravts</p>
+          <h1 className="text-2xl font-bold text-left">Aravts Offers</h1>
+          <p className="text-gray-500 text-left">Trade with Aravts</p>
         </div>
         <CreateOfferDialog projects={projects} />
       </div>
@@ -116,10 +116,10 @@ function OfferCard({ offer }: { offer: Offer }) {
               {offer.count_left} remaining
             </p>
           )}
-          <p>Duration: {offer.duration} days</p>
+          <p>Offer Validity period {offer.duration} days</p>
         </div>
-
-        <Button className="mt-2" variant="outline" size="sm">Buy Now</Button>
+<br />
+        <Button className="mt-2" disabled variant="outline" size="sm">Buy Now</Button>
 
       </CardContent>
     </Card>
@@ -160,7 +160,7 @@ function CreateOfferDialog({ projects }: { projects: Project[] }) {
         <DialogHeader>
           <DialogTitle>Create New Offer</DialogTitle>
           <DialogDescription>
-            Create a new offer for your project
+            Add your Offers for other Aravts
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -181,21 +181,21 @@ function CreateOfferDialog({ projects }: { projects: Project[] }) {
             </select>
           </div>
           <div>
-            <Label htmlFor="name">Offer Name</Label>
-            <Input id="name" name="name" required />
+            <Label htmlFor="name">Title</Label>
+            <Input id="name" name="name" required placeholder='Selling Online'/>
           </div>
           <div>
             <Label htmlFor="description">Description</Label>
-            <Textarea id="description" name="description" required />
+            <Textarea id="description" name="description" required  placeholder='Your offer description, benefits, terms and conditions, other details' />
           </div>
           <div className="flex gap-4">
             <div className="flex-1">
-              <Label htmlFor="price">Price ($)</Label>
-              <Input id="price" name="price" type="number" required />
+              <Label htmlFor="price">Price (USD)</Label>
+              <Input id="price" placeholder="15000" name="price" type="number" required />
             </div>
             <div className="flex-1">
-              <Label htmlFor="duration">Duration (days)</Label>
-              <Input id="duration" name="duration" type="number" required />
+              <Label htmlFor="duration">Offer Validity (days)</Label>
+              <Input id="duration" name="duration" placeholder="30" type="number" required />
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -206,12 +206,12 @@ function CreateOfferDialog({ projects }: { projects: Project[] }) {
               checked={isLimited}
               onChange={(e) => setIsLimited(e.target.checked)}
             />
-            <Label htmlFor="is_limited">Limited availability</Label>
+            <Label htmlFor="is_limited">Limited number</Label>
           </div>
           {isLimited && (
             <div>
-              <Label htmlFor="count_left">Available Offers</Label>
-              <Input id="count_left" name="count_left" type="number" required />
+              <Label htmlFor="count_left">Available</Label>
+              <Input id="count_left" name="count_left" type="number" placeholder="100" required />
             </div>
           )}
           <Button type="submit" className="w-full">Create Offer</Button>

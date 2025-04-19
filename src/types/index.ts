@@ -99,10 +99,11 @@ export interface Project {
   name: string;
   description: string;
   link: string;
-  fundings?: {
-    amount: number;
-    currency: string;
-  };
+  // fundings?: {
+  //   amount: number;
+  //   currency: string;
+  // };
+  fundings?: string;
   logo?: string;
   Status: ProjectStatus;
   location: string;

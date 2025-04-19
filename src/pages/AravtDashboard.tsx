@@ -118,19 +118,19 @@ const AravtDashboard = () => {
 
   return (
     <div className="mx-auto py-4 px-3 space-y-4">
-      <div className="flex justify-between items-center">
+      <div className=" items-center">
         <div>
           <h1 className="text-2xl font-bold">{user?.aravt?.name}</h1>
           <p className="text-gray-500">{user?.username} you are in the Aravt</p>
         </div>
-        <div className="flex gap-1">
+        {/* <div className="flex gap-1">
           <Button variant="outline" size="sm">
             <Bell className="h-4 w-4" />
           </Button>
           <Button variant="outline" size="sm">
             <Settings className="h-4 w-4" />
           </Button>
-        </div>
+        </div> */}
       </div>
 
       {dashboardError && (
@@ -139,29 +139,7 @@ const AravtDashboard = () => {
         </Alert>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Stats</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-1">
-          <div className="grid grid-cols-3 gap-2">
-            <div>
-              <p className="text-sm text-muted-foreground">Tasks Completed</p>
-              <p className="text-lg font-semibold">{stats.tasksCompleted}/{stats.totalTasks}</p>
-              <Progress value={(stats.tasksCompleted / stats.totalTasks) * 100} className="h-1 mt-1" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Tokens Earned</p>
-              <p className="text-lg font-semibold">{stats.tokensEarned} AT</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Rank Progress</p>
-              <p className="text-lg font-semibold">Rank {stats.rank}</p>
-              <Progress value={stats.rankProgress} className="h-1 mt-1" />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      
 
       <Card>
         <CardHeader className="pb-2">
@@ -283,7 +261,33 @@ const AravtDashboard = () => {
         </Card>
       )}
 
+<Card>
+        <CardHeader>
+          <CardTitle>Stats</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-4 md:grid-cols-1">
+          <div className="grid grid-cols-3 gap-2">
+            <div>
+              <p className="text-sm text-muted-foreground">Tasks Completed</p>
+              <p className="text-lg font-semibold">{stats.tasksCompleted}/{stats.totalTasks}</p>
+              <Progress value={(stats.tasksCompleted / stats.totalTasks) * 100} className="h-1 mt-1" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Tokens Earned</p>
+              <p className="text-lg font-semibold">{stats.tokensEarned} AT</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Rank Progress</p>
+              <p className="text-lg font-semibold">Rank {stats.rank}</p>
+              <Progress value={stats.rankProgress} className="h-1 mt-1" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <QuickActions />
+
+      
 
       {user?.able_to_create_aravt && (
         <Button 
@@ -292,7 +296,7 @@ const AravtDashboard = () => {
           onClick={() => setIsFormOpen(true)}
           className="w-full"
         >
-          Create Aravt
+          Create New Aravt
         </Button>
       )}
 

@@ -71,6 +71,24 @@ const Learn = () => {
             </p>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Join Our Groups</CardTitle>
+            <CardDescription>Other Online platforms</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 text-left">
+              Telegram: Join our group for updates
+              <br />
+              <br />
+              Youtube: Subscribe to tutorials channel
+              <br />
+              <br />
+              Linkedin: Connect with us for networking
+            </p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

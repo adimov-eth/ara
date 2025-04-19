@@ -71,14 +71,14 @@ const MemberManagement = () => {
     <div className="w-full max-w-6xl mx-auto space-y-6">
       <div className="">
         <div>
-          <h1 className="text-2xl font-bold">Members</h1>
-          <p className="text-gray-500 mb-2 ">Manage aravt members</p>
+          <h1 className="text-2xl font-bold">Members of Aravt</h1>
+          <p className="text-gray-500 mb-2 ">Aravt Management</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button>
               <Plus className="h-4 w-4 mr-2" />
-              Add Member
+              Invite Member
             </Button>
           </DialogTrigger>
           <DialogContent>
@@ -122,26 +122,11 @@ const MemberManagement = () => {
         </Alert>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Pending Join Requests</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {pendingRequests.map((application) => (
-            <RequestCard
-              key={application.id}
-              request={application}
-              onApprove={approveRequest}
-              onReject={rejectRequest}
-              isLoading={isLoading}
-            />
-          ))}
-        </CardContent>
-      </Card>
+      
 
       <Card>
         <CardHeader>
-          <CardTitle>Aravt Management</CardTitle>
+          {/* <CardTitle>Aravt Management</CardTitle> */}
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-col md:flex-row md:items-center gap-4">
@@ -189,6 +174,23 @@ const MemberManagement = () => {
               />
             ))}
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Requests to Join:</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {pendingRequests.map((application) => (
+            <RequestCard
+              key={application.id}
+              request={application}
+              onApprove={approveRequest}
+              onReject={rejectRequest}
+              isLoading={isLoading}
+            />
+          ))}
         </CardContent>
       </Card>
 

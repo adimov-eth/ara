@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Globe, Home, CreditCard, Star, Link as LinkIcon, Briefcase } from 'lucide-react';
+import { Globe, Home, CreditCard, Star, CalendarClock, Link as LinkIcon, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Task } from '@/types';
@@ -76,13 +76,13 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
                   className="flex items-center text-blue-500 hover:text-blue-600"
                 >
                   <LinkIcon className="h-4 w-4 mr-1" />
-                  <span>Link</span>
+                  <span>URL</span>
                 </a>
               )}
             </div>
 
             <div className="flex items-center">
-              <Star className="h-4 w-4 mr-1 text-gray-500" />
+              <CalendarClock className="h-4 w-4 mr-1 text-gray-500" />
               <span>{new Date(task.date_time).toLocaleDateString()}</span>
             </div>
 
@@ -94,7 +94,7 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
               onClick={() => onUpdate(task.id, { is_done: true })}
               disabled={isLoading || task.is_done === true}
             >
-              Complete
+            ◻ Complete
             </Button>
           )}
           {onDelete && (

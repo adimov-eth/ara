@@ -58,19 +58,13 @@ const AravtCard = ({ aravt }: AravtCardProps) => {
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
-              <h3 className="text-lg font-semibold">{aravt.id}. {aravt.name}</h3>
-              <p className="text-gray-500">{aravt.description}</p>
+              <h3 className="text-lg text-left font-semibold">{aravt.id}. {aravt.name}</h3>
+              <p className="text-gray-500 text-left ">{aravt.description}</p>
               
               {/* Additional Basic Info */}
               <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-3 text-sm">
                 
-                {aravt.responsible_user_id && (
-                  <div>
-                    <span className="text-gray-500">Responsible User:</span>
-                    <span className="ml-2 font-medium">#{aravt.responsible_user_id}</span>
-                  </div>
-                )}
-
+                
                 
                 {aravt.is_draft !== undefined && (
                   <div>
@@ -96,8 +90,9 @@ const AravtCard = ({ aravt }: AravtCardProps) => {
       {isExpanded && detailedAravt && (
         <div className="mt-4 space-y-4">
           <div className="grid grid-cols-2 gap-4">
+
             <div>
-              <h4 className="font-medium text-sm text-gray-500">Leader</h4>
+              <h4 className="font-medium text-left text-sm text-gray-500">Leader</h4>
               <div className="flex items-center gap-2 mt-1">
                 <Avatar className="h-6 w-6">
                   <AvatarFallback>{detailedAravt.leader.username[0]}</AvatarFallback>
@@ -105,14 +100,24 @@ const AravtCard = ({ aravt }: AravtCardProps) => {
                 <span>{detailedAravt.leader.username}</span>
               </div>
             </div>
+
+            
             
             <div>
-              <h4 className="font-medium text-sm text-gray-500">Team Size</h4>
+              <h4 className="font-medium text-sm text-gray-500 text-left">Team Size</h4>
               <div className="flex items-center gap-2 mt-1">
                 <Users className="h-4 w-4" />
                 <span>{detailedAravt.team.length} members</span>
               </div>
             </div>
+
+            {aravt.responsible_user_id && (
+                  <div className="text-left">
+                    <span className="text-gray-500">Manager UserID:</span>
+                    <span className="ml-2 text-gray-500 font-medium">#{aravt.responsible_user_id}</span>
+                  </div>
+                )}
+
           </div>
 
           {detailedAravt.telegram_chat_link && (
@@ -162,17 +167,19 @@ const AravtCard = ({ aravt }: AravtCardProps) => {
 
       <div className="mt-4 flex gap-2">
         <Button
-          onClick={handleExpandClick}
-          disabled={isLoading}
-        >
-          {isLoading ? 'Loading...' : isExpanded ? 'Info' : 'Info'}
-        </Button>
-        <Button 
+          className='bg-blue-700' 
           onClick={() => setIsJoining(!isJoining)}
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Submitting...' : 'Join Aravt'}
+          {isSubmitting ? 'Submitting...' : '✚ Join Aravt'}
         </Button>
+        <Button
+          onClick={handleExpandClick}
+          disabled={isLoading}
+        >
+          {isLoading ? 'Loading...' : isExpanded ? 'X Close' : '▼ More info'}
+        </Button>
+        
       </div>
 
       {isJoining && (

@@ -33,10 +33,7 @@ export function CreateProjectDialog({ aravt_id }: { aravt_id: number }) {
       const currency = formData.get('fundingCurrency') as string;
       
       if (amount && currency) {
-        newProject.fundings = {
-          amount: parseFloat(amount),
-          currency: currency
-        };
+        newProject.fundings = amount;
       }
     }
 
@@ -59,19 +56,19 @@ export function CreateProjectDialog({ aravt_id }: { aravt_id: number }) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="name" className="text-sm font-medium">
-              Project Name
+              Title
             </label>
             <Input id="name" name="name" required />
           </div>
           <div>
             <label htmlFor="description" className="text-sm font-medium">
-              Description
+              Description of your Business or Project
             </label>
-            <Textarea id="description" name="description" required />
+            <Textarea id="description" placeholder="Making websites online" name="description" required />
           </div>
           <div>
             <label htmlFor="link" className="text-sm font-medium">
-              Project Link
+              Project Website
             </label>
             <Input id="link" name="link" type="url" required />
           </div>
@@ -79,13 +76,13 @@ export function CreateProjectDialog({ aravt_id }: { aravt_id: number }) {
             <label htmlFor="logo" className="text-sm font-medium">
               Logo URL
             </label>
-            <Input id="logo" name="logo" type="url" required />
+            <Input id="logo" name="logo" placeholder='https://' type="url" required />
           </div>
           <div>
             <label htmlFor="location" className="text-sm font-medium">
               Location
             </label>
-            <Input id="location" name="location" required />
+            <Input id="location" name="location" placeholder='Ulaanbaatar, Mongolia' required />
           </div>
           
           <div className="space-y-4">
@@ -95,7 +92,7 @@ export function CreateProjectDialog({ aravt_id }: { aravt_id: number }) {
                 checked={includeFunding}
                 onCheckedChange={setIncludeFunding}
               />
-              <Label htmlFor="funding-toggle">Investments Required</Label>
+              <Label htmlFor="funding-toggle">Looking for Investments?</Label>
             </div>
 
             {includeFunding && (
@@ -108,6 +105,7 @@ export function CreateProjectDialog({ aravt_id }: { aravt_id: number }) {
                     id="fundingAmount" 
                     name="fundingAmount" 
                     type="number" 
+                    placeholder='100000'
                     step="0.01"
                     min="0"
                   />
@@ -119,7 +117,9 @@ export function CreateProjectDialog({ aravt_id }: { aravt_id: number }) {
                   <Input 
                     id="fundingCurrency" 
                     name="fundingCurrency" 
-                    placeholder="USDT"
+                    placeholder="USD"
+                    disabled
+                    value="USD"
                   />
                 </div>
               </div>

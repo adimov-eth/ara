@@ -19,12 +19,12 @@ interface DashboardState {
 
 export const useDashboardStore = create<DashboardState>((set) => ({
   stats: {
-    tasksCompleted: 12,
-    totalTasks: 15,
-    tokensEarned: 2450,
-    usdtEarned: 1200,
-    rank: 2,
-    rankProgress: 65,
+    tasksCompleted: 0,
+    totalTasks: 10,
+    tokensEarned: 0,
+    usdtEarned: 0,
+    rank: 1,
+    rankProgress: 0,
   },
   isLoading: false,
   error: null,

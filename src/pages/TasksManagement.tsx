@@ -115,8 +115,8 @@ const TasksManagement = () => {
     <div className="w-full max-w-6xl mx-auto mt-0 space-y-6">
       <div className="">
         <div>
-          <h1 className="text-2xl font-bold">Tasks</h1>
-          <p className="text-gray-500 mb-2">Manage your Aravt tasks and track progress</p>
+          <h1 className="text-2xl font-bold">Current Tasks</h1>
+          <p className="text-gray-500 mb-2">Set objectives and track progress</p>
         </div>
         <Button onClick={() => setShowCreateTaskForm(true)}>
           <Plus className="h-4 w-4 mr-2" />
@@ -142,9 +142,54 @@ const TasksManagement = () => {
                     </div>
                   </div>
 
+                  <div>
+                      <Label htmlFor="link">URL</Label>
+                      <Input id="link" name="link" placeholder="https://" />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="priority">Priority *</Label>
+                      <Select name="priority" defaultValue="medium">
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="low">Low</SelectItem>
+                          <SelectItem value="medium">Medium</SelectItem>
+                          <SelectItem value="high">High</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="is_global">Local or Global? *</Label>
+                      <Select name="is_global" defaultValue="false">
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="false">Local</SelectItem>
+                          <SelectItem value="true">Global</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="one_time">One or Many? *</Label>
+                      <Select name="one_time" defaultValue="true">
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="true">One Time</SelectItem>
+                          <SelectItem value="false">Task for Multiple members</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="reward">Reward *</Label>
+                      <Label htmlFor="reward">Reward amount *</Label>
                       <div className="flex gap-2">
                         <Input 
                           id="reward" 
@@ -153,6 +198,7 @@ const TasksManagement = () => {
                           step="1" 
                           min="0" 
                           required 
+                          placeholder='0'
                           className="flex-1"
                         />
                         <div className="w-24">
@@ -174,60 +220,19 @@ const TasksManagement = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <Label htmlFor="priority">Priority *</Label>
-                      <Select name="priority" defaultValue="medium">
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="low">Low</SelectItem>
-                          <SelectItem value="medium">Medium</SelectItem>
-                          <SelectItem value="high">High</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label htmlFor="is_global">Local or Global Task? *</Label>
-                      <Select name="is_global" defaultValue="false">
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="false">Local</SelectItem>
-                          <SelectItem value="true">Global</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label htmlFor="one_time">One Time task or Multiple members? *</Label>
-                      <Select name="one_time" defaultValue="true">
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="true">One Time</SelectItem>
-                          <SelectItem value="false">Task for Multiple members</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
+                  
 
-                  <div className="space-y-4 pt-4 border-t">
-                    <h3 className="text-sm font-medium text-gray-500">Optional</h3>
+                  <div className="space-y-4 pt-2 border-t">
+                    {/* <h3 className="text-sm font-medium text-gray-500">Optional</h3> */}
+                    
                     <div>
-                      <Label htmlFor="link">Online Link</Label>
-                      <Input id="link" name="link" placeholder="https://" />
-                    </div>
-                    <div>
-                      <Label htmlFor="business_id">Aravt Project</Label>
+                      <Label htmlFor="business_id">Project</Label>
                       <Select name="business_id">
                         <SelectTrigger>
                           <SelectValue placeholder="Select a business" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="project_id">None</SelectItem>
+                          <SelectItem value="project_id">All</SelectItem>
                           {businesses?.map((business) => (
                             <SelectItem key={business.id} value={business.id.toString()}>
                               {business.name}
@@ -242,6 +247,7 @@ const TasksManagement = () => {
                         id="responsible_users_ids" 
                         name="responsible_users_ids" 
                         placeholder="1, 2, 3" 
+                        disabled
                       />
                     </div>
                     <div>
@@ -277,17 +283,17 @@ const TasksManagement = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Tasks Overview</CardTitle>
+          {/* <CardTitle>Tasks Overview</CardTitle> */}
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="local">
             <TabsList>
               <TabsTrigger value="local" className="flex items-center gap-2">
                 <Home className="h-4 w-4" />
-                Local ({filteredLocalTasks.length})
+                Our Aravt ({filteredLocalTasks.length})
               </TabsTrigger>
               <TabsTrigger value="global" className="flex items-center gap-2">
-                <Globe className="h-4 w-4" />
+                <Globe className="h-4 w-4 text-blue-500" />
                 Global ({filteredGlobalTasks.length})
               </TabsTrigger>
             </TabsList>

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CreditCard } from 'lucide-react';
+import { Banknote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -28,7 +29,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
               <img src={project.logo} alt={`${project.name} logo`} className="h-8 w-8 mr-2" />
             )}
             <div>
-              <CardTitle className="text-lg">{project.name}</CardTitle>
+              <CardTitle className="text-lg text-left">{project.name}</CardTitle>
               <CardDescription>{project.description}</CardDescription>
             </div>
           </div>
@@ -43,8 +44,8 @@ const ProjectCard = ({ project }: { project: Project }) => {
             <div className="flex items-center gap-4">
               {project.fundings && (
                 <div>
-                  <CreditCard className="h-4 w-4 inline mr-1" />
-                  {project.fundings.amount} {project.fundings.currency}
+                  <Banknote className="h-4 w-4 inline mr-1" />
+                  {project.fundings} USD
                 </div>
               )}
               <div>
@@ -60,19 +61,22 @@ const ProjectCard = ({ project }: { project: Project }) => {
         <div className="flex gap-2">
           <Button 
             variant="outline" 
-            size="sm" 
-            onClick={() => navigate(`/projects/${project.id}`)}
-          >
-            View Details
-          </Button>
-          <Button 
-            variant="outline" 
             size="sm"
             onClick={() => navigate(`/offers?projectId=${project.id}`)}
           >
-            View Offers
+            Offers
           </Button>
-          <Button variant="outline" size="sm">Task Board</Button>
+
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => navigate(`/projects/${project.id}`)}
+          >
+            Project Details
+            
+          </Button>
+
+          <Button variant="outline" disabled size="sm">Task Board</Button>
         </div>
       </CardFooter>
     </Card>
@@ -100,8 +104,8 @@ const ProjectManagement = () => {
     <div className="w-full max-w-6xl mx-auto mt-8 space-y-4">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">Projects</h1>
-          <p className="text-gray-500">Manage your Aravt projects</p>
+          <h1 className="text-2xl text-left font-bold">Projects</h1>
+          <p className="text-gray-500">Aravt Business </p>
         </div>
         <CreateProjectDialog aravt_id={aravt.id}/>
       </div>
