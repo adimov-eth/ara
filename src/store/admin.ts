@@ -307,7 +307,7 @@ export const useAdminStore = create<AdminState>()((set, get) => {
       set({ isLoading: true, error: null });
       try {
         const { user } = useAuthStore.getState();
-        await api.send_invitation(email, user?.aravt?.id as number, user?.id as number);
+        await api.send_invitation(email); //user?.aravt?.id as number, user?.id as number);
         get().fetchAdminData();
       } catch (error) {
         set({ error: 'Failed to invite member' });

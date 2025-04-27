@@ -199,11 +199,11 @@ export const api = {
     return response.data
   },
 
-  async send_invitation(email: string, aravtId: number, referrerId: number): Promise<MessageResponse> {
-    const response = await axios.post('/send_invite_link', {
-      email,
-      aravt_id: aravtId,
-      referrer_id: referrerId
+  async send_invitation(email: string): Promise<MessageResponse> {
+    const response = await axios.post('/aravt/invite/', {
+      email
+      // aravt_id: aravtId,
+      // referrer_id: referrerId
     });
     return response.data;
   },
