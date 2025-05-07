@@ -67,7 +67,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
             <Globe className="h-6 w-6 text-gray-500" />
           </div>
           <CardDescription>
-            Choose your preferred way to connect
+            Please register or login to your account
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

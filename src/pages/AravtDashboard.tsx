@@ -120,7 +120,7 @@ const AravtDashboard = () => {
     <div className="mx-auto py-4 px-3 space-y-4">
       <div className=" items-center">
         <div>
-          <h1 className="text-2xl font-bold">{user?.aravt?.name}</h1>
+          <h1 className="text-2xl font-bold">{user?.aravt?.name} (№{user?.aravt?.id})</h1>
           <p className="text-gray-500">{user?.username} you are in the Aravt</p>
         </div>
         {/* <div className="flex gap-1">
@@ -141,19 +141,7 @@ const AravtDashboard = () => {
 
       
 
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm">About</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          <p className="text-sm text-muted-foreground">{aravtDetails?.description}</p>
-          <div className="flex flex-wrap gap-1">
-            {aravtDetails?.skills?.map((skill, i) => (
-              <Badge key={i} variant="outline" className="text-xs">{skill}</Badge>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      
 
       <Card>
         <CardHeader className="pb-2">
@@ -188,6 +176,20 @@ const AravtDashboard = () => {
                   <p className="text-xs text-muted-foreground">{member.role}</p>
                 </div>
               </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm">About</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <p className="text-sm text-muted-foreground">{aravtDetails?.description}</p>
+          <div className="flex flex-wrap gap-1">
+            {aravtDetails?.skills?.map((skill, i) => (
+              <Badge key={i} variant="outline" className="text-xs">{skill}</Badge>
             ))}
           </div>
         </CardContent>

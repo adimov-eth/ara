@@ -87,7 +87,7 @@ const Profile = () => {
                 <p className="text-sm text-gray-500">{user.aravt.description}</p>
               </div>
               <Button asChild className="w-full">
-                <Link to="/dashboard">Aravt Dashboard</Link>
+                <Link to="/dashboard">Open Dashboard</Link>
               </Button>
             </>
           ) : (
@@ -187,7 +187,7 @@ const Profile = () => {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500">No join requests to other Aravts</p>
+          <p className="text-gray-500">No requests to join other Aravts</p>
         )}
       </div>}
 

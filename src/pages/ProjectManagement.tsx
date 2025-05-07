@@ -105,7 +105,7 @@ const ProjectManagement = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl text-left font-bold">Projects</h1>
-          <p className="text-gray-500">Aravt Business </p>
+          <p className="text-gray-500">Business of Aravt</p>
         </div>
         <CreateProjectDialog aravt_id={aravt.id}/>
       </div>

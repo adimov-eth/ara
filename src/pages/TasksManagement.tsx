@@ -290,7 +290,7 @@ const TasksManagement = () => {
             <TabsList>
               <TabsTrigger value="local" className="flex items-center gap-2">
                 <Home className="h-4 w-4" />
-                Our Aravt ({filteredLocalTasks.length})
+                Aravt ({filteredLocalTasks.length})
               </TabsTrigger>
               <TabsTrigger value="global" className="flex items-center gap-2">
                 <Globe className="h-4 w-4 text-blue-500" />

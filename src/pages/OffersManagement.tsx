@@ -74,8 +74,8 @@ const OffersManagement = () => {
     <div className="container mx-auto py-6 space-y-8">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-left">Aravts Offers</h1>
-          <p className="text-gray-500 text-left">Trade with Aravts</p>
+          <h1 className="text-2xl font-bold text-left">Offers from Aravts</h1>
+          <p className="text-gray-500 text-left">Trading with others</p>
         </div>
         <CreateOfferDialog projects={projects} />
       </div>
@@ -110,15 +110,14 @@ function OfferCard({ offer }: { offer: Offer }) {
       </CardHeader>
       <CardContent>
         <div className="">
+          <p>Offer Validity period {offer.duration} days</p>
           <p className="font-medium">Price: ${offer.price}</p>
           {offer.is_limited && (
             <p className="text-amber-600">
               {offer.count_left} remaining
             </p>
           )}
-          <p>Offer Validity period {offer.duration} days</p>
         </div>
-<br />
         <Button className="mt-2" disabled variant="outline" size="sm">Buy Now</Button>
 
       </CardContent>
@@ -173,7 +172,7 @@ function CreateOfferDialog({ projects }: { projects: Project[] }) {
               required
             >
               <option value="">Select a project</option>
-              {projects.map((project) => (
+              {projects?.map((project) => (
                 <option key={project.id} value={project.id}>
                   {project.name}
                 </option>
