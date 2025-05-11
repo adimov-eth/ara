@@ -89,6 +89,9 @@ const Profile = () => {
               <Button asChild className="w-full">
                 <Link to="/dashboard">Open Dashboard</Link>
               </Button>
+              <Button asChild className="w-full">
+                <Link to="https://telegram.me/share/url?url=https://aravt.io/?ref=1&text=I%20invite%20you%20to%20join%20Aravt%20Systems">Invite a friend</Link>
+              </Button>
             </>
           ) : (
             <p className="text-gray-500">Not a member of any Aravt</p>

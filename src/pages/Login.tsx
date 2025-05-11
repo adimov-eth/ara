@@ -59,10 +59,10 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
   };
 
   return (
-    <div className="flex justify-center min-h-screen bg-gray-50">
-      <Card className="w-full max-w-md mx-4">
+    <div className="flex justify-center min-h-screen bg-gray-50 pt-4">
+      <Card className="w-full max-w-md mx-4 pt-3">
         <CardHeader className="space-y-1">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pb-2">
             <CardTitle className="text-2xl">Welcome to Aravt</CardTitle>
             <Globe className="h-6 w-6 text-gray-500" />
           </div>
@@ -112,7 +112,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
             </TabsContent> */}
 
             <TabsContent value="username">
-              <form onSubmit={handleUsernameLogin} className="space-y-4">
+              <form onSubmit={handleUsernameLogin} className="space-y-5">
                 <div className="space-y-2">
                   <Label htmlFor="username">Username</Label>
                   <Input
@@ -163,6 +163,46 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
                   </Link>
                 </div>
               </form>
+
+              <div className="relative w-full mt-4 pt-4">
+                <b>Intro Video</b>
+                
+                <iframe
+                  width="560"
+                  height="315"
+                  src="https://www.youtube.com/embed/d7hHU-X0aOM?si=q7QAVa2Fv3nyRtxt"
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  className="w-full h-64 pt-2"
+                ></iframe>
+              </div>
+
+              <div className="relative w-full h-80 mt-4">
+                
+                <img
+                  src="https://app.aravt.io/img/gerege/photo_2568-01-31 15.54.09.jpeg"
+                  alt="Background"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                  <a
+                    href="https://t.me/aravtforum"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white text-lg font-semibold bg-blue-500 px-4 py-2 rounded-md hover:bg-blue-600"
+                  >
+                    Join Community
+                  </a>
+                </div>
+
+
+
+              </div>
+
             </TabsContent>
           </Tabs>
         </CardContent>
