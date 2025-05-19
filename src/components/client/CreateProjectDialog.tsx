@@ -32,7 +32,7 @@ export function CreateProjectDialog({ aravt_id }: { aravt_id: number }) {
       const amount = formData.get('fundingAmount') as string;
       const currency = formData.get('fundingCurrency') as string;
       
-      if (amount && currency) {
+      if (amount) {
         newProject.fundings = amount;
       }
     }
@@ -103,11 +103,8 @@ export function CreateProjectDialog({ aravt_id }: { aravt_id: number }) {
                   </label>
                   <Input 
                     id="fundingAmount" 
-                    name="fundingAmount" 
-                    type="number" 
-                    placeholder='100000'
-                    step="0.01"
-                    min="0"
+                    name="fundingAmount"  
+                    value="10000"
                   />
                 </div>
                 <div>
