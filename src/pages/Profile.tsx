@@ -65,25 +65,42 @@ const Profile = () => {
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow">
-      <h2 className="text-2xl font-bold mb-4">Your Profile</h2>
+      <h2 className="text-2xl font-bold mb-4">My Profile</h2>
       <div className="space-y-2">
         <p><strong>Username:</strong> {user?.username}</p>
         <p><strong>Email:</strong> {user?.email}</p>
-        <p><strong>City:</strong> {user?.city}</p>
-        <p><strong>Date of Birth:</strong> {user?.date_of_birth}</p>
         <p><strong>Full Name:</strong> {user?.full_name}</p>
+        <p><strong>Date of Birth:</strong> {user?.date_of_birth}</p>
+        <p><strong>City:</strong> {user?.city}</p>
+      </div>
+
+      <div className="mt-4">
+        <Button
+          onClick={async () => {
+            try {
+              // await api.startKYC();
+              alert("KYC process started successfully.");
+            } catch (error) {
+              console.error("Failed to start KYC process:", error);
+              alert("An error occurred while starting the KYC process.");
+            }
+          }}
+          className=""
+        >
+          Start KYC Process
+        </Button>
       </div>
 
       {/* Aravt Info */}
       <Card className="mt-6">
         <CardHeader>
-          <CardTitle>Your Aravt</CardTitle>
+          <CardTitle>My Aravt</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {user?.aravt ? (
             <>
               <div className="p-4 border rounded-lg">
-                <p className="font-medium">{user.aravt.name} (№{user.aravt.id})</p>
+                <p className="font-medium">🌀 {user.aravt.name} (№{user.aravt.id})</p>
                 <p className="text-sm text-gray-500">{user.aravt.description}</p>
               </div>
               <Button asChild className="w-full">
@@ -92,6 +109,11 @@ const Profile = () => {
               <Button asChild className="w-full">
                 <Link to="https://telegram.me/share/url?url=https://aravt.io/?ref=1&text=I%20invite%20you%20to%20join%20Aravt%20Systems">Invite a friend</Link>
               </Button>
+              <Button variant="outline"  asChild className="w-full">
+                <Link to="#">Leave Aravt</Link>
+              </Button>
+
+              
             </>
           ) : (
             <p className="text-gray-500">Not a member of any Aravt</p>
@@ -179,8 +201,8 @@ const Profile = () => {
 
             
   
-      {<div className="mt-4">
-        <h3 className="text-md font-semibold">Join Requests</h3>
+      {<div className="mt-4 pt-4 mb-4">
+        <h3 className="text-md font-semibold">Requests</h3>
         {applications?.length > 0 ? (
           <ul className="list-disc pl-5">
             {applications.map((request) => (
@@ -190,7 +212,7 @@ const Profile = () => {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500">No requests to join other Aravts</p>
+          <p className="text-gray-500">No requests to join from other Aravts</p>
         )}
       </div>}
 
@@ -209,7 +231,7 @@ const Profile = () => {
         )}
       >
         Logout
-      </button>
+        </button>
       </div>
 
     </div>

@@ -54,13 +54,13 @@ const BrowseAravts = () => {
       {/* Aravts Section */}
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">🌀 {filteredAravts.length} </h2>
+          <h2 className="text-2xl font-bold">🌀&nbsp;{filteredAravts.length}&nbsp;</h2>
           <div className="flex items-center gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <Input 
                 placeholder="Search Aravts..." 
-                className="w-64 pl-9 h-10 bg-white"
+                className="w-48 pl-9 h-10 bg-white"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -73,7 +73,7 @@ const BrowseAravts = () => {
                 className="rounded-none"
               >
                 <List className="h-4 w-4 mr-1" />
-                List
+                
               </Button>
               <Button 
                 variant={viewMode === 'tree' ? 'default' : 'outline'} 
@@ -82,7 +82,7 @@ const BrowseAravts = () => {
                 className="rounded-none"
               >
                 <Network className="h-4 w-4 mr-1" />
-                Structure
+                
               </Button>
             </div>
           </div>

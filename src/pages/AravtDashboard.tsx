@@ -121,7 +121,7 @@ const AravtDashboard = () => {
       <div className=" items-center">
         <div>
           <h1 className="text-2xl font-bold">{user?.aravt?.name} (№{user?.aravt?.id})</h1>
-          <p className="text-gray-500">{user?.username} you are in the Aravt</p>
+          <p className="text-gray-500"><b>{user?.username}</b> you are in the Aravt</p>
         </div>
         {/* <div className="flex gap-1">
           <Button variant="outline" size="sm">
@@ -139,23 +139,16 @@ const AravtDashboard = () => {
         </Alert>
       )}
 
-      
-
-      
-
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Leadership</CardTitle>
+          <CardTitle className="text-sm">About</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-2">
-            <Avatar className="h-6 w-6">
-              <AvatarFallback className="text-xs">{aravtDetails?.leader.username[0]}</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="text-sm font-medium">{aravtDetails?.leader.username}</p>
-              <p className="text-xs text-muted-foreground">Aravt Leader</p>
-            </div>
+        <CardContent className="space-y-2">
+          <p className="text-sm text-muted-foreground">{aravtDetails?.description}</p>
+          <div className="flex flex-wrap gap-1">
+            {aravtDetails?.skills?.map((skill, i) => (
+              <Badge key={i} variant="outline" className="text-xs">{skill}</Badge>
+            ))}
           </div>
         </CardContent>
       </Card>
@@ -180,40 +173,36 @@ const AravtDashboard = () => {
           </div>
         </CardContent>
       </Card>
+      
 
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm">About</CardTitle>
+          <CardTitle className="text-sm">Leadership</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2">
-          <p className="text-sm text-muted-foreground">{aravtDetails?.description}</p>
-          <div className="flex flex-wrap gap-1">
-            {aravtDetails?.skills?.map((skill, i) => (
-              <Badge key={i} variant="outline" className="text-xs">{skill}</Badge>
-            ))}
+        <CardContent>
+          <div className="flex items-center gap-2">
+            <Avatar className="h-6 w-6">
+              <AvatarFallback className="text-xs">{aravtDetails?.leader.username[0]}</AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="text-sm font-medium">{aravtDetails?.leader.username}</p>
+              <p className="text-xs text-muted-foreground">Aravt Leader</p>
+            </div>
           </div>
         </CardContent>
       </Card>
 
+      
+
+      
+
       {aravtDetails && (
         <Card>
           <CardHeader>
-            <CardTitle>Aravt Details</CardTitle>
+            <CardTitle>Aravt Business</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {aravtDetails.telegram_chat_link && (
-              <div>
-                <h4 className="text-sm font-medium text-gray-500">Telegram Chat</h4>
-                <a 
-                  href={aravtDetails.telegram_chat_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
-                  Join Telegram Chat
-                </a>
-              </div>
-            )}
+            
 
             {aravtDetails.business?.length > 0 && (
               <div>
@@ -221,12 +210,13 @@ const AravtDashboard = () => {
                 <div className="grid gap-2 mt-2">
                   {aravtDetails.business.map(project => (
                     <Card key={project.id} className="p-4">
-                      <div className="flex items-center justify-between">
+                      <div className="">
                         <div>
-                          <h5 className="font-medium">{project.name}</h5>
-                          <p className="text-sm text-gray-500">{project.description}</p>
+                          <h5 className="font-medium">• {project.name}</h5>
+                          <p className="text-sm pb-1 text-gray-500">{project.description}</p>
                         </div>
-                        <Badge>{project.Status}</Badge>
+                        <Badge>{"Active"}</Badge>
+                        {/* <Badge>{project.Status}</Badge> */}
                       </div>
                     </Card>
                   ))}
@@ -236,17 +226,17 @@ const AravtDashboard = () => {
 
             {aravtDetails.offers?.length > 0 && (
               <div>
-                <h4 className="text-sm font-medium text-gray-500">Offers</h4>
+                <h4 className="pt-2 text-sm font-medium text-gray-500">Market Offers</h4>
                 <div className="grid gap-2 mt-2">
                   {aravtDetails.offers.map(offer => (
                     <Card key={offer.id} className="p-4">
-                      <div className="flex items-center justify-between">
+                      <div className="">
                         <div>
                           <h5 className="font-medium">{offer.name}</h5>
                           <p className="text-sm text-gray-500">{offer.description}</p>
                         </div>
-                        <div className="text-right">
-                          <div className="font-medium">{offer.price} AT</div>
+                        <div className="text-center">
+                          <div className="font-medium pt-2">{"$" + offer.price}</div>
                           {offer.is_limited && (
                             <div className="text-sm text-gray-500">
                               {offer.count_left} remaining
@@ -259,42 +249,59 @@ const AravtDashboard = () => {
                 </div>
               </div>
             )}
+
+            {aravtDetails.telegram_chat_link && (
+              <div>
+                <h4 className="text-sm pt-2 font-medium text-gray-500">Telegram Chat</h4>
+                <a 
+                  href={aravtDetails.telegram_chat_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:underline"
+                >
+                  Open Telegram Chat
+                </a>
+              </div>
+            )}
+
           </CardContent>
         </Card>
       )}
 
-<Card>
+      
+
+      <QuickActions />
+
+      <Card>
         <CardHeader>
-          <CardTitle>Stats</CardTitle>
+          <CardTitle>Statistics</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-1">
           <div className="grid grid-cols-3 gap-2">
             <div>
-              <p className="text-sm text-muted-foreground">Tasks Completed</p>
+              <p className="text-sm text-muted-foreground">Tasks</p>
               <p className="text-lg font-semibold">{stats.tasksCompleted}/{stats.totalTasks}</p>
               <Progress value={(stats.tasksCompleted / stats.totalTasks) * 100} className="h-1 mt-1" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Tokens Earned</p>
-              <p className="text-lg font-semibold">{stats.tokensEarned} AT</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Rank Progress</p>
+              <p className="text-sm text-muted-foreground">Rating</p>
               <p className="text-lg font-semibold">Rank {stats.rank}</p>
               <Progress value={stats.rankProgress} className="h-1 mt-1" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Tokens</p>
+              <p className="text-lg font-semibold">{stats.tokensEarned} $aravt</p>
             </div>
           </div>
         </CardContent>
       </Card>
-
-      <QuickActions />
 
       
 
       {user?.able_to_create_aravt && (
         <Button 
           variant="outline" 
-          size="sm" 
+          size="lg" 
           onClick={() => setIsFormOpen(true)}
           className="w-full"
         >

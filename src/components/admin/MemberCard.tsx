@@ -49,7 +49,7 @@ export const MemberCard = ({ isLeader, member, onUpdateRole, onRemoveMember, isL
             </Avatar>
             <div>
               <div className="font-medium text-lg flex items-center gap-2">
-                {member.username}
+                {member.full_name}
                 <Badge variant={
                   member.role === 'SuperAdmin' ? 'destructive' : 
                   member.role === 'AravtLeader' ? 'default' : 
@@ -68,16 +68,7 @@ export const MemberCard = ({ isLeader, member, onUpdateRole, onRemoveMember, isL
         <div className="mt-4">
           {isLeader && (
             <>
-              <div className="flex items-center">
-                <input 
-                  type="checkbox" 
-                  checked={member.able_to_create_aravt} 
-                  onChange={handleAravtChange} 
-                  disabled={isLoading}
-                />
-                <label className="ml-2">Can Create Aravt</label>
-              </div>
-              <div className="flex items-center">
+            <div className="flex items-center">
                 <input 
                   type="checkbox" 
                   checked={member.able_to_create_tasks} 
@@ -86,29 +77,40 @@ export const MemberCard = ({ isLeader, member, onUpdateRole, onRemoveMember, isL
                 />
                 <label className="ml-2">Can Create Tasks</label>
               </div>
+              
+              <div className="flex items-center">
+                <input 
+                  type="checkbox" 
+                  checked={member.able_to_create_aravt} 
+                  onChange={handleAravtChange} 
+                  disabled={isLoading}
+                />
+                <label className="ml-2">Can Create his own Aravt</label>
+              </div>
+              
             </>
           )}
         </div>
-        <div className="mt-6 grid grid-cols-4 gap-4">
+        <div className="mt-6 grid grid-cols-3 gap-4">
           <div>
             <div className="text-sm font-medium">Tasks</div>
-            <div className="text-2xl font-bold">{member.tasksCompleted}</div>
+            <div className="text-2xl font-bold">0/10 {member.tasksCompleted}</div>
           </div>
           <div>
             <div className="text-sm font-medium">Rating</div>
-            <div className="text-2xl font-bold">{member.rating}</div>
+            <div className="text-2xl font-bold">10 {member.rating}</div>
           </div>
-          <div>
+          {/* <div>
             <div className="text-sm font-medium">Success Rate</div>
             <div>
               <div className="flex justify-between items-center">
                 <span className="text-2xl font-bold">{member.completionRate}</span>
               </div>
             </div>
-          </div>
+          </div> */}
           <div>
             <div className="text-sm font-medium">Tokens</div>
-            <div className="text-2xl font-bold">{member.tokenBalance}</div>
+            <div className="text-2xl font-bold">100{member.tokenBalance}</div>
           </div>
         </div>
         <div className="mt-4 space-y-2">
@@ -121,7 +123,7 @@ export const MemberCard = ({ isLeader, member, onUpdateRole, onRemoveMember, isL
               <SelectValue placeholder="Select role" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="User">User</SelectItem>
+              <SelectItem value="User">Member</SelectItem>
               <SelectItem value="AravtLeader">Aravt Leader</SelectItem>
               <SelectItem value="SuperAdmin">Super Admin</SelectItem>
             </SelectContent>

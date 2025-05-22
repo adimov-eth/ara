@@ -64,7 +64,8 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
           <div className="flex items-center gap-4">
             <div className="flex items-center">
               <CreditCard className="h-4 w-4 mr-1 text-gray-500" />
-              <span>{task.reward} {task.reward_type}</span>
+              <span>{task.reward}</span>
+              {/* <span>{task.reward} {task.reward_type}</span> */}
             </div>
             
             <div>

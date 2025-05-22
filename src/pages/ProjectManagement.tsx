@@ -34,7 +34,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
             </div>
           </div>
           <Badge variant={project.Status === 'Posted' ? 'default' : 'secondary'}>
-            {project.Status}
+            Active {project.Status}
           </Badge>
         </div>
       </CardHeader>
@@ -45,13 +45,13 @@ const ProjectCard = ({ project }: { project: Project }) => {
               {project.fundings && (
                 <div>
                   <Banknote className="h-4 w-4 inline mr-1" />
-                  {project.fundings} USD
+                  Fundings: {project.fundings} USD
                 </div>
               )}
               <div>
-                <Badge variant="secondary">
-                  {projectOffers.length} Offers
-                </Badge>
+                {/* <Badge variant="secondary">
+                  
+                </Badge> */}
               </div>
             </div>
           </div>
@@ -59,24 +59,27 @@ const ProjectCard = ({ project }: { project: Project }) => {
       </CardContent>
       <CardFooter className="p-4">
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => navigate(`/offers?projectId=${project.id}`)}
-          >
-            Offers
-          </Button>
 
           <Button 
             variant="outline" 
             size="sm" 
             onClick={() => navigate(`/projects/${project.id}`)}
           >
-            Project Details
+            Details
             
           </Button>
 
-          <Button variant="outline" disabled size="sm">Task Board</Button>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => navigate(`/offers?projectId=${project.id}`)}
+          >
+            Market Offers: {projectOffers.length} 
+          </Button>
+
+          
+
+          <Button variant="outline" disabled size="sm">Project Tasks</Button>
         </div>
       </CardFooter>
     </Card>

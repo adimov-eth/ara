@@ -72,7 +72,7 @@ const MemberManagement = () => {
       <div className="">
         <div>
           <h1 className="text-2xl font-bold">Aravt Members</h1>
-          <p className="text-gray-500 mb-2 ">Users Management</p>
+          <p className="text-gray-500 mb-2 ">Manage the Team of Aravt</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
@@ -179,7 +179,7 @@ const MemberManagement = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Requests to Join the Aravt:</CardTitle>
+          <CardTitle>Requests to Join your Aravt:</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {pendingRequests.map((application) => (

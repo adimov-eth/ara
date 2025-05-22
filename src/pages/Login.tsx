@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowRight, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -62,10 +63,25 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
     <div className="flex justify-center min-h-screen bg-gray-50 pt-4">
       <Card className="w-full max-w-md mx-4 pt-3">
         <CardHeader className="space-y-1">
-          <div className="flex items-center justify-between pb-2">
+            <div className="flex items-center justify-between pb-2">
             <CardTitle className="text-2xl">Welcome to Aravt</CardTitle>
-            <Globe className="h-6 w-6 text-gray-500" />
-          </div>
+
+
+            <Select defaultValue="all">
+                      <SelectTrigger className="w-[60px]">
+                        <SelectValue placeholder="Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all"><Globe className="h-6 w-6 text-gray-500" /></SelectItem>
+                        <SelectItem value="mn">🇲🇳 Mongolian</SelectItem>
+                        <SelectItem value="ru">🇷🇺 Rusain</SelectItem>
+                        <SelectItem value="zh">🇨🇳 Chinese</SelectItem>
+                        <SelectItem value="jp">🇯🇵 Japanese</SelectItem>
+                        <SelectItem value="kp">🇰🇷 Korean</SelectItem>
+                      </SelectContent>
+                    </Select>
+            
+            </div>
           <CardDescription>
             Please register or login to your account
           </CardDescription>
@@ -161,11 +177,18 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
                   >
                     Sign up
                   </Link>
+                    <br />
+                    <Link 
+                    to="/forgot-password" 
+                    className="text-primary hover:underline"
+                    >
+                    Forgot password?
+                    </Link>
                 </div>
               </form>
 
               <div className="relative w-full mt-4 pt-4">
-                <b>Intro Video</b>
+                <b>Demo Video</b>
                 
                 <iframe
                   width="560"
@@ -181,7 +204,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
               </div>
 
               <div className="relative w-full h-80 mt-4">
-                
+              
                 <img
                   src="https://app.aravt.io/img/gerege/photo_2568-01-31 15.54.09.jpeg"
                   alt="Background"
