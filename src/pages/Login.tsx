@@ -66,9 +66,8 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
             <div className="flex items-center justify-between pb-2">
             <CardTitle className="text-2xl">Welcome to Aravt</CardTitle>
 
-
             <Select defaultValue="all">
-                      <SelectTrigger className="w-[60px]">
+                      <SelectTrigger className="w-[64px]">
                         <SelectValue placeholder="Status" />
                       </SelectTrigger>
                       <SelectContent>

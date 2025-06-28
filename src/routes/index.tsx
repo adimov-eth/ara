@@ -29,7 +29,6 @@ export function AppRoutes() {
         <Route path="/learn" element={<Learn />} />
         <Route path="/complete_registration" element={<CompleteRegistration/>} /> 
         <Route path="/link_telegram" element={<LinkTelegram/>} /> !!
-        <Route path="/browse" element={<BrowseAravts /> }/>
       </Route>
       
       {/* Protected routes */}
@@ -45,6 +44,7 @@ export function AppRoutes() {
         <Route path="/members" element={<MemberManagement />} />
         <Route path="/wallet" element={<Wallet />} />
         <Route path="/offers" element={<OffersManagement />} />
+        <Route path="/browse" element={<BrowseAravts /> }/>
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
