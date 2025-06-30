@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Globe, Home, CreditCard, Star, CalendarClock, Link as LinkIcon, Briefcase } from 'lucide-react';
+import { Globe, Home, CreditCard, Star, Coins, CalendarClock, Link as LinkIcon, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Task } from '@/types';
@@ -63,7 +63,7 @@ export const TaskCard = ({ task, onUpdate, onDelete, isLoading }: TaskCardProps)
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-4">
             <div className="flex items-center">
-              <CreditCard className="h-4 w-4 mr-1 text-gray-500" />
+              <Coins className="h-4 w-4 mr-1 text-gray-500" />
               <span>{task.reward}</span>
               {/* <span>{task.reward} {task.reward_type}</span> */}
             </div>
