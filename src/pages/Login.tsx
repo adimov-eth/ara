@@ -82,7 +82,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
             
             </div>
           <CardDescription>
-            Please register or login to your account
+            Please login to your account or sign up for new one
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -187,12 +187,12 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
               </form>
 
               <div className="relative w-full mt-4 pt-4">
-                <b>Demo Video</b>
+                <b>Video</b>
                 
                 <iframe
                   width="560"
                   height="315"
-                  src="https://www.youtube.com/embed/d7hHU-X0aOM?si=q7QAVa2Fv3nyRtxt"
+                  src="https://www.youtube.com/embed/7R_ALK8tt9Y?si=q7QAVa2Fv3nyRtxt"
                   title="YouTube video player"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
