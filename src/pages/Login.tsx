@@ -192,7 +192,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
                 <iframe
                   width="560"
                   height="315"
-                  src="https://www.youtube.com/embed/7R_ALK8tt9Y?si=q7QAVa2Fv3nyRtxt"
+                  src="https://www.youtube.com/embed/80kMVEKaeaM?si=q7QAVa2Fv3nyRtxt"
                   title="YouTube video player"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
