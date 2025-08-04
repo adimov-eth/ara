@@ -36,73 +36,80 @@ const BrowseAravts = () => {
     <div className="w-full max-w-6xl mx-auto p-8 space-y-8">
       {/* Welcome Message - Only show if user is not in an Aravt */}
       {!user?.aravt?.id && (
-        <Card className="bg-blue-50 border-none p-6">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-2xl">👋</span>
-            <h2 className="text-xl font-semibold">Welcome to Aravt!</h2>
-          </div>
-          <p className="text-gray-600">You need to join one of the active Aravts to continue.</p>
-        </Card>
+      <Card className="bg-blue-50 border-none p-6">
+        <div className="flex items-center gap-2 mb-2">
+        <span className="text-2xl">👋</span>
+        <h2 className="text-xl font-semibold">Welcome to Aravt!</h2>
+        </div>
+        <p className="text-gray-600">You need to join one of the active Aravts to continue.</p>
+      </Card>
       )}
 
       {error && (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
+      <Alert variant="destructive">
+        <AlertDescription>{error}</AlertDescription>
+      </Alert>
       )}
 
       {/* Aravts Section */}
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">🌀&nbsp;{filteredAravts.length}&nbsp;</h2>
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-              <Input 
-                placeholder="Search Aravts..." 
-                className="w-48 pl-9 h-10 bg-white"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            <div className="flex border rounded-md overflow-hidden">
-              <Button 
-                variant={viewMode === 'list' ? 'default' : 'outline'} 
-                size="sm"
-                onClick={() => setViewMode('list')}
-                className="rounded-none"
-              >
-                <List className="h-4 w-4 mr-1" />
-                
-              </Button>
-              <Button 
-                variant={viewMode === 'tree' ? 'default' : 'outline'} 
-                size="sm"
-                onClick={() => setViewMode('tree')}
-                className="rounded-none"
-              >
-                <Network className="h-4 w-4 mr-1" />
-                
-              </Button>
-            </div>
-          </div>
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">🌀&nbsp;{filteredAravts.length}&nbsp;</h2>
+        <div className="flex items-center gap-4">
+        <div className="relative">
+          <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+          <Input 
+          placeholder="Search Aravts..." 
+          className="w-48 pl-9 h-10 bg-white"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
-
-        {viewMode === 'list' ? (
-          <div className="space-y-4">
-            {filteredAravts.map((aravt) => (
-              <AravtCard 
-                key={aravt.id} 
-                aravt={aravt} 
-              />
-            ))}
-          </div>
-        ) : (
-          <Card className="p-4 bg-white">
-            <AravtRadialTree aravts={filteredAravts} />
-          </Card>
-        )}
+        <div className="flex border rounded-md overflow-hidden">
+          <Button 
+          variant={viewMode === 'list' ? 'default' : 'outline'} 
+          size="sm"
+          onClick={() => setViewMode('list')}
+          className="rounded-none"
+          >
+          <List className="h-4 w-4 mr-1" />
+          
+          </Button>
+          <Button 
+          variant={viewMode === 'tree' ? 'default' : 'outline'} 
+          size="sm"
+          onClick={() => setViewMode('tree')}
+          className="rounded-none"
+          >
+          <Network className="h-4 w-4 mr-1" />
+          
+          </Button>
+        </div>
+        </div>
       </div>
+
+      {viewMode === 'list' ? (
+        <div className="space-y-4">
+        {filteredAravts.map((aravt) => (
+          <AravtCard 
+          key={aravt.id} 
+          aravt={aravt} 
+          />
+        ))}
+        </div>
+      ) : (
+        <Card className="p-4 bg-white">
+        <AravtRadialTree aravts={filteredAravts} />
+        </Card>
+      )}
+      </div>
+      
+      <a
+      href="/learn"
+      className="inline-block text-blue-600 hover:underline font-medium"
+      >
+      Create new Aravt
+      </a>
     </div>
   );
 };

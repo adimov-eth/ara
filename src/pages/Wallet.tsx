@@ -210,7 +210,15 @@ const Wallet = () => {
   };
 
   return (
+    
     <div className="container mx-auto p-4 space-y-6">
+
+    <Card>
+        <CardContent>
+          <SellToken />
+        </CardContent>
+      </Card>
+
       <div className="w-full flex justify-center gap-4">
         <TonConnectButton />
         {connected && sender && account && (
@@ -220,20 +228,17 @@ const Wallet = () => {
             className="flex items-center gap-2"
           >
             {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
-            Refresh Transactions
+            Refresh
           </Button>
         )}
       </div>
       
-      <Card>
-        <CardContent>
-          <SellToken />
-        </CardContent>
-      </Card>
+      
       
       <Card>
         <CardHeader>
-          <CardTitle>Your Wallet</CardTitle>
+          <CardTitle>My Wallet</CardTitle>
+          0 $aravt
         </CardHeader>
         <CardContent className="space-y-4">
           {isLoading && (

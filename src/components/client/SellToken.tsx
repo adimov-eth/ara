@@ -11,13 +11,14 @@ const SellToken: React.FC = () => {
     const [success, setSuccess] = useState<string | null>(null);
     const [amount, setAmount] = useState<string>('');
     const [tokenAmount, setTokenAmount] = useState<string>('');
+    
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         // Only allow numbers and decimal point
         const value = e.target.value.replace(/[^0-9.]/g, '');
         // Prevent multiple decimal points
         if (value.split('.').length > 2) return;
         setAmount(value);
-        setTokenAmount((Number(value) * 600 * 0.9).toFixed(9));
+        setTokenAmount((Number(value) * 600 * 0.9).toFixed(2));
     };
 
     const handleChange2 = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +27,7 @@ const SellToken: React.FC = () => {
         // Prevent multiple decimal points
         if (value.split('.').length > 2) return;
         setTokenAmount(value);
-        setAmount((Number(value) / 600 / 0.9).toFixed(9));
+        setAmount((Number(value) / 600 / 0.9).toFixed(2));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -66,27 +67,27 @@ const SellToken: React.FC = () => {
         <div className="p-4">
             <h1 className="text-2xl font-bold mb-4">Buy Aravt Tokens</h1>
             {sellError && <p className="text-red-500">{sellError}</p>}
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 items-center gap-4 max-w-xs mx-auto">
+            <form onSubmit={handleSubmit} className="grid grid-cols-2 items-center gap-2 max-w-xs mx-auto">
                 
                 <input
                     type="text"
                     name="tokenAmount"
-                    placeholder="Enter amount in Aravt Tokens"
+                    placeholder="Amount in $aravt"
                     value={tokenAmount}
                     onChange={handleChange2}
                     required
-                    className="text-center bg-gray-200 placeholder-gray-800 border py-2 w-full rounded"
-                />
+                    className="text-center bg-gray-200 placeholder-gray-500 border py-2 rounded"
+                />$aravt
 
                 <input
                     type="text"
                     name="amount"
-                    placeholder="Enter amount in TON"
+                    placeholder="Amount in TON"
                     value={amount}
                     onChange={handleChange}
                     required
-                    className="text-center bg-gray-200 placeholder-gray-800 border py-2 w-full rounded"
-                />
+                    className="text-center bg-gray-200 placeholder-gray-500 border py-2 rounded"
+                /> TON
                 
                 <button 
                     type="submit" 
