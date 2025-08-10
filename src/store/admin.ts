@@ -1,5 +1,7 @@
 import { create } from 'zustand'
-import { type User, type Task, type Aravt, ExtendedUser } from '@/types'
+import { User, Task, Aravt, JoinRequest } from '@/types'
+import { api } from '@/lib/api'
+import { useAuthStore } from '@/store/auth'
 
 interface AdminStats {
   totalMembers: number;
@@ -8,23 +10,6 @@ interface AdminStats {
   averageRating: number;
   totalRewards: string;
   pendingRequests: number;
-}
-
-interface JoinRequest {
-  id: number;
-  user: {
-    name: string;
-    username: string;
-    email: string;
-    skills: string[];
-    referredBy: string;
-  };
-  applicationDate: string;
-}
-
-export interface AdminTask extends Task {
-  assignedTo?: string[];
-  priority: 'low' | 'medium' | 'high';
 }
 
 interface AravtSettings {
@@ -47,307 +32,288 @@ interface AravtSettings {
 
 interface AdminState {
   stats: AdminStats;
-  members: ExtendedUser[];
+  members: User[];
   pendingRequests: JoinRequest[];
-  tasks: AdminTask[];
+  tasks: Task[];
   aravt: Aravt | null;
   isLoading: boolean;
   error: string | null;
   fetchAdminData: () => Promise<void>;
+  fetchAravtData: () => Promise<void>;
   approveRequest: (requestId: number) => Promise<void>;
   rejectRequest: (requestId: number) => Promise<void>;
   updateMemberRole: (userId: number, role: User['role']) => Promise<void>;
   removeMember: (userId: number) => Promise<void>;
-  createTask: (task: Omit<AdminTask, 'id'>) => Promise<void>;
-  updateTask: (taskId: number, updates: Partial<AdminTask>) => Promise<void>;
+  createTask: (task: Omit<Task, 'id'>) => Promise<void>;
+  updateTask: (taskId: number, updates: Partial<Task>) => Promise<void>;
   deleteTask: (taskId: number) => Promise<void>;
   settings: AravtSettings;
   updateSettings: (updates: Partial<AravtSettings>) => Promise<void>;
+  inviteMember: (email: string) => Promise<void>;
 }
 
-export const useAdminStore = create<AdminState>((set, get) => ({
-  stats: {
-    totalMembers: 25,
-    activeTasks: 12,
-    taskCompletion: 85,
-    averageRating: 4.7,
-    totalRewards: '25,000 USDT',
-    pendingRequests: 3,
-  },
-  members: [],
-  pendingRequests: [],
-  tasks: [
-    {
-      id: 1,
-      title: 'Smart Contract Development',
-      description: 'Develop and test token staking smart contract',
-      reward: 1500,
-      rewardType: 'USDT',
-      deadline: '2024-12-01',
-      status: 'in_progress',
-      assignees: [],
-      progress: 65,
-      isGlobal: false,
-      priority: 'high',
-      assignedTo: ['John D.', 'Sarah M.'],
-    },
-    // Add more mock tasks as needed
-  ],
-  aravt: null,
-  isLoading: false,
-  error: null,
-  settings: {
-    name: 'ARAVT SYSTEMS',
-    description: 'Founders Aravt',
-    telegramLink: 'https://t.me/aravtsystems',
-    maxMembers: 100,
-    taskSettings: {
-      requireApproval: true,
-      minReward: 100,
-      maxReward: 10000,
-      defaultRewardType: 'AT',
-    },
-    memberSettings: {
-      allowSelfJoin: false,
-      requireKYC: true,
-      minRating: 4.0,
-    },
-  },
+export const useAdminStore = create<AdminState>()((set, get) => {
+  const aravt = useAuthStore.getState().aravt as Aravt; // Access aravt from the store without using a hook
+  const user = useAuthStore.getState().user as User;
 
-  fetchAdminData: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      // TODO: Replace with actual API calls
-      await new Promise(resolve => setTimeout(resolve, 1000));
+  return {
+    stats: {
+      totalMembers: 25,
+      activeTasks: 12,
+      taskCompletion: 85,
+      averageRating: 4.7,
+      totalRewards: '25,000 USDT',
+      pendingRequests: 3,
+    },
+    members: [],
+    pendingRequests: [],
+    tasks: [],
+    aravt: null,
+    isLoading: false,
+    error: null,
+    settings: {
+      name: 'ARAVT SYSTEMS',
+      description: 'Founders Aravt',
+      telegramLink: 'https://t.me/aravtsystems',
+      maxMembers: 100,
+      taskSettings: {
+        requireApproval: true,
+        minReward: 100,
+        maxReward: 10000, 
+        defaultRewardType: 'AT',
+      },
+      memberSettings: {
+        allowSelfJoin: false,
+        requireKYC: true,
+        minRating: 4.0,
+      },
+    },
 
-      const mockPendingRequests: JoinRequest[] = [
-        {
-          id: 1,
-          user: {
-            name: 'Sarah Johnson',
-            username: '@sjohnson',
-            email: 'sarah@example.com',
-            skills: ['Smart Contracts', 'DeFi'],
-            referredBy: 'Alex Chen',
+    fetchAdminData: async () => {
+      set({ isLoading: true, error: null });
+      try {
+
+        if (user.is_leader_of_aravt) {
+          const PendingRequests: JoinRequest[] = await api.aravt_applications()
+          set({ 
+            pendingRequests: PendingRequests,
+            isLoading: false,
+          });
+        } else {
+          set({ 
+            pendingRequests: [],
+            isLoading: false,
+          });
+        }
+      } catch (error) {
+        set({ 
+          error: error instanceof Error ? error.message : 'Failed to fetch admin data', 
+          isLoading: false 
+        });
+      }
+    },
+
+    fetchAravtData: async () => {
+      set({ isLoading: true, error: null });
+      try {
+        const user_aravt = await api.aravt_aravt(aravt.id)
+        const Aravt_Members: User[] = [user_aravt.leader, ...user_aravt.team]
+        const Members: User[] = await Promise.all(Aravt_Members.map(async member => {
+          const user = await api.users_user(member.id)          
+          return user
+        }))
+
+        set({ 
+          members: Members,
+          aravt: user_aravt,
+          isLoading: false,
+        });
+      } catch (error) {
+        set({ 
+          error: error instanceof Error ? error.message : 'Failed to fetch admin data', 
+          isLoading: false 
+        });
+      }
+    },
+
+    approveRequest: async (requestId: number) => {
+      set({ isLoading: true, error: null });
+      try {
+        await api.aravt_applications_approve(requestId)
+        
+        const state = get();
+        const updatedRequests = state.pendingRequests.filter(req => req.id !== requestId);
+        set({ 
+          pendingRequests: updatedRequests,
+          stats: {
+            ...state.stats,
+            pendingRequests: state.stats.pendingRequests - 1,
+            totalMembers: state.stats.totalMembers + 1,
           },
-          applicationDate: '2024-11-08',
-        },
-        {
-          id: 2,
-          user: {
-            name: 'David Lee',
-            username: '@dlee',
-            email: 'david@example.com',
-            skills: ['Frontend', 'UI/UX'],
-            referredBy: 'Maria Garcia',
+          isLoading: false,
+        });
+      } catch (error) {
+        set({ 
+          error: error instanceof Error ? error.message : 'Failed to approve request', 
+          isLoading: false 
+        });
+      }
+    },
+
+    rejectRequest: async (requestId: number) => {
+      set({ isLoading: true, error: null });
+      try {
+        await api.aravt_applications_reject(requestId)
+        
+        const state = get();
+        const updatedRequests = state.pendingRequests.filter(req => req.id !== requestId);
+        set({ 
+          pendingRequests: updatedRequests,
+          stats: {
+            ...state.stats,
+            pendingRequests: state.stats.pendingRequests - 1,
           },
-          applicationDate: '2024-11-09',
-        },
-      ];
+          isLoading: false,
+        });
+      } catch (error) {
+        set({ 
+          error: error instanceof Error ? error.message : 'Failed to reject request', 
+          isLoading: false 
+        });
+      }
+    },
 
-      const mockMembers = [
-        {
-          id: 1,
-          username: 'alexchen',
-          email: 'alex@example.com',
-          role: 'AravtLeader' as const,
-          tasksCompleted: 24,
-          rating: 4.8,
-          completionRate: 92,
-          city: 'Singapore',
-          tokenBalance: 2500,
-        },
-        {
-          id: 2,
-          username: 'mgarcia',
-          email: 'maria@example.com',
-          role: 'User' as const,
-          tasksCompleted: 18,
-          rating: 4.5,
-          completionRate: 85,
-          city: 'Barcelona',
-          tokenBalance: 1200,
-        },
-      ];
+    updateMemberRole: async (userId: number, role: User['role']) => {
+      set({ isLoading: true, error: null });
+      try {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        const state = get();
+        const updatedMembers = state.members.map(member =>
+          member.id === userId ? { ...member, role } : member
+        );
+        set({ members: updatedMembers, isLoading: false });
+      } catch (error) {
+        set({ 
+          error: error instanceof Error ? error.message : 'Failed to update member role', 
+          isLoading: false 
+        });
+      }
+    },
 
-      set({ 
-        pendingRequests: mockPendingRequests,
-        members: mockMembers,
-        isLoading: false,
-      });
-    } catch (error) {
-      set({ 
-        error: error instanceof Error ? error.message : 'Failed to fetch admin data', 
-        isLoading: false 
-      });
-    }
-  },
+    removeMember: async (userId: number) => {
+      set({ isLoading: true, error: null });
+      try {
+        await api.aravt_drop_user(userId);
+        const state = get();
+        const updatedMembers = state.members.filter(member => member.id !== userId);
+        set({ 
+          members: updatedMembers,
+          stats: {
+            ...state.stats,
+            totalMembers: state.stats.totalMembers - 1,
+          },
+          isLoading: false,
+        });
+      } catch (error) {
+        set({ 
+          error: error instanceof Error ? error.message : 'Failed to remove member', 
+          isLoading: false 
+        });
+      }
+    },
 
-  approveRequest: async (requestId: number) => {
-    set({ isLoading: true, error: null });
-    try {
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const state = get();
-      const updatedRequests = state.pendingRequests.filter(req => req.id !== requestId);
-      set({ 
-        pendingRequests: updatedRequests,
-        stats: {
-          ...state.stats,
-          pendingRequests: state.stats.pendingRequests - 1,
-          totalMembers: state.stats.totalMembers + 1,
-        },
-        isLoading: false,
-      });
-    } catch (error) {
-      set({ 
-        error: error instanceof Error ? error.message : 'Failed to approve request', 
-        isLoading: false 
-      });
-    }
-  },
+    createTask: async (task) => {
+      set({ isLoading: true, error: null });
+      try {
+        await api.tasks_set_task(task)
 
-  rejectRequest: async (requestId: number) => {
-    set({ isLoading: true, error: null });
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const state = get();
-      const updatedRequests = state.pendingRequests.filter(req => req.id !== requestId);
-      set({ 
-        pendingRequests: updatedRequests,
-        stats: {
-          ...state.stats,
-          pendingRequests: state.stats.pendingRequests - 1,
-        },
-        isLoading: false,
-      });
-    } catch (error) {
-      set({ 
-        error: error instanceof Error ? error.message : 'Failed to reject request', 
-        isLoading: false 
-      });
-    }
-  },
+        let all_tasks = await api.tasks_get_tasks();
+        // TODO:
+        let other_tasks = all_tasks.other_tasks;
+        let parent_tasks = all_tasks.parent_tasks;
 
-  updateMemberRole: async (userId: number, role: User['role']) => {
-    set({ isLoading: true, error: null });
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const state = get();
-      const updatedMembers = state.members.map(member =>
-        member.id === userId ? { ...member, role } : member
-      );
-      set({ members: updatedMembers, isLoading: false });
-    } catch (error) {
-      set({ 
-        error: error instanceof Error ? error.message : 'Failed to update member role', 
-        isLoading: false 
-      });
-    }
-  },
+        const tasks = all_tasks.tasks;
+        
+        set({
+          tasks: tasks,
+          isLoading: false,
+        });
+      } catch (error) {
+        set({ 
+          error: error instanceof Error ? error.message : 'Failed to create task', 
+          isLoading: false 
+        });
+      }
+    },
 
-  removeMember: async (userId: number) => {
-    set({ isLoading: true, error: null });
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const state = get();
-      const updatedMembers = state.members.filter(member => member.id !== userId);
-      set({ 
-        members: updatedMembers,
-        stats: {
-          ...state.stats,
-          totalMembers: state.stats.totalMembers - 1,
-        },
-        isLoading: false,
-      });
-    } catch (error) {
-      set({ 
-        error: error instanceof Error ? error.message : 'Failed to remove member', 
-        isLoading: false 
-      });
-    }
-  },
+    updateTask: async (taskId, updates) => {
+      set({ isLoading: true, error: null });
+      try {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        set(state => ({
+          tasks: state.tasks.map(task =>
+            task.id === taskId ? { ...task, ...updates } : task
+          ),
+          isLoading: false,
+        }));
+      } catch (error) {
+        set({ 
+          error: error instanceof Error ? error.message : 'Failed to update task', 
+          isLoading: false 
+        });
+      }
+    },
 
-  createTask: async (task) => {
-    set({ isLoading: true, error: null });
-    try {
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const newTask = {
-        ...task,
-        id: Math.max(0, ...get().tasks.map(t => t.id)) + 1,
-      };
-      
-      set(state => ({
-        tasks: [...state.tasks, newTask],
-        isLoading: false,
-      }));
-    } catch (error) {
-      set({ 
-        error: error instanceof Error ? error.message : 'Failed to create task', 
-        isLoading: false 
-      });
-    }
-  },
+    deleteTask: async (taskId) => {
+      set({ isLoading: true, error: null });
+      try {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        set(state => ({
+          tasks: state.tasks.filter(task => task.id !== taskId),
+          isLoading: false,
+        }));
+      } catch (error) {
+        set({ 
+          error: error instanceof Error ? error.message : 'Failed to delete task', 
+          isLoading: false 
+        });
+      }
+    },
 
-  updateTask: async (taskId, updates) => {
-    set({ isLoading: true, error: null });
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      set(state => ({
-        tasks: state.tasks.map(task =>
-          task.id === taskId ? { ...task, ...updates } : task
-        ),
-        isLoading: false,
-      }));
-    } catch (error) {
-      set({ 
-        error: error instanceof Error ? error.message : 'Failed to update task', 
-        isLoading: false 
-      });
-    }
-  },
+    updateSettings: async (updates) => {
+      set({ isLoading: true, error: null });
+      try {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        set(state => ({
+          settings: {
+            ...state.settings,
+            ...updates,
+          },
+          isLoading: false,
+        }));
+      } catch (error) {
+        set({ 
+          error: error instanceof Error ? error.message : 'Failed to update settings', 
+          isLoading: false 
+        });
+      }
+    },
 
-  deleteTask: async (taskId) => {
-    set({ isLoading: true, error: null });
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      set(state => ({
-        tasks: state.tasks.filter(task => task.id !== taskId),
-        isLoading: false,
-      }));
-    } catch (error) {
-      set({ 
-        error: error instanceof Error ? error.message : 'Failed to delete task', 
-        isLoading: false 
-      });
-    }
-  },
-
-  updateSettings: async (updates) => {
-    set({ isLoading: true, error: null });
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      set(state => ({
-        settings: {
-          ...state.settings,
-          ...updates,
-        },
-        isLoading: false,
-      }));
-    } catch (error) {
-      set({ 
-        error: error instanceof Error ? error.message : 'Failed to update settings', 
-        isLoading: false 
-      });
-    }
-  },
-})); 
+    inviteMember: async (email: string) => {
+      set({ isLoading: true, error: null });
+      try {
+        const { user } = useAuthStore.getState();
+        await api.send_invitation(email); //user?.aravt?.id as number, user?.id as number);
+        get().fetchAdminData();
+      } catch (error) {
+        set({ error: 'Failed to invite member' });
+      } finally {
+        set({ isLoading: false });
+      }
+    },
+  }
+}); 

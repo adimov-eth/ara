@@ -1,13 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Wallet, ArrowRight, Globe } from 'lucide-react';
+import { ArrowRight, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuthStore } from '@/store/auth';
+import { User } from '@/types';
+import { TonConnectButton } from '@tonconnect/ui-react';
+import { useTonConnect } from '@/hooks/useTonConnect';
+
 import { api } from '@/lib/api';
 
 interface LoginProps {
@@ -16,13 +21,15 @@ interface LoginProps {
 
 const Login = ({ onLoginSuccess }: LoginProps) => {
   const navigate = useNavigate();
+  const setToken = useAuthStore(state => state.setToken);
   const login = useAuthStore(state => state.login);
+  const referralInfo = useAuthStore(state => state.referralInfo);
   
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isWalletConnecting, setIsWalletConnecting] = useState(false);
   const [error, setError] = useState('');
+
 
   const handleUsernameLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,10 +38,20 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
     
     try {
       const { access_token, user } = await api.login(username, password);
+      setToken(access_token)
+      const current_user: User = await api.users_user(user.id);
       
-      login(user, access_token);
+      login(current_user, access_token);
       onLoginSuccess?.();
-      navigate('/dashboard');
+
+      if (referralInfo?.aravtId) {
+        useAuthStore.getState().setReferralInfo(null);
+        navigate(`/aravts/${referralInfo.aravtId}`);
+      } else if (Boolean(current_user.aravt)) {
+        navigate('/dashboard');
+      } else {
+        navigate('/browse');
+      }
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'Invalid credentials. Please try again.');
     } finally {
@@ -42,43 +59,30 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
     }
   };
 
-  const handleWalletConnect = async () => {
-    setIsWalletConnecting(true);
-    setError('');
-
-    try {
-      // TODO: Replace with TON wallet connection logic
-      const mockUser = {
-        id: 1,
-        username: 'wallet_user',
-        role: 'User' as const,
-      };
-      const mockToken = 'mock-wallet-token';
-      
-      login(mockUser, mockToken);
-      onLoginSuccess?.();
-      navigate('/dashboard');
-    } catch (error: unknown) {
-      setError(
-        error instanceof Error 
-          ? error.message 
-          : 'Failed to connect wallet. Please make sure you have TON wallet installed.'
-      );
-    } finally {
-      setIsWalletConnecting(false);
-    }
-  };
-
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <Card className="w-full max-w-md mx-4">
+    <div className="flex justify-center min-h-screen bg-gray-50 pt-4">
+      <Card className="w-full max-w-md mx-4 pt-3">
         <CardHeader className="space-y-1">
-          <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between pb-2">
             <CardTitle className="text-2xl">Welcome to Aravt</CardTitle>
-            <Globe className="h-6 w-6 text-gray-500" />
-          </div>
+
+            <Select defaultValue="all">
+                      <SelectTrigger className="w-[64px]">
+                        <SelectValue placeholder="Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all"><Globe className="h-6 w-6 text-gray-500" /></SelectItem>
+                        <SelectItem value="mn">🇲🇳 Mongolian</SelectItem>
+                        <SelectItem value="ru">🇷🇺 Rusain</SelectItem>
+                        <SelectItem value="zh">🇨🇳 Chinese</SelectItem>
+                        <SelectItem value="jp">🇯🇵 Japanese</SelectItem>
+                        <SelectItem value="kp">🇰🇷 Korean</SelectItem>
+                      </SelectContent>
+                    </Select>
+            
+            </div>
           <CardDescription>
-            Choose your preferred way to connect
+            Please login to your account or sign up for new one
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -88,22 +92,18 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
             </Alert>
           )}
           
-          <Tabs defaultValue="wallet" className="space-y-4">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="wallet">TON Wallet</TabsTrigger>
+          <Tabs defaultValue="username" className="space-y-4">
+            {/*<TabsList className="grid w-full grid-cols-1">
               <TabsTrigger value="username">Username</TabsTrigger>
+              {<TabsTrigger value="wallet">TON Wallet</TabsTrigger> }
             </TabsList>
+            */}
 
-            <TabsContent value="wallet">
+            {/* <TabsContent value="wallet">
               <div className="space-y-4">
-                <Button 
-                  className="w-full h-12"
-                  onClick={handleWalletConnect}
-                  disabled={isWalletConnecting}
-                >
-                  <Wallet className="mr-2 h-4 w-4" />
-                  {isWalletConnecting ? 'Connecting...' : 'Connect TON Wallet'}
-                </Button>
+                <div className="w-full flex justify-center">
+                  <TonConnectButton />
+                </div>
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
                     <span className="w-full border-t" />
@@ -114,17 +114,26 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
                     </span>
                   </div>
                 </div>
+                <CardFooter className="flex flex-col space-y-4">
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => window.open('https://db.aravt.io', '_blank')}
+                  >
+                    Don't have a TON wallet?
+                  </Button>
+                </CardFooter>
               </div>
-            </TabsContent>
+            </TabsContent> */}
 
             <TabsContent value="username">
-              <form onSubmit={handleUsernameLogin} className="space-y-4">
+              <form onSubmit={handleUsernameLogin} className="space-y-5">
                 <div className="space-y-2">
                   <Label htmlFor="username">Username</Label>
                   <Input
                     id="username"
                     type="username"
-                    placeholder="userrname"
+                    placeholder="username"
                     value={username}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
                     required
@@ -142,40 +151,83 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full"
+                  className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                   disabled={isLoading}
                 >
                   {isLoading ? (
                     'Signing in...'
                   ) : (
                     <>
-                      Sign in with Username
+                      Sign in
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </>
                   )}
                 </Button>
                 <div className="text-center text-sm">
                   Don't have an account?{" "}
-                  <Link to="/signup" className="text-primary hover:underline">
+                  <Link 
+                    to={`/signup${referralInfo ? 
+                      `?ref=${referralInfo.referredById}${
+                        referralInfo.aravtId ? `&aravtId=${referralInfo.aravtId}` : ''
+                      }` 
+                      : ''
+                    }`} 
+                    className="text-primary hover:underline"
+                  >
                     Sign up
                   </Link>
+                    <br />
+                    <Link 
+                    to="/forgot-password" 
+                    className="text-primary hover:underline"
+                    >
+                    Forgot password?
+                    </Link>
                 </div>
               </form>
+
+              <div className="relative w-full mt-4 pt-4">
+                <b>Video</b>
+                
+                <iframe
+                  width="560"
+                  height="315"
+                  src="https://www.youtube.com/embed/80kMVEKaeaM?si=q7QAVa2Fv3nyRtxt"
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  className="w-full h-64 pt-2"
+                ></iframe>
+              </div>
+
+              <div className="relative w-full h-80 mt-4">
+              
+                <img
+                  src="https://app.aravt.io/img/gerege/photo_2568-01-31 15.54.09.jpeg"
+                  alt="Background"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                  <a
+                    href="https://t.me/aravtforum"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white text-lg font-semibold bg-blue-500 px-4 py-2 rounded-md hover:bg-blue-600"
+                  >
+                    Join Community
+                  </a>
+                </div>
+
+
+
+              </div>
+
             </TabsContent>
           </Tabs>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
-          <div className="text-sm text-center text-gray-500">
-            By connecting, you agree to our Terms of Service and Privacy Policy
-          </div>
-          <Button 
-            variant="outline" 
-            className="w-full"
-            onClick={() => window.open('https://ton.org/wallets', '_blank')}
-          >
-            Don't have a TON wallet?
-          </Button>
-        </CardFooter>
       </Card>
     </div>
   );

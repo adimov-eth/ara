@@ -1,12 +1,11 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { type AdminTask } from '@/store/admin';
+import { Task } from '@/types';
 
 interface TaskManagementCardProps {
-  task: AdminTask;
-  onUpdate: (taskId: number, updates: Partial<AdminTask>) => void;
+  task: Task;
+  onUpdate: (taskId: number, updates: Partial<Task>) => void;
   onDelete: (taskId: number) => void;
   isLoading?: boolean;
 }
@@ -16,7 +15,7 @@ export const TaskManagementCard = ({ task, onUpdate, onDelete, isLoading }: Task
     <CardContent className="p-6">
       <div className="flex items-start justify-between">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="">
             <h3 className="text-lg font-medium">{task.title}</h3>
             <Badge variant={
               task.priority === 'high' ? 'destructive' :
@@ -26,20 +25,18 @@ export const TaskManagementCard = ({ task, onUpdate, onDelete, isLoading }: Task
               {task.priority}
             </Badge>
             <Badge variant={
-              task.status === 'completed' ? 'default' :
-              task.status === 'in_progress' ? 'secondary' :
-              'outline'
+              task.is_done ? 'default' : 'secondary' 
             }>
-              {task.status}
+              {task.is_done ? "Completed" : "In Progress"}
             </Badge>
           </div>
           <p className="text-sm text-muted-foreground mt-1">{task.description}</p>
           <div className="flex items-center gap-4 mt-2">
             <span className="text-sm">
-              Reward: {task.reward} {task.rewardType}
+              Reward: {task.reward} {"AT"}
             </span>
             <span className="text-sm">
-              Due: {new Date(task.deadline).toLocaleDateString()}
+              Due: {new Date(task.date_time).toLocaleDateString()}
             </span>
           </div>
         </div>
@@ -47,10 +44,10 @@ export const TaskManagementCard = ({ task, onUpdate, onDelete, isLoading }: Task
           <Button 
             variant="outline" 
             size="sm"
-            onClick={() => onUpdate(task.id, { status: 'completed' })}
-            disabled={isLoading || task.status === 'completed'}
+            onClick={() => onUpdate(task.id, { is_done: true })}
+            disabled={isLoading || task.is_done}
           >
-            Mark Complete
+            Complete
           </Button>
           <Button 
             variant="outline" 
@@ -63,19 +60,10 @@ export const TaskManagementCard = ({ task, onUpdate, onDelete, isLoading }: Task
           </Button>
         </div>
       </div>
-      {task.progress > 0 && (
-        <div className="mt-4">
-          <div className="flex justify-between text-sm mb-1">
-            <span>Progress</span>
-            <span>{task.progress}%</span>
-          </div>
-          <Progress value={task.progress} />
-        </div>
-      )}
-      {task.assignedTo && task.assignedTo.length > 0 && (
+      {task.responsible_users_ids && task.responsible_users_ids.length > 0 && (
         <div className="mt-4">
           <span className="text-sm text-muted-foreground">
-            Assigned to: {task.assignedTo.join(', ')}
+            Assigned to: {task.responsible_users_ids.join(', ')}
           </span>
         </div>
       )}

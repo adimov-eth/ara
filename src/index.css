@@ -34,6 +34,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  margin: 0 auto;
 }
 
 h1 {
@@ -136,4 +137,44 @@ button:focus-visible {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Responsive styles */
+@media (max-width: 640px) {
+  :root {
+    font-size: 14px; /* Adjust base font size for mobile */
+  }
+
+  h1 {
+    font-size: 2.5em; /* Adjust heading size for mobile */
+  }
+
+  a {
+    font-size: 0.875rem; /* Adjust link font size for mobile */
+  }
+
+  button {
+    padding: 0.4em 0.8em; /* Adjust button padding for mobile */
+    font-size: 1rem; /* Adjust button font size for mobile */
+  }
+}
+
+/* Add these styles to your global CSS file */
+.aravt-tree {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.aravt-tree .link {
+  transition: stroke 0.3s;
+}
+
+.aravt-tree .node:hover circle {
+  fill: #3b82f6;
+  r: 7;
+  transition: all 0.2s;
+}
+
+.aravt-tree .node text {
+  font-size: 12px;
+  pointer-events: none;
 }

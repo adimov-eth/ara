@@ -1,8 +1,9 @@
 #root {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background: white;
 }
 
 .logo {
@@ -39,4 +40,44 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Add responsive styles */
+@media (max-width: 640px) {
+  #root {
+    padding: 1rem; /* Reduce padding for mobile */
+    width: 100%; /* Ensure full width on mobile */
+  }
+
+  .logo {
+    height: 4em; /* Adjust logo size for mobile */
+  }
+
+  .card {
+    padding: 1.5em; /* Adjust card padding for mobile */
+  }
+
+  .text-xl {
+    font-size: 1.5rem; /* Adjust font size for mobile */
+  }
+
+  .text-lg {
+    font-size: 1.25rem; /* Adjust font size for mobile */
+  }
+
+  .text-sm {
+    font-size: 0.875rem; /* Adjust font size for mobile */
+  }
+
+  button {
+    padding: 0.5em 1em; /* Increase button size for mobile */
+    font-size: 1.1rem; /* Adjust button font size for mobile */
+  }
+}
+
+/* Add a consistent width for the navbar */
+.navbar {
+  max-width: 100%; /* Match the root container */
+  margin: 0 auto; /* Center the navbar */
+  padding: 0 1rem; /* Add some padding */
 }

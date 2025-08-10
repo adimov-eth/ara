@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Plus, Search, Globe, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,10 +6,15 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { useAuthStore } from '@/store/auth';
-import { useDashboardStore } from '@/store/dashboard';
-import { LoadingSpinner } from '@/components/LoadingSpinner';
-import { TaskCard } from '@/components/TaskCard';
+import { useTasksStore } from '@/store/tasks';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { TaskCard } from '@/components/client/TaskCard';
+import { api } from '@/lib/api';
+import { Project } from '@/types';
 
 const TasksManagement = () => {
   const { user } = useAuthStore();
@@ -18,31 +23,256 @@ const TasksManagement = () => {
     globalTasks, 
     isLoading, 
     error, 
-    fetchDashboardData,
-    updateTaskProgress 
-  } = useDashboardStore();
+    fetchTasksData,
+    updateTaskIsDone 
+  } = useTasksStore();
+  const [showCreateTaskForm, setShowCreateTaskForm] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [priorityFilter, setPriorityFilter] = useState('all');
+  const [businesses, setBusinesses] = useState<Project[]>([]);
 
   useEffect(() => {
-    fetchDashboardData();
-  }, [fetchDashboardData]);
+    const fetchBusinesses = async () => {
+      if (user?.aravt) {
+        try {
+          const aravtData = await api.aravt_aravt(user.aravt.id);
+          setBusinesses(aravtData.business || []);
+        } catch (error) {
+          console.error('Error fetching businesses:', error);
+        }
+      }
+    };
+    fetchBusinesses();
+  }, [user?.aravt]);
+
+  const handleCreateTask = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData(e.currentTarget);
+      const responsibleUsers = formData.get('responsible_users_ids') as string;
+      
+      // Handle both string and array inputs for responsible users
+      const responsible_users_ids = responsibleUsers ?
+          responsibleUsers.trim().startsWith('[') ?
+            JSON.parse(responsibleUsers) :
+            responsibleUsers.split(',').map(id => Number(id.trim()))
+        : [];
+
+      const taskData = {
+        title: formData.get('title') as string,
+        description: formData.get('description') as string,
+        link: formData.get('link') as string || '',
+        reward: Math.floor(Number(formData.get('reward'))),
+        reward_type: (formData.get('reward_type') === 'AT' ? 'AT' : 'USDT') as 'AT' | 'USDT',
+        definition_of_done: JSON.parse(formData.get('definition_of_done') as string || '{}'),
+        responsible_users_ids,
+        is_done: false,
+        is_global: formData.get('is_global') === 'true',
+        date_time: formData.get('deadline') as string,
+        priority: formData.get('priority') as 'low' | 'medium' | 'high',
+        one_time: formData.get('one_time') === 'true',
+        business_id: formData.get('business_id') ? Number(formData.get('business_id')) : undefined,
+        completions: {
+          completions_amount: 0,
+          is_completion_approved: false,
+          num_of_approved: 0
+        }
+      };
+      await api.tasks_set_task(taskData);
+      await fetchTasksData();
+      setShowCreateTaskForm(false);
+    } catch (error) {
+      console.error('Error creating task:', error);
+    }
+  };
+
+  const filterTasks = (tasks: any[]) => {
+    return tasks.filter(task => {
+      const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          task.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesStatus = statusFilter === 'all' || 
+                          (statusFilter === 'completed' && task.is_done) ||
+                          (statusFilter === 'open' && !task.is_done);
+      const matchesPriority = priorityFilter === 'all' || task.priority === priorityFilter;
+      
+      return matchesSearch && matchesStatus && matchesPriority;
+    });
+  };
+
+  const filteredLocalTasks = useMemo(() => filterTasks(localTasks), [localTasks, searchQuery, statusFilter, priorityFilter]);
+  const filteredGlobalTasks = useMemo(() => filterTasks(globalTasks), [globalTasks, searchQuery, statusFilter, priorityFilter]);
+
+  useEffect(() => {
+    fetchTasksData();
+  }, [fetchTasksData]);
 
   if (!user) {
     return <LoadingSpinner />;
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto mt-8 space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="w-full max-w-6xl mx-auto mt-0 space-y-6">
+      <div className="">
         <div>
-          <h1 className="text-2xl font-bold">Tasks</h1>
-          <p className="text-gray-500">Manage your tasks and track progress</p>
+          <h1 className="text-2xl font-bold">Current Tasks</h1>
+          <p className="text-gray-500 mb-2">Set objectives and track progress</p>
         </div>
-        {user.role !== 'User' && (
-          <Button>
-            <Plus className="h-4 w-4 mr-2" />
-            Create Task
-          </Button>
-        )}
+        <Button onClick={() => setShowCreateTaskForm(true)}>
+          <Plus className="h-4 w-4 mr-2" />
+          Create Task
+        </Button>
+
+        {showCreateTaskForm && (
+          <Dialog open={showCreateTaskForm} onOpenChange={setShowCreateTaskForm}>
+            <DialogContent className="max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Create New Task</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleCreateTask}>
+                <div className="space-y-4">
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="title">Title *</Label>
+                      <Input id="title" name="title" required />
+                    </div>
+                    <div>
+                      <Label htmlFor="description">Description *</Label>
+                      <Textarea id="description" name="description" required />
+                    </div>
+                  </div>
+
+                  <div>
+                      <Label htmlFor="link">URL</Label>
+                      <Input id="link" name="link" placeholder="https://" />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="priority">Priority *</Label>
+                      <Select name="priority" defaultValue="medium">
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="low">Low</SelectItem>
+                          <SelectItem value="medium">Medium</SelectItem>
+                          <SelectItem value="high">High</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="is_global">Local or Global? *</Label>
+                      <Select name="is_global" defaultValue="false">
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="false">Local</SelectItem>
+                          <SelectItem value="true">Global</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="one_time">One or Many? *</Label>
+                      <Select name="one_time" defaultValue="true">
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="true">One Time</SelectItem>
+                          <SelectItem value="false">Task for Multiple members</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="reward">Reward amount *</Label>
+                      <div className="flex gap-2">
+                        <Input 
+                          id="reward" 
+                          name="reward" 
+                          type="number" 
+                          step="1" 
+                          min="0" 
+                          required 
+                          placeholder='0'
+                          className="flex-1"
+                        />
+                        <div className="w-24">
+                          <Select name="reward_type" defaultValue="AT">
+                            <SelectTrigger>
+                              <SelectValue placeholder="Type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="AT">AT</SelectItem>
+                              <SelectItem value="USDT">USDT</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="deadline">Deadline *</Label>
+                      <Input id="deadline" name="deadline" type="datetime-local" required />
+                    </div>
+                  </div>
+
+                  
+
+                  <div className="space-y-4 pt-2 border-t">
+                    {/* <h3 className="text-sm font-medium text-gray-500">Optional</h3> */}
+                    
+                    <div>
+                      <Label htmlFor="business_id">Project</Label>
+                      <Select name="business_id">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a business" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="project_id">All</SelectItem>
+                          {businesses?.map((business) => (
+                            <SelectItem key={business.id} value={business.id.toString()}>
+                              {business.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="responsible_users_ids">Responsible Users (IDs)</Label>
+                      <Input 
+                        id="responsible_users_ids" 
+                        name="responsible_users_ids" 
+                        placeholder="1, 2, 3" 
+                        disabled
+                      />
+                    </div>
+                    <div>
+                      {/* <Label htmlFor="definition_of_done">Definition of Done (JSON)</Label> */}
+                      <Input 
+                        id="definition_of_done" 
+                        name="definition_of_done" 
+                        placeholder="{}"
+                        defaultValue="{}"
+                        type="hidden"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <DialogFooter className="mt-6">
+                  <Button type="button" variant="outline" onClick={() => setShowCreateTaskForm(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit">Create Task</Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        )}     
       </div>
 
       {error && (
@@ -53,18 +283,18 @@ const TasksManagement = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Tasks Overview</CardTitle>
+          {/* <CardTitle>Tasks Overview</CardTitle> */}
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="local">
             <TabsList>
               <TabsTrigger value="local" className="flex items-center gap-2">
                 <Home className="h-4 w-4" />
-                Local Tasks
+                Aravt ({filteredLocalTasks.length})
               </TabsTrigger>
               <TabsTrigger value="global" className="flex items-center gap-2">
-                <Globe className="h-4 w-4" />
-                Global Tasks
+                <Globe className="h-4 w-4 text-blue-500" />
+                Global ({filteredGlobalTasks.length})
               </TabsTrigger>
             </TabsList>
 
@@ -74,21 +304,22 @@ const TasksManagement = () => {
                 <Input 
                   placeholder="Search tasks..." 
                   className="pl-9"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
               <div className="flex gap-2">
-                <Select defaultValue="all">
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
                   <SelectTrigger className="w-[130px]">
                     <SelectValue placeholder="Status" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Status</SelectItem>
                     <SelectItem value="open">Open</SelectItem>
-                    <SelectItem value="in_progress">In Progress</SelectItem>
                     <SelectItem value="completed">Completed</SelectItem>
                   </SelectContent>
                 </Select>
-                <Select defaultValue="all">
+                <Select value={priorityFilter} onValueChange={setPriorityFilter}>
                   <SelectTrigger className="w-[130px]">
                     <SelectValue placeholder="Priority" />
                   </SelectTrigger>
@@ -104,31 +335,43 @@ const TasksManagement = () => {
 
             <TabsContent value="local" className="mt-4">
               <div className="grid grid-cols-1 gap-4">
-                {localTasks.map((task) => (
+                {filteredLocalTasks.map((task) => (
                   <TaskCard
                     key={task.id}
                     task={task}
-                    onUpdate={(taskId, updates) => 
-                      updateTaskProgress(taskId, updates.progress || 0)
-                    }
+                    onUpdate={async (taskId, updates) => {
+                      await updateTaskIsDone(taskId, updates.is_done || false);
+                      await fetchTasksData();
+                    }}
                     isLoading={isLoading}
                   />
                 ))}
+                {filteredLocalTasks.length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    No local tasks found
+                  </div>
+                )}
               </div>
             </TabsContent>
 
             <TabsContent value="global" className="mt-4">
               <div className="grid grid-cols-1 gap-4">
-                {globalTasks.map((task) => (
+                {filteredGlobalTasks.map((task) => (
                   <TaskCard
                     key={task.id}
                     task={task}
-                    onUpdate={(taskId, updates) => 
-                      updateTaskProgress(taskId, updates.progress || 0)
-                    }
+                    onUpdate={async (taskId, updates) => {
+                      await updateTaskIsDone(taskId, updates.is_done || false);
+                      await fetchTasksData();
+                    }}
                     isLoading={isLoading}
                   />
                 ))}
+                {filteredGlobalTasks.length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    No global tasks found
+                  </div>
+                )}
               </div>
             </TabsContent>
           </Tabs>
@@ -138,4 +381,4 @@ const TasksManagement = () => {
   );
 };
 
-export default TasksManagement; 
+export default TasksManagement;
